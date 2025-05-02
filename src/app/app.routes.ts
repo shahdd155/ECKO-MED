@@ -10,7 +10,23 @@ export const routes: Routes = [
     {
         path: '',
         component: AuthLayoutComponent,
-        children: []
+        children: [
+            {
+                path: 'login',
+                title: 'login',
+                loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
+            },
+            {
+                path: 'register',
+                title: 'Register',
+                loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent)
+            },
+            {
+                path: 'forgotpass',
+                title: 'forget password',
+                loadComponent: () => import('./pages/forgotpass/forgotpass.component').then(m => m.ForgotpassComponent)
+            }
+        ]
     },
     {
         path: '',component: DataEntryLayoutComponent, canActivate:[patientGuard],

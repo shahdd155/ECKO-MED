@@ -1,0 +1,80 @@
+<section class="h-screen overflow-hidden flex flex-col justify-center items-center bg-gray-100">
+  <div class="p-4 w-full max-w-[1100px]">
+    <span class="text-2xl font-bolder tracking-widest">ECKO MED</span>
+  </div>
+  <div class="flex items-center justify-center w-full flex-1">
+    <div class="relative w-full max-w-full h-full bg-white shadow-lg flex">
+      <!-- Left Split -->
+      <div class="w-1/2 h-full relative flex flex-col">
+        <img src="/images/clay-banks-cEzMOp5FtV4-unsplash.jpg" alt="Gloves" class="absolute bottom-0 left-0 w-full h-full object-cover object-left" />
+      </div>
+
+      <div class="w-1/2 h-full relative">
+        <img src="/images/photo-1505751172876-fa1923c5c528-unsplash.jpeg" alt="Stethoscope" class="absolute top-0 right-0 w-full h-full object-cover object-right rounded-tr-xl" />
+      </div>
+ 
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl px-12 py-10 flex flex-col items-center min-w-[400px] min-h-[370px] z-10">
+        <h2 class="text-2xl font-normal mb-6">Welcome Back</h2>
+        <form class="w-full flex flex-col gap-3" [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+
+       <div class="w-full flex flex-col gap-3">
+        <label for="username" class="text-sm font-medium mb-1">Username</label>
+        <input id="username" type="text" placeholder="Enter your username" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+       
+        @if(loginForm.get('email')?.errors && loginForm.get('email')?.touched){
+          <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+              <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Danger</span>
+              <div>
+               
+                  <ul class="mt-1.5 list-disc list-inside">
+                      @if(loginForm.get('email')?.getError('required')){
+                          <li>this field is required</li>
+                      }
+                      @else if (loginForm.get('email')?.getError('email')) {
+                          <li>enter valid email</li>
+                      }
+                 
+                </ul>
+              </div>
+            </div>
+      }
+      </div>
+         <div class="w-full flex flex-col gap-3">
+          <label for="password" class="text-sm font-medium mt-2 mb-1">Password</label>
+          <input id="password" type="password" placeholder="Enter your password" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+         
+          @if(loginForm.get('password')?.errors && loginForm.get('password')?.touched){
+            <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Danger</span>
+                <div>
+                    <ul class="mt-1.5 list-disc list-inside">
+                        @if(loginForm.get('password')?.getError('required')){
+                            <li>this field is required</li> 
+                        }
+                      
+                     @else if(loginForm.get('password')?.getError('pattern')) {
+                        <li>enter correct password</li> 
+                     }
+                   
+                  </ul>
+                </div>
+              </div>
+        }
+        </div>
+          <button type="submit" class="mt-5 bg-slate-600 text-white py-2 rounded shadow hover:bg-slate-700 transition">Log In</button>
+        </form>
+        <div class="flex justify-between w-full mt-4 text-xs text-gray-500">
+          <a routerLink="/forgotpass" class="hover:underline hover:cursor-pointer me-3">Forgot Password?</a>
+          <a href="/register" class="hover:underline">Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
