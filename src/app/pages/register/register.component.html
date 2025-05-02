@@ -11,19 +11,342 @@
           <img src="/images/photo-1505751172876-fa1923c5c528-unsplash.jpeg" alt="Stethoscope" class="absolute top-0 right-0 w-full h-full object-cover object-right rounded-tr-xl" />
         </div>
   
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl px-12 py-10 flex flex-col items-center min-w-[400px] min-h-[370px] z-10">
-          <h2 class="text-2xl font-normal mb-6">register now:</h2>
-          <form class="w-full flex flex-col gap-3">
-         <div class="w-full flex flex-col gap-3">
-          <label for="username" class="text-sm font-medium mb-1">Username</label>
-          <input id="username" type="text" placeholder="Enter your username" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-         </div>
-           <div class="w-full flex flex-col gap-3">
-            <label for="password" class="text-sm font-medium mt-2 mb-1">Password</label>
-            <input id="password" type="password" placeholder="Enter your password" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-           </div>
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl px-12 py-10 flex flex-col items-center min-w-[400px] max-h-[80vh] overflow-y-auto z-10">
+          <h2 class="text-2xl font-normal mb-6 top-0 bg-white w-full text-center">register now:</h2>
+          <form class="w-full flex flex-col gap-3"  [formGroup]="registerForm" (ngSubmit)="submitForm()">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label for="firstName" class="text-sm font-medium">First Name</label>
+                <input id="firstName" type="text" formControlName="firstName" placeholder="Enter your first name" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                @if (registerForm.get('firstName')?.errors && registerForm.get('firstName')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('firstName')?.getError('required')) {
+                                    <li>First name is required</li>
+                                }
+                                @else if (registerForm.get('firstName')?.getError('minlength')) {
+                                    <li>First name must be at least 2 characters</li>
+                                }
+                                @else if (registerForm.get('firstName')?.getError('maxlength')) {
+                                    <li>First name cannot exceed 20 characters</li>
+                                }
+                                @else if (registerForm.get('firstName')?.getError('pattern')) {
+                                    <li>First name can only contain letters and spaces</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+              <div class="flex flex-col gap-1">
+                <label for="lastName" class="text-sm font-medium">Last Name</label>
+                <input id="lastName" type="text" formControlName="lastName" placeholder="Enter your last name" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+               
+                @if (registerForm.get('lastName')?.errors && registerForm.get('lastName')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('lastName')?.getError('required')) {
+                                    <li>Last name is required</li>
+                                }
+                                @else if (registerForm.get('lastName')?.getError('minlength')) {
+                                    <li>Last name must be at least 2 characters</li>
+                                }
+                                @else if (registerForm.get('lastName')?.getError('maxlength')) {
+                                    <li>Last name cannot exceed 20 characters</li>
+                                }
+                                @else if (registerForm.get('lastName')?.getError('pattern')) {
+                                    <li>Last name can only contain letters and spaces</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label for="gender" class="text-sm font-medium">Gender</label>
+                <select id="gender" formControlName="gender" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                  <option value="">Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+          
+                @if (registerForm.get('gender')?.errors && registerForm.get('gender')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('gender')?.getError('required')) {
+                                    <li>Gender is required</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+              <div class="flex flex-col gap-1">
+                <label for="dateOfBirth" class="text-sm font-medium">Date of Birth</label>
+                <input id="dateOfBirth" type="date" formControlName="dateOfBirth" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                <!-- Date of Birth Validation -->
+                @if (registerForm.get('dateOfBirth')?.errors && registerForm.get('dateOfBirth')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('dateOfBirth')?.getError('required')) {
+                                    <li>Date of birth is required</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="phoneNumber" class="text-sm font-medium">Phone Number</label>
+              <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="Enter your phone number" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+        
+              @if (registerForm.get('phoneNumber')?.errors && registerForm.get('phoneNumber')?.touched) {
+                  <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                      <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                      </svg>
+                      <span class="sr-only">Danger</span>
+                      <div>
+                          <ul class="mt-1.5 list-disc list-inside">
+                              @if (registerForm.get('phoneNumber')?.getError('required')) {
+                                  <li>Phone number is required</li>
+                              }
+                              @else if (registerForm.get('phoneNumber')?.getError('pattern')) {
+                                  <li>Please enter a valid Egyptian phone number (e.g., 01XXXXXXXXX)</li>
+                              }
+                          </ul>
+                      </div>
+                  </div>
+              }
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="username" class="text-sm font-medium">Username</label>
+              <input id="username" type="text" formControlName="username" placeholder="Choose a username" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+             
+              @if (registerForm.get('username')?.errors && registerForm.get('username')?.touched) {
+                  <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                      <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                      </svg>
+                      <span class="sr-only">Danger</span>
+                      <div>
+                          <ul class="mt-1.5 list-disc list-inside">
+                              @if (registerForm.get('username')?.getError('required')) {
+                                  <li>Username is required</li>
+                              }
+                              @else if (registerForm.get('username')?.getError('minlength')) {
+                                  <li>Username must be at least 4 characters</li>
+                              }
+                              @else if (registerForm.get('username')?.getError('maxlength')) {
+                                  <li>Username cannot exceed 20 characters</li>
+                              }
+                              @else if (registerForm.get('username')?.getError('pattern')) {
+                                  <li>Username can only contain letters, numbers, and underscores</li>
+                              }
+                          </ul>
+                      </div>
+                  </div>
+              }
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="email" class="text-sm font-medium">Email</label>
+              <input id="email" type="email" formControlName="email" placeholder="Enter your email" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+              <!-- Email Validation -->
+              @if (registerForm.get('email')?.errors && registerForm.get('email')?.touched) {
+                  <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                      <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                      </svg>
+                      <span class="sr-only">Danger</span>
+                      <div>
+                          <ul class="mt-1.5 list-disc list-inside">
+                              @if (registerForm.get('email')?.getError('required')) {
+                                  <li>Email is required</li>
+                              }
+                              @else if (registerForm.get('email')?.getError('email') || registerForm.get('email')?.getError('pattern')) {
+                                  <li>Please enter a valid email address</li>
+                              }
+                          </ul>
+                      </div>
+                  </div>
+              }
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="street" class="text-sm font-medium">Street Address</label>
+              <input id="street" type="text" formControlName="street" placeholder="Enter your street address" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+              <!-- Street Validation -->
+              @if (registerForm.get('street')?.errors && registerForm.get('street')?.touched) {
+                  <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                      <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                      </svg>
+                      <span class="sr-only">Danger</span>
+                      <div>
+                          <ul class="mt-1.5 list-disc list-inside">
+                              @if (registerForm.get('street')?.getError('required')) {
+                                  <li>Street address is required</li>
+                              }
+                              @else if (registerForm.get('street')?.getError('minlength')) {
+                                  <li>Street address must be at least 5 characters</li>
+                              }
+                              @else if (registerForm.get('street')?.getError('maxlength')) {
+                                  <li>Street address cannot exceed 100 characters</li>
+                              }
+                          </ul>
+                      </div>
+                  </div>
+              }
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label for="city" class="text-sm font-medium">City</label>
+                <input id="city" type="text" formControlName="city" placeholder="Enter your city" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                <!-- City Validation -->
+                @if (registerForm.get('city')?.errors && registerForm.get('city')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('city')?.getError('required')) {
+                                    <li>City is required</li>
+                                }
+                                @else if (registerForm.get('city')?.getError('minlength')) {
+                                    <li>City must be at least 2 characters</li>
+                                }
+                                @else if (registerForm.get('city')?.getError('maxlength')) {
+                                    <li>City cannot exceed 50 characters</li>
+                                }
+                                @else if (registerForm.get('city')?.getError('pattern')) {
+                                    <li>City can only contain letters and spaces</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+              <div class="flex flex-col gap-1">
+                <label for="country" class="text-sm font-medium">Country</label>
+                <input id="country" type="text" formControlName="country" placeholder="Enter your country" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                <!-- Country Validation -->
+                @if (registerForm.get('country')?.errors && registerForm.get('country')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('country')?.getError('required')) {
+                                    <li>Country is required</li>
+                                }
+                                @else if (registerForm.get('country')?.getError('minlength')) {
+                                    <li>Country must be at least 2 characters</li>
+                                }
+                                @else if (registerForm.get('country')?.getError('maxlength')) {
+                                    <li>Country cannot exceed 50 characters</li>
+                                }
+                                @else if (registerForm.get('country')?.getError('pattern')) {
+                                    <li>Country can only contain letters and spaces</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label for="profilePic" class="text-sm font-medium">Profile Picture</label>
+              <input id="profilePic" type="file" formControlName="profilePic" accept="image/*" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label for="password" class="text-sm font-medium">Password</label>
+                <input id="password" type="password" formControlName="password" placeholder="Enter your password" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                <!-- Password Validation -->
+                @if (registerForm.get('password')?.errors && registerForm.get('password')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('password')?.getError('required')) {
+                                    <li>Password is required</li>
+                                }
+                                @else if (registerForm.get('password')?.getError('minlength')) {
+                                    <li>Password must be at least 8 characters</li>
+                                }
+                                @else if (registerForm.get('password')?.getError('pattern')) {
+                                    <li>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+              <div class="flex flex-col gap-1">
+                <label for="confirmPassword" class="text-sm font-medium">Confirm Password</label>
+                <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm your password" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                <!-- Confirm Password Validation -->
+                @if (registerForm.get('confirmPassword')?.errors && registerForm.get('confirmPassword')?.touched) {
+                    <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <span class="sr-only">Danger</span>
+                        <div>
+                            <ul class="mt-1.5 list-disc list-inside">
+                                @if (registerForm.get('confirmPassword')?.getError('required')) {
+                                    <li>Please confirm your password</li>
+                                }
+                                @else if (registerForm.errors?.['mismatch']) {
+                                    <li>Passwords do not match</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+              </div>
+            </div>
+
             <button type="submit" class="mt-5 bg-slate-600 text-white py-2 rounded shadow hover:bg-slate-700 transition">
-              Register</button>
+              Register
+            </button>
           </form>
           <div class="flex justify-between w-full mt-4 text-xs text-gray-500">
             <a  routerLink="/login"  class="hover:underline hover:cursor-pointer me-3">login</a>
