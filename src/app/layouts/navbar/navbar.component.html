@@ -1,1 +1,57 @@
-<p>navbar works!</p>
+<nav class="flex flex-col h-screen w-64 bg-gray-100 rounded-br-3xl shadow-md">
+ 
+ @if (!isPatient()) {
+  <ul class="flex-1 px-6 py-8 space-y-4">
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fas fa-tachometer-alt"></i>
+      <a class="cursor-pointer" routerLink="/patientdashboard" routerLinkActive="active-link">Dashboard</a>
+    </li>
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fa-solid fa-users"></i>
+      <a class="cursor-pointer" routerLink="/myvisits" routerLinkActive="active-link">Recent Interactions</a>
+    </li>
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <a class="cursor-pointer">Search</a>
+    </li>
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fa-solid fa-file-waveform"></i>
+      <a class="cursor-pointer">Medical History</a> 
+      <!-- need to be added -->
+    </li>
+  </ul>
+ }@else {
+  <ul class="flex-1 px-6 py-8 space-y-4">
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fas fa-tachometer-alt"></i>
+      <a class="cursor-pointer" routerLink="/dEntrydashboard" routerLinkActive="active-link">Dashboard</a>
+    </li>
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fa-solid fa-building-user"></i>
+      <a class="cursor-pointer" routerLink="/departmentinteraction" routerLinkActive="active-link">departments</a>
+    </li>
+    <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <i class="fa-solid fa-users-viewfinder"></i>
+      <a class="cursor-pointer">interactions</a>
+    </li>
+  </ul>
+ }
+ 
+ 
+
+  <ul class="px-6 py-6 mt-auto space-y-4">
+    <li class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+      <i class="fa-solid fa-gear"></i>
+      <a class="cursor-pointer" routerLink="/settings" routerLinkActive="active-link">Settings</a>
+    </li>
+    <li class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+      <i class="fa-solid fa-circle-question"></i>
+      <a class="cursor-pointer" routerLink="/helpCenter" routerLinkActive="active-link">Help Center</a>
+    </li>
+    <li class="flex items-center w-full space-x-3 text-gray-600 hover:text-red-500 focus:outline-none">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <a class="cursor-pointer" role="button" (click)="logOut()">Log Out</a>
+    </li>
+  </ul>
+</nav>
+

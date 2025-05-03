@@ -9,6 +9,11 @@ import { dataEntryGuard } from './core/guards/data-entry.guard';
 export const routes: Routes = [
     {
         path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+    },
+    {
+        path: '',
         component: AuthLayoutComponent,
         children: [
             {
@@ -41,7 +46,7 @@ export const routes: Routes = [
                 path: 'dEntrydashboard',
                 loadComponent: () => import('./pages/dentrydashboard/dentrydashboard.component')
                     .then(m => m.DentrydashboardComponent),
-                title: 'DataEntry Dashboard'
+                title: 'DataEntryDashboard'
             },
             {
                 path: 'dentryprofile',
@@ -77,6 +82,18 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/pdashboard/pdashboard.component')
                     .then(m => m.PdashboardComponent),
                 title: 'Patient Dashboard'
+            },
+            {
+                path: 'settings',
+                loadComponent: () => import('./pages/settings/settings.component')
+                    .then(m => m.SettingsComponent),
+                title: 'settings'
+            }, 
+            {
+                path: 'helpCenter',
+                loadComponent: () => import('./pages/help-center/help-center.component')
+                    .then(m => m.HelpCenterComponent),
+                title: 'helpCenter'
             }
         ]
     },
