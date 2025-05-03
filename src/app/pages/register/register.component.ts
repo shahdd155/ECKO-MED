@@ -64,6 +64,7 @@ export class RegisterComponent {
       Validators.maxLength(50),
       Validators.pattern(/^[a-zA-Z\s]*$/)
     ]),
+    profilePic: new FormControl(null),
     password: new FormControl(null, [
       Validators.required,
       Validators.minLength(8),
