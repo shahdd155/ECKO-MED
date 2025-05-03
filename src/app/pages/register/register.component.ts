@@ -64,43 +64,34 @@ export class RegisterComponent {
       Validators.maxLength(50),
       Validators.pattern(/^[a-zA-Z\s]*$/)
     ]),
-
     password: new FormControl(null, [
       Validators.required,
       Validators.minLength(8),
       Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
     ]),
+    confirmPassword: new FormControl(null, [
+      Validators.required
+    ])
   }, { validators: this.confirmPassword });
 
-  submitForm():void{
-
-
-
-    // if(this.registerForm.valid){
-    
-    //   this.authService.sendSignupForm(this.registerForm.value).subscribe({
-    //     next:(res)=>{
-     
-    //   }
-    
-    //     },
-    //     error:(err:HttpErrorResponse)=>{
-    //      console.log(err)
-    //     }
-      
-    //   })
-    // }
-
+  submitForm(): void {
+    if (this.registerForm.valid) {
+      const userData = this.registerForm.value;
+      this.authService.register(userData).subscribe(
+        (response) => {
+          console.log('Registration successful', response);
+          this.router.navigate(['/login']);
+        },
+        (error) => {
+          console.error('Registration failed', error);
+        }
+      );
+    }
   }
 
-    confirmPassword(group:AbstractControl){ 
-      const password= group.get('password')?.value; 
-      const rePassword= group.get('rePassword')?.value; 
-      
-       return password===rePassword?null:{mismatch:true}; 
-      }
-      
-
-
-
+  confirmPassword(group: AbstractControl): { [key: string]: any } | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
+  }
 }
