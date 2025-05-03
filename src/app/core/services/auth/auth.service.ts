@@ -1,30 +1,37 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environment/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private httpClient:HttpClient) { }
-  private readonly router= inject(Router);
+  constructor(private httpClient: HttpClient, @Inject(Router) private router: Router) {}
 
+  // Function to register a new user
+  register(userData: { username: string; email: string; password: string }): Observable<any> {
+    return this.httpClient.post(`${environment.baseUrl}/register`, userData);
+  }
 
-  // sendSignupForm(formData:object):Observable<any>{
-
-  //    return this.httpClient.post(`${environment.baseUrl}`)  
-  //   // da el api bta3 el signup el hn5do mn backend 
-  //     }
-    
-    
-    //   sendLoginForm(formData:object):Observable<any>{
-    //     return this.httpClient.post(`${environment.baseUrl}`)
-    // //brdo el api mn backend
-    //       }
-
-
+  // Function to log in a user
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.httpClient.post(`${environment.baseUrl}/login`, credentials);
+  }
   
+  // Function to check if a user is logged in
+  isLoggedIn(): boolean {
+    // Check if a token is present in local storage
+    return !!localStorage.getItem('authToken');
+  }
+
+  // Function to log out a user
+  logout(): void {
+    // Remove the token from local storage
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/login']);
+  }
 }

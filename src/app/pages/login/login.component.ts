@@ -1,4 +1,3 @@
-
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth/auth.service';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -23,7 +22,16 @@ export class LoginComponent {
 
   submitLogin():void{
     if(this.loginForm.valid){
-
+      const credentials = this.loginForm.value;
+      this.authService.login(credentials).subscribe(
+        (response) => {
+          console.log('Login successful', response);
+          this.router.navigate(['/dashboard']);
+        },
+        (error) => {
+          console.error('Login failed', error);
+        }
+      );
     }
   }
 }
