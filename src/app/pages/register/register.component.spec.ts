@@ -1,4 +1,3 @@
-// 1:1:src/app/pages/register/register.component.spec.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -8,6 +7,7 @@ import { RegisterComponent } from './register.component';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { environment } from '../../core/environment/environment';
 import { Router } from '@angular/router';
+import { User } from '../../models/user.model'; // Import the User interface
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -42,7 +42,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should call AuthService.register on valid form submission', () => {
-    const userData = {
+    const userData: User = { // Use the User interface for type annotation
       firstName: 'John',
       lastName: 'Doe',
       gender: 'male',
@@ -69,7 +69,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should not call AuthService.register on invalid form submission', () => {
-    const invalidUserData = {
+    const invalidUserData: User = { // Use the User interface for type annotation
       firstName: 'J',
       lastName: 'D',
       gender: '',
@@ -92,7 +92,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should show password mismatch error on password mismatch', () => {
-    const mismatchUserData = {
+    const mismatchUserData: User = { // Use the User interface for type annotation
       firstName: 'John',
       lastName: 'Doe',
       gender: 'male',

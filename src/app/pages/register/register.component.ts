@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { User } from '../../models/user.model'; // Import the User interface
 
 @Component({
   selector: 'app-register',
-  imports: [RouterLink,ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -76,7 +77,7 @@ export class RegisterComponent {
 
   submitForm(): void {
     if (this.registerForm.valid) {
-      const userData = this.registerForm.value;
+      const userData: User = this.registerForm.value; // Use the User interface for type annotation
       this.authService.register(userData).subscribe(
         (response) => {
           console.log('Registration successful', response);
