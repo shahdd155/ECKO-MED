@@ -78,15 +78,15 @@ export class RegisterComponent {
   submitForm(): void {
     if (this.registerForm.valid) {
       const userData = this.registerForm.value;
-      this.authService.register(userData).subscribe(
-        (response) => {
+      this.authService.register(userData).subscribe({
+        next: (response) => {
           console.log('Registration successful', response);
           this.router.navigate(['/login']);
         },
-        (error) => {
+        error: (error) => {
           console.error('Registration failed', error);
         }
-      );
+      });
     }
   }
 

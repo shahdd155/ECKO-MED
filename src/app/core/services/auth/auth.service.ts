@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environment/environment';
-
+import { User } from './models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient, @Inject(Router) private router: Router) {}
 
   // Function to register a new user
-  register(userData: { username: string; email: string; password: string }): Observable<any> {
+  register(userData: User): Observable<any> {
     return this.httpClient.post(`${environment.baseUrl}/register`, userData);
   }
 
