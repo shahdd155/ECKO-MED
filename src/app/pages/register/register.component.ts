@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-register',
-  imports: [RouterLink,ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -77,7 +78,7 @@ export class RegisterComponent {
 
   submitForm(): void {
     if (this.registerForm.valid) {
-      const userData = this.registerForm.value;
+      const userData: User = this.registerForm.value;
       this.authService.register(userData).subscribe({
         next: (response) => {
           console.log('Registration successful', response);
@@ -85,6 +86,11 @@ export class RegisterComponent {
         },
         error: (error) => {
           console.error('Registration failed', error);
+          if (error instanceof SyntaxError) {
+            console.error('Invalid JSON response:', error.message);
+          } else {
+            console.error('Server error:', error);
+          }
         }
       });
     }

@@ -108,6 +108,10 @@
     }
   },
   "cli": {
+<<<<<<< HEAD
     "analytics": "ea1b1a57-db03-41d3-84e7-0164e8567ef8"
+=======
+    "analytics": "d98d2883-9a8e-4fab-9d6f-b36ef6b1f27e"
+>>>>>>> AbdElRahman
   }
 }

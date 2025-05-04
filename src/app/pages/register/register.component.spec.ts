@@ -1,18 +1,16 @@
-// 1:1:src/app/pages/register/register.component.spec.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { RegisterComponent } from './register.component';
-import { AuthService } from '../../core/services/auth/auth.service';
 import { environment } from '../../core/environment/environment';
 import { Router } from '@angular/router';
+import { User } from '../../models/user.model';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let authService: AuthService;
   let httpMock: HttpTestingController;
   let router: any;
 
@@ -25,7 +23,6 @@ describe('RegisterComponent', () => {
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
     spyOn(router, 'navigate');
@@ -42,7 +39,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should call AuthService.register on valid form submission', () => {
-    const userData = {
+    const userData: User = {
       firstName: 'John',
       lastName: 'Doe',
       gender: 'male',
@@ -69,7 +66,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should not call AuthService.register on invalid form submission', () => {
-    const invalidUserData = {
+    const invalidUserData: User = {
       firstName: 'J',
       lastName: 'D',
       gender: '',
@@ -92,7 +89,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should show password mismatch error on password mismatch', () => {
-    const mismatchUserData = {
+    const mismatchUserData: User = {
       firstName: 'John',
       lastName: 'Doe',
       gender: 'male',
