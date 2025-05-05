@@ -1,1 +1,98 @@
-<p>pdashboard works!</p>
+<div class="p-6 md:p-10 w-full">
+  <!--  user name from backend -->
+  <div class="text-2xl font-semibold mb-2">Hi : {{userName}}</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- My visits list from backend) -->
+     <a routerLink="/myvisits">
+      <div class="bg-gray-100  rounded-xl shadow p-6 flex flex-col">
+        <div class="text-xl font-semibold mb-2">My Visits</div>
+        <div class="text-gray-500 text-md mb-4">Visits you've Done through the App</div>
+        <div class="flex items-center">
+          <!-- htt3'yr filter visits -->
+          <input type="text" placeholder="Go" class="border border-gray-300 rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
+          <button class=" px-4 py-2 flex items-center">
+              <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+     </a>
+    <!-- Search  clinic search from backend -->
+    <div class="bg-gray-100  rounded-xl shadow p-6 flex flex-col">
+      <div class="text-xl font-semibold mb-2">Search</div>
+      <div class="text-gray-500 text-md mb-4">Find Clinic</div>
+      <div class="flex items-center">
+        <!-- search clinics -->
+        <input type="text" placeholder="Go" class="border border-gray-300 rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
+        <button class="px-4 py-2 rounded-r flex items-center">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- new Clinics Carousel from backend) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Dynamic: hospital/clinic/news cards -->
+    <div class="relative bg-red-100 rounded-xl shadow overflow-hidden flex flex-col justify-end min-h-[160px]">
+      <img src="" alt="Blood Cells" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+      <div class="relative p-4">
+        <!-- hospital name from backend -->
+        <div class="text-lg font-bold">Hospital: {{hospitalName}}</div>
+        <div class="text-md text-gray-700 mb-2">News</div>
+        <div class="text-sm mb-2">Blood Scans are now Available</div>
+ <div class="flex">
+    <input type="text" placeholder="Go" class="border bg-transparent border-black rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
+    <button class="px-4 py-2 rounded-r flex items-center">
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
+ </div>
+      </div>
+    </div>
+    <div class="relative bg-blue-100 rounded-xl shadow overflow-hidden flex flex-col justify-end min-h-[160px]">
+      <img src="" alt="Doctor" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+      <div class="relative p-4">
+        <div class="text-lg font-bold">Doctor:{{dName}}</div>
+        <div class="text-md text-gray-700 mb-2">News</div>
+        <div class="text-sm mb-2">Doctor Ali-qadi is available from 29-2 to 31-3</div>
+        <div class="flex">
+            <input type="text" placeholder="Go" class="border  bg-transparent border-black rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
+            <button class="px-4 py-2 rounded-r flex items-center">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+         </div>
+      </div>
+    </div>
+    <div class="relative bg-blue-50 rounded-xl shadow overflow-hidden flex flex-col justify-end min-h-[160px]">
+      <img src="" alt="Building" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+      <div class="relative p-4">
+        <!-- htt3'yr brdoesm el clinic 7sb backend -->
+        <div class="text-lg font-bold">Clinic: MC</div>
+        <div class="text-md text-gray-700 mb-2">News</div>
+        <div class="text-sm mb-2">New Branch is now launched at New Giza</div>
+ <div class="flex">
+    <input type="text" placeholder="Go" class="border  bg-transparent border-black rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
+    <button class="px-4 py-2 rounded-r flex items-center">
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
+ </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-gray-100 rounded-xl shadow flex flex-col md:flex-row items-center p-6">
+    <div class="flex-1 flex flex-col justify-center">
+      <div class="text-xl font-semibold mb-2">Profile</div>
+      <div class="text-gray-500 text-md mb-4">Access your Data</div>
+      <!-- profile access button -->
+       <a routerLink="/patientprofile">
+        <button class="bg-gray-800 text-white px-6 py-2 rounded shadow hover:bg-gray-700 w-auto">Go To Profile</button>
+       </a>
+
+    </div>
+    <div class="flex-1 flex justify-end">
+      <!-- user image from backend -->
+      <img src="" alt="user image" />
+    </div>
+  </div>
+
+</div>

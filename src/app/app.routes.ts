@@ -69,8 +69,30 @@ export const routes: Routes = [
                 path: 'myvisits',
                 loadComponent: () => import('./pages/myvisits/myvisits.component')
                     .then(m => m.MyvisitsComponent),
-                title: 'My Visits'
+                title: 'My Visits',
             },
+
+
+            {
+                path: 'scans',
+                loadComponent: () => import('./pages/scans/scans.component')
+                    .then(m => m.ScansComponent),
+                title: 'Scans'
+            },
+            {
+                path: 'receipts',
+                loadComponent: () => import('./pages/receipts/receipts.component')
+                    .then(m => m.ReceiptsComponent),
+                title: 'Receipts'
+            },
+            {
+                path: 'prescriptions',
+                loadComponent: () => import('./pages/prescriptions/prescriptions.component')
+                    .then(m => m.PrescriptionsComponent),
+                title: 'Prescriptions'
+            },
+
+
             {
                 path: 'patientprofile',
                 loadComponent: () => import('./pages/patientprofile/patientprofile.component')

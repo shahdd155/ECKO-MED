@@ -1,1 +1,48 @@
-<p>patientprofile works!</p>
+<div class="w-full h-full bg-gray-200 rounded-3xl">
+  <div class="w-full h-full flex items-center justify-center">
+    <div class="bg-gray-200 rounded-2xl shadow-xl p-8 flex flex-col md:flex-row gap-8 w-full h-full">
+      <div class="flex-1 min-w-[260px]">
+        <h2 class="text-2xl font-semibold mb-2">User profile</h2>
+        <p class="text-gray-500 text-sm mb-4 border-b-4 border-white pb-8">Fill down your personal info.</p>
+    
+        <div class="mb-4">
+          <div class="font-semibold mb-2">Personal Info</div>
+          <div class="flex gap-2 mb-2">
+            <input type="text" placeholder="Last Name" class="border border-gray-300 rounded px-3 py-2 flex-1" />
+            <input type="text" placeholder="First Name" class="border border-gray-300 rounded px-3 py-2 flex-1" />
+          </div>
+          <input type="text" placeholder="National Id" class="border border-gray-300 rounded px-3 py-2 w-full mb-2" />
+        </div>
+        <div class="flex justify-center gap-8 items-center mb-4 border-b-4 border-white pb-8">
+          <div class="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-2">
+            <i class="fa-solid fa-user text-4xl text-gray-200"></i>
+          </div>
+
+          <button class="bg-slate-600 text-white px-4 py-2 rounded shadow hover:bg-slate-700">Update Image</button>
+        </div>
+        <div class="flex gap-2">
+          <button class="bg-slate-600 text-white px-8 py-2 rounded shadow hover:bg-slate-700 flex-1">Save</button>
+          <button class="border border-gray-400 text-gray-700 px-8 py-2 rounded flex-1">Cancel</button>
+        </div>
+      </div>
+      <div class="flex-1 min-w-[260px]">
+        <h2 class="text-2xl font-semibold mb-2">Health Insurance</h2>
+        <p class="text-gray-500 text-sm mb-4 border-b-4 border-white pb-8">Please, update your Health Insurance.</p>
+        <div class="mb-4">
+          <div class="font-semibold mb-2">Type</div>
+          <input type="text" placeholder="Card Number" class="border border-gray-300 rounded px-3 py-2 w-full mb-2" />
+          <div class="flex gap-2 mb-2">
+            <input type="text" placeholder="Expiration MM / YY" class="border border-gray-300 rounded px-3 py-2 flex-1" />
+            <input type="text" placeholder="CVC" class="border border-gray-300 rounded px-3 py-2 flex-1" />
+          </div>
+          <button class="bg-slate-600 text-white px-8 py-2 rounded shadow hover:bg-slate-700 w-full">Update Card</button>
+        </div>
+        <hr class="mb-4" />
+        <div>
+          <div class="font-semibold mb-2">Remove Insurance</div>
+          <button class="bg-slate-600 text-white px-8 py-2 rounded shadow hover:bg-slate-700 w-full">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
