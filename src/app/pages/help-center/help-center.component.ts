@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { SupportTicket } from '../../models/ticket'; // Import the SupportTicket interface
 
 @Component({
   selector: 'app-help-center',
@@ -9,8 +10,8 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
   styleUrl: './help-center.component.scss'
 })
 export class HelpCenterComponent {
-  // Define the ticket object
-  ticket = {
+  // Define the ticket object using the SupportTicket interface
+  ticket: SupportTicket = {
     name: '',
     email: '',
     message: ''

@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Receipt } from '../../models/receipt'; // Import the Receipt interface
 
 @Component({
   selector: 'app-receipts',
+  standalone: true,
   imports: [],
   templateUrl: './receipts.component.html',
   styleUrl: './receipts.component.scss'
 })
 export class ReceiptsComponent {
   // Define the receipt property with dummy data
-  receipt = {
+  receipt: Receipt = {
     patientName: 'John Doe',
     visitDate: '2023-10-01',
     doctor: 'Dr. Ali',
