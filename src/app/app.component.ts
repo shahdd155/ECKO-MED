@@ -10,7 +10,7 @@ import { FlowbiteService } from './core/services/flowbite.service';
 })
 export class AppComponent {
   constructor(private flowbiteService: FlowbiteService) {}
-
+  name = 'eckomed';
   ngOnInit(): void {
     this.flowbiteService.loadFlowbite(flowbite => {
       // Your custom code here
