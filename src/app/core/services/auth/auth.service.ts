@@ -12,16 +12,16 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, @Inject(Router) private router: Router) {}
 
+  // Function to log in a user
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.httpClient.post(`${environment.baseUrl}/login`, credentials);
+  }
+
   // Function to register a new user
   register(userData: User): Observable<any> {
     return this.httpClient.post(`${environment.baseUrl}/register`, userData);
   }
 
-  // Function to log in a user
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/login`, credentials);
-  }
-  
   // Function to check if a user is logged in
   isLoggedIn(): boolean {
     // Check if a token is present in local storage

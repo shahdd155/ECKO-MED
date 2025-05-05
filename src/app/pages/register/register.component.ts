@@ -89,7 +89,7 @@ export class RegisterComponent {
           if (error instanceof SyntaxError) {
             console.error('Invalid JSON response:', error.message);
           } else {
-            console.error('Server error:', error);
+            console.error('Server error:', error.message);
           }
         }
       });
