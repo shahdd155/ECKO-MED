@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { DataEntryLayoutComponent } from './layouts/data-entry-layout/data-entry-layout.component';
 import { PatientLayoutComponent } from './layouts/patient-layout/patient-layout.component';
-import { NotfoundComponent } from './pages/notfound/notfound.component';
+import { NotfoundComponent } from './pages/notFound/notfound.component';
 import { patientGuard } from './core/guards/patient.guard';
 import { dataEntryGuard } from './core/guards/data-entry.guard';
 
@@ -29,7 +29,7 @@ export const routes: Routes = [
             {
                 path: 'forgotpass',
                 title: 'forget password',
-                loadComponent: () => import('./pages/forgotpass/forgotpass.component').then(m => m.ForgotpassComponent)
+                loadComponent: () => import('./pages/forgotPassword/forgotpass.component').then(m => m.ForgotpassComponent)
             }
         ]
     },
@@ -38,25 +38,25 @@ export const routes: Routes = [
         children: [
             {
                 path: 'addpatient',
-                loadComponent: () => import('./pages/addpatient/addpatient.component')
+                loadComponent: () => import('./pages/addPatient/addpatient.component')
                     .then(m => m.AddpatientComponent),
                 title: 'Add Patient'
             },
             {
                 path: 'dEntrydashboard',
-                loadComponent: () => import('./pages/dentrydashboard/dentrydashboard.component')
+                loadComponent: () => import('./pages/dataEntryDashboard/dentrydashboard.component')
                     .then(m => m.DentrydashboardComponent),
                 title: 'DataEntryDashboard'
             },
             {
                 path: 'dentryprofile',
-                loadComponent: () => import('./pages/dentryprofile/dentryprofile.component')
+                loadComponent: () => import('./pages/dataEntryProfile/dentryprofile.component')
                     .then(m => m.DentryprofileComponent),
                 title: 'DataEntry Profile'
             },
             {
                 path: 'departmentinteraction',
-                loadComponent: () => import('./pages/departmentinteraction/departmentinteraction.component')
+                loadComponent: () => import('./pages/departmentInteraction/departmentinteraction.component')
                     .then(m => m.DepartmentinteractionComponent),
                 title: 'Department Interaction'
             }
@@ -67,7 +67,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'myvisits',
-                loadComponent: () => import('./pages/myvisits/myvisits.component')
+                loadComponent: () => import('./pages/myVisits/myvisits.component')
                     .then(m => m.MyvisitsComponent),
                 title: 'My Visits',
             },
@@ -95,13 +95,13 @@ export const routes: Routes = [
 
             {
                 path: 'patientprofile',
-                loadComponent: () => import('./pages/patientprofile/patientprofile.component')
+                loadComponent: () => import('./pages/patientProfile/patientprofile.component')
                     .then(m => m.PatientprofileComponent),
                 title: 'Patient Profile'
             },
             {
                 path: 'patientdashboard',
-                loadComponent: () => import('./pages/pdashboard/pdashboard.component')
+                loadComponent: () => import('./pages/patientDashboard/pdashboard.component')
                     .then(m => m.PdashboardComponent),
                 title: 'Patient Dashboard'
             },
