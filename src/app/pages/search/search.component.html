@@ -1,1 +1,86 @@
-<p>search works!</p>
+<div class="flex items-center gap-4 mb-4 justify-between">
+    <select class="border rounded px-2 py-1" [(ngModel)]="selectedDepartment">
+      <option value="">Department type</option>
+      @for (dept of departments; track dept) {
+        <option [value]="dept">{{ dept }}</option>
+      }
+    </select>
+  
+    <div class="flex flex-col items-center">
+      <span>Price</span>
+      <input
+      type="range"
+      min="300"
+      max="10000"
+      step="100"
+      [(ngModel)]="price"
+      class="w-64 accent-gray-600"
+    />
+  
+    <!-- Min and Max Labels -->
+    <div class="flex justify-between w-64 text-xs text-gray-600">
+      <span>300 EGP</span>
+      <span>10,000 EGP</span>
+    </div>
+    </div>
+  
+    <div class="flex flex-col justify-end">
+        <input
+        placeholder="Search"
+        [(ngModel)]="searchText"
+        class="bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2"
+      />
+        
+    
+  
+      <div class="flex items-center ml-auto gap-2">
+        <span class="text-xs">Sort By</span>
+        <button class="text-gray-700">
+          <i class="fa fa-filter"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="w-full h-full bg-gray-200 rounded-3xl p-4">
+    <div class="w-full h-full flex flex-col">
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-300 p-0 w-full">
+        <h2 class="text-xl font-semibold px-6 pt-6 pb-4">Results</h2>
+  
+        <div class="bg-gray-100 rounded-xl mx-4 mb-4 p-4 transition-all duration-300 flex flex-col gap-4 overflow-y-auto"
+             [style.maxHeight]="expanded ? '1000px' : '300px'">
+             @for (hospital of filteredHospitals; track hospital) {
+                <div class="bg-slate-500 bg-opacity-90 text-white rounded-xl p-6 flex flex-col gap-3 shadow-md">
+                  <div class="text-lg font-semibold">{{ hospital.hospital }}</div>
+                  <div class="flex flex-wrap gap-4">
+                    <div class="bg-gray-300 text-black px-4 py-2 rounded min-w-[120px] text-center">
+                      Distance: {{ hospital.distance }} km
+                    </div>
+                    <div class="bg-gray-300 text-black px-4 py-2 rounded min-w-[120px] text-center">
+                      Budget: {{ hospital.budget | currency:'EGP'}}
+                    </div>
+                    <div class="bg-gray-300 text-black px-4 py-2 rounded min-w-[120px] text-center">
+                      Health Insurance: {{ hospital.healthInsurance }}
+                    </div>
+                    <div class="bg-gray-300 text-black px-4 py-2 rounded min-w-[120px] text-center">
+                        Health Insurance: {{ hospital.department}}
+                      </div>
+                  </div>
+                </div>
+              }
+              
+              
+        </div>
+  
+        <div class="flex justify-center pb-4">
+          <button (click)="toggleExpand()" class="focus:outline-none">
+            @if (!expanded) {
+              <i class="fa-solid fa-chevron-down text-2xl text-gray-600"></i>
+            } @else {
+              <i class="fa-solid fa-chevron-up text-2xl text-gray-600"></i>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

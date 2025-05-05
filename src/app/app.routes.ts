@@ -116,6 +116,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/help-center/help-center.component')
                     .then(m => m.HelpCenterComponent),
                 title: 'helpCenter'
+            },
+            {
+                path: 'search',
+                loadComponent: () => import('./pages/search/search.component')
+                    .then(m => m.SearchComponent),
+                title: 'search'
             }
         ]
     },
