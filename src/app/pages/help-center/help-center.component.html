@@ -1,1 +1,42 @@
-<p>help-center works!</p>
+<div class="w-full h-full bg-gray-200 rounded-3xl p-4">
+    <div class="w-full h-full flex flex-col">
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-300 border-t-4 border-t-green-400 p-0 w-full">
+        <h2 class="text-xl font-semibold px-8 pt-6 pb-2">Help Center</h2>
+        <div class="bg-gray-100 rounded-xl mx-6 mb-6 p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+          <!-- Contact Info Section -->
+          <div class="bg-green-500 bg-opacity-60 rounded-xl p-6 shadow-sm text-white">
+            <h3 class="text-lg font-bold mb-4">Contact Support</h3>
+            <p class="mb-2"><strong>Email:</strong> support&#64;clinicapp.com</p>
+            <p class="mb-2"><strong>Phone:</strong> +20 100 123 4567</p>
+            <div class="mt-4">
+              <h4 class="font-semibold mb-2">Follow us:</h4>
+              <div class="flex space-x-4">
+                <a href="https://facebook.com" target="_blank" class="hover:underline">Facebook</a>
+                <a href="https://twitter.com" target="_blank" class="hover:underline">Twitter</a>
+                <a href="https://instagram.com" target="_blank" class="hover:underline">Instagram</a>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Submit Ticket Section -->
+          <div class="bg-white rounded-xl shadow-md p-6">
+            <h3 class="text-lg font-bold mb-4">Submit a Ticket</h3>
+            <form (submit)="submitTicket()" class="flex flex-col gap-4">
+              <input type="text" [(ngModel)]="ticket.name" name="name" placeholder="Your Name" required
+                class="rounded-lg border-gray-300 shadow-sm px-4 py-2" />
+              <input type="email" [(ngModel)]="ticket.email" name="email" placeholder="Your Email" required
+                class="rounded-lg border-gray-300 shadow-sm px-4 py-2" />
+              <textarea [(ngModel)]="ticket.message" name="message" placeholder="How can we help you?" rows="5" required
+                class="rounded-lg border-gray-300 shadow-sm px-4 py-2"></textarea>
+              <button type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md">
+                Submit Ticket
+              </button>
+            </form>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
