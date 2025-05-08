@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-prescriptions',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './prescriptions.component.html',
   styleUrl: './prescriptions.component.scss'
 })
@@ -17,8 +17,4 @@ export class PrescriptionsComponent {
 
   constructor(private router: Router) {}
 
-  // Method to navigate to /myvisits
-  navigateToMyVisits() {
-    this.router.navigate(['/myvisits']);
-  }
 }

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Receipt } from '../../models/receipt'; // Import the Receipt interface
 
 @Component({
   selector: 'app-receipts',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './receipts.component.html',
   styleUrl: './receipts.component.scss'
 })
@@ -25,8 +25,5 @@ export class ReceiptsComponent {
 
   constructor(private router: Router) {}
 
-  // Method to navigate to /myvisits
-  navigateToMyVisits() {
-    this.router.navigate(['/myvisits']);
-  }
+
 }

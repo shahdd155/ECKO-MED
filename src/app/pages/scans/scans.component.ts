@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Scan } from '../../models/scan'; // Import the Scan interface
 
 @Component({
   selector: 'app-scans',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './scans.component.html',
   styleUrl: './scans.component.scss'
 })
@@ -19,8 +19,5 @@ export class ScansComponent {
 
   constructor(private router: Router) {}
 
-  // Method to navigate to /myvisits
-  navigateToMyVisits() {
-    this.router.navigate(['/myvisits']);
-  }
+
 }
