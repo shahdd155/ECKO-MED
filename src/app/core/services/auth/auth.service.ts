@@ -12,7 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
 
   constructor(private httpClient: HttpClient, @Inject(Router) private router: Router) {}
-userData:any;
+  userData:any;
 
   // Function to log in a user
   login(credentials: { email: string; password: string }): Observable<any> {
@@ -49,23 +49,23 @@ userData:any;
   }
 
   //-------------------to get the user id from the token----------------
-       getUserData():void{
-        this.userData= jwtDecode(localStorage.getItem('token')!)
-        console.log(this.userData)
-      }
+    getUserData():void{
+    this.userData= jwtDecode(localStorage.getItem('token')!)
+    console.log(this.userData)
+  }
 
 
-      setEmailVerify(data:object):Observable<any>{
-        return this.httpClient.post(`${environment.baseUrl}auth/forgotPasswords`,data)
-      } //de lel email yt2kd mno
+  setEmailVerify(data:object):Observable<any>{
+    return this.httpClient.post(`${environment.baseUrl}/forgot-Password`,data)
+  } //de lel email yt2kd mno
 
-      setCodeVerify(data:object):Observable<any>{
-        return this.httpClient.post(`${environment.baseUrl}auth/verifyResetCode`,data) //de yt2kd mn el code
-      }
+  setCodeVerify(data:object):Observable<any>{
+    return this.httpClient.post(`${environment.baseUrl}/verify-code`,data) //de yt2kd mn el code
+  }
 
-      resetPassword(data:object):Observable<any>{
-        return this.httpClient.put(`${environment.baseUrl}auth/resetPassword`,data) //de b2a ny3'yr el pass 
-      }
+  resetPassword(data:object):Observable<any>{
+    return this.httpClient.put(`${environment.baseUrl}/reset-password`,data) //de b2a ny3'yr el pass 
+  }
 
 
 }

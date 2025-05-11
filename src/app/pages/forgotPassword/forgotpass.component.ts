@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router} from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-forgotpass',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './forgotpass.component.html',
   styleUrl: './forgotpass.component.scss'
 })
@@ -38,7 +38,7 @@ export class ForgotpassComponent {
     let emailValue = this.verifyEmail.get('email')?.value;
     this.resetPassword.get('email')?.patchValue(emailValue);
     this.authService.setEmailVerify(this.verifyEmail.value).subscribe({
-      next: (res) => {
+      next: (res:any) => {
         if (res.statusMsg === "success") {
           this.step = 2;
         }
@@ -60,9 +60,12 @@ export class ForgotpassComponent {
     this.authService.resetPassword(this.resetPassword.value).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
-        this.authService.getUserData();
+        // this.authService.getUserData();
         this.router.navigate(['/login']);
-      }
+      },
+      error: (error) => {
+        console.error('Reset password error:', error);
+      } 
     });
   }
 }
