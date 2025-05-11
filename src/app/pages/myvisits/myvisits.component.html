@@ -2,9 +2,7 @@
   <div class="w-full h-full flex flex-col">
     <div class="bg-white rounded-2xl shadow-xl border border-gray-300 border-t-4 border-t-gray-400 p-0 w-full">
       <h2 class="text-xl font-semibold px-8 pt-6 pb-2">Recent Interactions</h2>
-      <div class="bg-gray-100 rounded-xl mx-6 mb-6 p-4 transition-all duration-300 flex flex-col gap-4"
-           [style.maxHeight]="expanded ? '1000px' : '120px'"
-           [style.overflowY]="expanded ? 'auto' : 'hidden'">
+      <div class="bg-gray-100 rounded-xl mx-6 mb-6 p-4 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-200px)]">
         @for (visit of visits; track visit) {
           <div class="bg-slate-400 bg-opacity-70 rounded-xl p-6 flex flex-col gap-2 relative shadow-sm">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -15,7 +13,6 @@
               <div class="md:absolute md:top-6 md:right-8 text-xs text-gray-900">{{ visit.date }}</div>
             </div>
             <div class="flex flex-wrap gap-4 mt-2">
-          
                 <button routerLink="/scans" class="bg-gray-200 px-4 py-2 rounded flex items-center gap-2 shadow hover:bg-gray-300 min-w-[120px] justify-between">
                   <span>Scans</span>
                   <i class="fa-solid fa-arrow-right"></i>
@@ -33,15 +30,6 @@
             </div>
           </div>
         }
-      </div>
-      <div class="flex justify-center pb-4">
-        <button (click)="toggleExpand()" class="focus:outline-none">
-          @if (!expanded) {
-            <i class="fa-solid fa-chevron-down text-2xl text-gray-600"></i>
-          } @else {
-            <i class="fa-solid fa-chevron-up text-2xl text-gray-600"></i>
-          }
-        </button>
       </div>
     </div>
   </div>

@@ -46,10 +46,4 @@ export class MyvisitsComponent {
       ]
     }
   ];
-
-  expanded = false;
-
-  toggleExpand() {
-    this.expanded = !this.expanded;
-  }
 }

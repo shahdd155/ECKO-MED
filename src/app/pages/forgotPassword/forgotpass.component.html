@@ -1,1 +1,54 @@
-<p>forgotpass works!</p>
+<!-- Main container for forgot password form -->
+<section class="min-h-screen bg-gray-50 flex flex-col items-center pt-16">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Forget Password</h1>
+
+        <!-- byd5l el mail w yt2kd da s7 wla 3'lt asln b3den yb3tlo code 3la el mail -->
+        @if (step == 1) {
+            <form [formGroup]="verifyEmail" class="space-y-6" (ngSubmit)="verifyEmailSubmit()">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Enter valid email:</label>
+                    <input formControlName="email" type="email" id="email"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                </div>
+                <button [disabled]="verifyEmail.invalid"
+                    class="w-full py-2 px-4 bg-slate-600 text-white font-semibold rounded-lg shadow hover:bg-slate-800 transition disabled:bg-blue-300">
+                    Verify Email
+                </button>
+            </form>
+        } 
+        <!-- byt2kd el code s7 el etb3tlo -->
+        @else if (step == 2) {
+            <form [formGroup]="verifyCode" class="space-y-6" (ngSubmit)="verifyCodeSubmit()">
+                <div>
+                    <label for="resetCode" class="block text-sm font-medium text-gray-700 mb-1">Enter the reset code sent to you:</label>
+                    <input formControlName="resetCode" type="text" id="resetCode"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                </div>
+                <button [disabled]="verifyCode.invalid"
+                    class="w-full py-2 px-4 bg-slate-600 text-white font-semibold rounded-lg shadow hover:bg-slate-700 transition disabled:bg-blue-300">
+                    Verify Reset Code
+                </button>
+            </form>
+        } 
+        <!--byd5l el pass el gded b2a w byb2a zahr el email bss read  only -->
+        @else if (step == 3) {
+            <form [formGroup]="resetPassword" class="space-y-6" (ngSubmit)="verifyPasswordSubmit()">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Enter valid email:</label>
+                    <input readonly formControlName="email" type="email" id="email"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500" />
+                </div>
+                <div>
+                    <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">Enter valid new password:</label>
+                    <input formControlName="newPassword" type="password" id="newPassword"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                </div>
+                <button [disabled]="resetPassword.invalid"
+                    class="w-full py-2 px-4 bg-slate-600 text-white font-semibold rounded-lg shadow hover:bg-slate-700 transition disabled:bg-blue-300">
+                    Reset Password
+                </button>
+            </form>
+        }
+    </div>
+</section>

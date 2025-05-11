@@ -11,8 +11,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class SearchComponent {
   searchText = '';
-  price = 1000;
+ 
   selectedDepartment = '';
+  minPrice = 0;
+  maxPrice = 10000;
+  minLimit = 0;
+  maxLimit = 10000;
+  hasInsurance = false;
+
 
   departments = ['Cardiology', 'Neurology', 'Pediatrics'];
 
@@ -23,17 +29,27 @@ export class SearchComponent {
     { hospital: 'Cairo Care', distance: 12, budget: 300, healthInsurance: 'yes', department: 'Cardiology' }
   ];
 
-  get filteredHospitals() {
-    return this.hospitals.filter(h =>
-      h.hospital.toLowerCase().startsWith(this.searchText.toLowerCase()) &&
-      h.budget <= this.price &&
-      (this.selectedDepartment === '' || h.department === this.selectedDepartment)
-    );
-  }
+get filteredHospitals() {
+  return this.hospitals.filter(h =>
+    h.hospital.toLowerCase().startsWith(this.searchText.toLowerCase()) &&
+    h.budget <= this.maxPrice &&
+    (this.selectedDepartment === '' || h.department === this.selectedDepartment) &&
+    (!this.hasInsurance || h.healthInsurance === 'yes')
+  );
+}
 
   expanded = false;
   toggleExpand() {
     this.expanded = !this.expanded;
   }
+
+
+
+validateRange(type: 'max') {
+  if (this.maxPrice < 0) {
+    this.maxPrice = 0;
+  }
+}
+
 
 }

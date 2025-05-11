@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environment/environment';
 import { User } from '../../../models/user.model';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { User } from '../../../models/user.model';
 export class AuthService {
 
   constructor(private httpClient: HttpClient, @Inject(Router) private router: Router) {}
+userData:any;
 
   // Function to log in a user
   login(credentials: { email: string; password: string }): Observable<any> {
@@ -32,6 +34,28 @@ export class AuthService {
   logout(): void {
     // Remove the token from local storage
     localStorage.removeItem('authToken');
+    this.userData=null
     this.router.navigate(['/login']);
   }
+
+  //-------------------to get the user id from the token----------------
+       getUserData():void{
+this.userData= jwtDecode(localStorage.getItem('token')!)
+console.log(this.userData)
+      }
+
+
+      setEmailVerify(data:object):Observable<any>{
+        return this.httpClient.post(`${environment.baseUrl}auth/forgotPasswords`,data)
+      } //de lel email yt2kd mno
+
+      setCodeVerify(data:object):Observable<any>{
+        return this.httpClient.post(`${environment.baseUrl}auth/verifyResetCode`,data) //de yt2kd mn el code
+      }
+
+      resetPassword(data:object):Observable<any>{
+        return this.httpClient.put(`${environment.baseUrl}auth/resetPassword`,data) //de b2a ny3'yr el pass 
+      }
+
+
 }
