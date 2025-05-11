@@ -18,7 +18,8 @@ export class LoginComponent {
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(null, [Validators.required, Validators.email]), // Added email control
     password: new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
-    rememberMe: new FormControl(false)  // Added rememberMe control
+    rememberMe: new FormControl(false),  // Added rememberMe control
+    role: new FormControl('patient')
   });
 
   submitLogin(): void {
