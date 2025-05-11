@@ -19,6 +19,7 @@ userData:any;
     return this.httpClient.post(`${environment.baseUrl}/login`, credentials);
   }
 
+
   // Function to register a new user
   register(userData: User): Observable<any> {
     return this.httpClient.post(`${environment.baseUrl}/register`, userData);
@@ -32,16 +33,25 @@ userData:any;
 
   // Function to log out a user
   logout(): void {
-    // Remove the token from local storage
-    localStorage.removeItem('authToken');
-    this.userData=null
-    this.router.navigate(['/login']);
+    // Call the backend logout endpoint
+    this.httpClient.post(`${environment.baseUrl}/logout`, {}).subscribe({
+      next: () => {
+        // Remove the token from local storage
+        localStorage.removeItem('authToken');
+        this.userData = null;
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Logout error:', error);
+        // Handle the error appropriately
+      }
+    });
   }
 
   //-------------------to get the user id from the token----------------
        getUserData():void{
-this.userData= jwtDecode(localStorage.getItem('token')!)
-console.log(this.userData)
+        this.userData= jwtDecode(localStorage.getItem('token')!)
+        console.log(this.userData)
       }
 
 

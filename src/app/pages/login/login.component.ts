@@ -28,7 +28,7 @@ export class LoginComponent {
       this.authService.login(credentials).subscribe({
         next: (response) => {
           console.log('Login successful', response);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/patientdashboard']);
         },
         error: (error) => {
           console.error('Login failed', error);
