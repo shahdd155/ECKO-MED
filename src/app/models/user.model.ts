@@ -6,7 +6,7 @@ export interface User {
     phoneNumber: string;
     username: string;
     email: string;
-    profilePicture?: File;
+    profilePicture?: FormData;
     street: string;
     city: string;
     country: string;

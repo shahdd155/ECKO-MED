@@ -85,23 +85,27 @@ export class RegisterComponent {
   submitForm(): void {
     if (this.registerForm.invalid) return;
 
-    const user: User = {
-      firstName: this.registerForm.get('firstName')?.value,
-      lastName: this.registerForm.get('lastName')?.value,
-      gender: this.registerForm.get('gender')?.value,
-      dateOfBirth: this.registerForm.get('dateOfBirth')?.value,
-      phoneNumber: this.registerForm.get('phoneNumber')?.value,
-      username: this.registerForm.get('username')?.value,
-      email: this.registerForm.get('email')?.value,
-      street: this.registerForm.get('street')?.value,
-      city: this.registerForm.get('city')?.value,
-      country: this.registerForm.get('country')?.value,
-      password: this.registerForm.get('password')?.value,
-      confirmPassword: this.registerForm.get('confirmPassword')?.value,
-      profilePicture: this.selectedFile || undefined
-    };
-    console.log(user.profilePicture);
-    this.authService.register(user).subscribe({
+    const formData = new FormData();
+
+    // Append all user fields as strings
+    formData.append('firstName', this.registerForm.get('firstName')?.value || '');
+    formData.append('lastName', this.registerForm.get('lastName')?.value || '');
+    formData.append('gender', this.registerForm.get('gender')?.value || '');
+    formData.append('dateOfBirth', this.registerForm.get('dateOfBirth')?.value || '');
+    formData.append('phoneNumber', this.registerForm.get('phoneNumber')?.value || '');
+    formData.append('username', this.registerForm.get('username')?.value || '');
+    formData.append('email', this.registerForm.get('email')?.value || '');
+    formData.append('street', this.registerForm.get('street')?.value || '');
+    formData.append('city', this.registerForm.get('city')?.value || '');
+    formData.append('country', this.registerForm.get('country')?.value || '');
+    formData.append('password', this.registerForm.get('password')?.value || '');
+    formData.append('confirmPassword', this.registerForm.get('confirmPassword')?.value || '');
+
+    if (this.selectedFile) {
+      formData.append('profilePicture', this.selectedFile, this.selectedFile.name);
+    }
+
+    this.authService.register(formData).subscribe({
       next: () => this.router.navigate(['/login']),
       error: (error) => {
         console.error('Registration failed', error);
