@@ -86,21 +86,21 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return;
 
     const user: User = {
-      FirstName: this.registerForm.get('firstName')?.value,
-      LastName: this.registerForm.get('lastName')?.value,
-      Gender: this.registerForm.get('gender')?.value,
-      DateOfBirth: this.registerForm.get('dateOfBirth')?.value,
-      PhoneNumber: this.registerForm.get('phoneNumber')?.value,
-      Username: this.registerForm.get('username')?.value,
-      Email: this.registerForm.get('email')?.value,
-      Street: this.registerForm.get('street')?.value,
-      City: this.registerForm.get('city')?.value,
-      Country: this.registerForm.get('country')?.value,
-      Password: this.registerForm.get('password')?.value,
-      ConfirmPassword: this.registerForm.get('confirmPassword')?.value,
-      ProfilePicture: this.selectedFile || undefined
+      firstName: this.registerForm.get('firstName')?.value,
+      lastName: this.registerForm.get('lastName')?.value,
+      gender: this.registerForm.get('gender')?.value,
+      dateOfBirth: this.registerForm.get('dateOfBirth')?.value,
+      phoneNumber: this.registerForm.get('phoneNumber')?.value,
+      username: this.registerForm.get('username')?.value,
+      email: this.registerForm.get('email')?.value,
+      street: this.registerForm.get('street')?.value,
+      city: this.registerForm.get('city')?.value,
+      country: this.registerForm.get('country')?.value,
+      password: this.registerForm.get('password')?.value,
+      confirmPassword: this.registerForm.get('confirmPassword')?.value,
+      profilePicture: this.selectedFile || undefined
     };
-    console.log(user.ProfilePicture);
+    console.log(user.profilePicture);
     this.authService.register(user).subscribe({
       next: () => this.router.navigate(['/login']),
       error: (error) => {

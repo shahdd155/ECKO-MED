@@ -1,15 +1,15 @@
 export interface User {
-    FirstName: string;
-    LastName: string;
-    Gender: string;
-    DateOfBirth: Date;
-    PhoneNumber: string;
-    Username: string;
-    Email: string;
-    ProfilePicture?:File;
-    Street: string;
-    City: string;
-    Country: string;
-    Password: string;
-    ConfirmPassword: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    dateOfBirth: Date;
+    phoneNumber: string;
+    username: string;
+    email: string;
+    profilePicture?: File;
+    street: string;
+    city: string;
+    country: string;
+    password: string;
+    confirmPassword: string;
 }
