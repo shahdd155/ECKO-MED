@@ -124,7 +124,7 @@
             <div class="flex flex-col gap-1">
               <label for="phoneNumber" class="text-sm font-medium">Phone Number</label>
               <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="Enter your phone number" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-        
+              <!-- Phone Number Validation -->
               @if (registerForm.get('phoneNumber')?.errors && registerForm.get('phoneNumber')?.touched) {
                   <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
                       <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -148,7 +148,7 @@
             <div class="flex flex-col gap-1">
               <label for="username" class="text-sm font-medium">Username</label>
               <input id="username" type="text" formControlName="username" placeholder="Choose a username" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-             
+              <!-- Username Validation -->
               @if (registerForm.get('username')?.errors && registerForm.get('username')?.touched) {
                   <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
                       <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -289,7 +289,11 @@
 
             <div class="flex flex-col gap-1">
               <label for="profilePic" class="text-sm font-medium">Profile Picture</label>
-              <input id="profilePic" type="file" formControlName="profilePic" accept="image/*" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+              <input    id="profilePic"
+                        type="file" 
+                        (change)="onFileSelected($event)"
+                        accept="image/*" 
+                        class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
             </div>
 
             <div class="grid grid-cols-2 gap-4">

@@ -21,7 +21,7 @@ export class AuthService {
 
 
   // Function to register a new user
-  register(userData: User): Observable<any> {
+  register(userData: User | FormData): Observable<any> {
     return this.httpClient.post(`${environment.baseUrl}/register`, userData);
   }
 

@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { DataEntryLayoutComponent } from './layouts/data-entry-layout/data-entry-layout.component';
 import { PatientLayoutComponent } from './layouts/patient-layout/patient-layout.component';
-import { NotfoundComponent } from './pages/notFound/notfound.component';
+import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { patientGuard } from './core/guards/patient.guard';
 import { dataEntryGuard } from './core/guards/data-entry.guard';
 
@@ -38,7 +38,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'addpatient',
-                loadComponent: () => import('./pages/addPatient/addpatient.component')
+                loadComponent: () => import('./pages/addpatient/addpatient.component')
                     .then(m => m.AddpatientComponent),
                 title: 'Add Patient'
             },
@@ -56,7 +56,7 @@ export const routes: Routes = [
             },
             {
                 path: 'departmentinteraction',
-                loadComponent: () => import('./pages/departmentInteraction/departmentinteraction.component')
+                loadComponent: () => import('./pages/departmentinteraction/departmentinteraction.component')
                     .then(m => m.DepartmentinteractionComponent),
                 title: 'Department Interaction'
             }
@@ -67,7 +67,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'myvisits',
-                loadComponent: () => import('./pages/myVisits/myvisits.component')
+                loadComponent: () => import('./pages/myvisits/myvisits.component')
                     .then(m => m.MyvisitsComponent),
                 title: 'My Visits',
             },
@@ -95,7 +95,7 @@ export const routes: Routes = [
 
             {
                 path: 'patientprofile',
-                loadComponent: () => import('./pages/patientProfile/patientprofile.component')
+                loadComponent: () => import('./pages/patientprofile/patientprofile.component')
                     .then(m => m.PatientprofileComponent),
                 title: 'Patient Profile'
             },
