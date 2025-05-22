@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 @Component({
   selector: 'app-footer',
@@ -7,5 +7,5 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-
+  isPatient= input<boolean>(true);
 }
