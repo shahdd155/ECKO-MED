@@ -1,5 +1,15 @@
+
 .active-link{
-    background-color: rgb(41, 84, 122) !important;
+       background-color: #6b7280  !important;
+    color: #fff !important;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px; 
+}
+.active-link:hover{
+    background-color: #4B5563 !important;
     color: #fff !important;
     border-radius: 5px;
     -webkit-border-radius: 5px;

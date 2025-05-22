@@ -1,29 +1,29 @@
-<nav class="flex flex-col h-screen w-64 bg-gray-100 rounded-br-3xl shadow-md">
+<nav class="flex flex-col h-full w-64 bg-gray-100 rounded-br-3xl shadow-md overflow-hidden">
  
  @if (isPatient()) {
   <ul class="flex-1 px-6 py-8 space-y-4">
-    <li routerLinkActive="active-link" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+    <li routerLinkActive="active-link" routerLink="/patientdashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fas fa-tachometer-alt"></i>
-      <a class="cursor-pointer" routerLink="/patientdashboard">Dashboard</a>
+      <a class="cursor-pointer" >Dashboard</a>
     </li>
-    <li routerLinkActive="active-link" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+    <li routerLinkActive="active-link" routerLink="/myvisits" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fa-solid fa-users"></i>
-      <a class="cursor-pointer" routerLink="/myvisits" >Recent Interactions</a>
+      <a class="cursor-pointer">Recent Interactions</a>
     </li>
-    <li routerLinkActive="active-link" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+    <li routerLinkActive="active-link" routerLink="/search" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <a class="cursor-pointer" routerLink="/search">Search</a>
+      <a class="cursor-pointer">Search</a>
     </li>
   </ul>
  }@else {
   <ul class="flex-1 px-6 py-8 space-y-4">
-    <li routerLinkActive="active-link" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+    <li routerLinkActive="active-link" routerLink="/dEntrydashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fas fa-tachometer-alt"></i>
-      <a class="cursor-pointer" routerLink="/dEntrydashboard">Dashboard</a>
+      <a class="cursor-pointer">Dashboard</a>
     </li>
-    <li routerLinkActive="active-link" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+    <li routerLinkActive="active-link" routerLink="/departmentinteraction" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fa-solid fa-building-user"></i>
-      <a class="cursor-pointer" routerLink="/departmentinteraction">departments</a>
+      <a class="cursor-pointer">departments</a>
     </li>
     <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fa-solid fa-users-viewfinder"></i>
@@ -35,15 +35,15 @@
  
 
   <ul class="px-6 py-6 mt-auto space-y-4">
-    <li class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+    <li routerLink="/settings" class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
       <i class="fa-solid fa-gear"></i>
-      <a class="cursor-pointer" routerLink="/settings">Settings</a>
+      <a class="cursor-pointer">Settings</a>
     </li>
-    <li class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+    <li routerLink="/helpCenter" class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
       <i class="fa-solid fa-circle-question"></i>
-      <a class="cursor-pointer" routerLink="/helpCenter">Help Center</a>
+      <a class="cursor-pointer">Contact Us</a>
     </li>
-    <li class="flex items-center w-full space-x-3 text-gray-600 hover:text-red-500 focus:outline-none">
+    <li class="flex items-center w-full space-x-3 text-gray-600 focus:outline-none">
       <i class="fa-solid fa-arrow-right-from-bracket"></i>
       <a class="cursor-pointer" role="button" (click)="logOut()">Log Out</a>
     </li>
