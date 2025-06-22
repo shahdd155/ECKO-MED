@@ -59,6 +59,18 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/departmentinteraction/departmentinteraction.component')
                     .then(m => m.DepartmentinteractionComponent),
                 title: 'Department Interaction'
+            },
+            {
+                path: 'pharmacy/view-requests',
+                loadComponent: () => import('./pages/Pharmacy/viewRequests/view-requests.component')
+                    .then(m => m.ViewRequestsComponent),
+                title: 'View Pharmacy Requests'
+            },
+            {
+                path: 'pharmacy/manage-requests',
+                loadComponent: () => import('./pages/Pharmacy/manageRequests/manage-requests.component')
+                    .then(m => m.ManageRequestsComponent),
+                title: 'Manage Pharmacy Requests'
             }
         ]
     },
