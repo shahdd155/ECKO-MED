@@ -79,32 +79,26 @@
           <div class="bg-slate-500 bg-opacity-90 text-white rounded-xl p-6 flex flex-col gap-3 shadow-md w-full">
             <div class="text-lg font-semibold">{{ hospital.hospital }}</div>
             <div class="flex flex-wrap gap-4 w-full">
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 Distance: {{ hospital.distance }} km
               </div>
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 Budget: {{ hospital.budget | currency:'EGP'}}
               </div>
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                   Department: {{ hospital.department}}
                 </div>
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 City: {{ hospital.city }}
               </div>
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 Area: {{ hospital.area }}
               </div>
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 Insurance Name: {{ hospital.insuranceName }}
               </div>
-              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px] flex items-center justify-center gap-2">
-                Availability:
-                <span class="w-4 h-4 rounded-full"
-                      [ngClass]="{
-                        'bg-red-500': hospital.traffic === 'high',
-                        'bg-orange-500': hospital.traffic === 'moderate',
-                        'bg-green-500': hospital.traffic === 'low'
-                      }"></span>
+              <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
+                Availability: {{ hospital.availability }}
               </div>
             </div>
           </div>

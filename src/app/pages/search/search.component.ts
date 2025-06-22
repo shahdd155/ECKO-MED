@@ -41,10 +41,10 @@ export class SearchComponent {
   departments = ['Cardiology', 'Neurology', 'Pediatrics'];
 
   hospitals = [
-    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', city: 'Cairo', area: 'Nasr City', insuranceName: 'MedCare', traffic: 'high' },
-    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', city: 'Alexandria', area: 'Gleem', insuranceName: 'HealthPlus', traffic: 'moderate' },
-    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', city: 'Aswan', area: 'Downtown', insuranceName: 'MedCare', traffic: 'low' },
-    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', city: 'Cairo', area: 'Maadi', insuranceName: 'LifeSecure', traffic: 'high' }
+    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', city: 'Cairo', area: 'Nasr City', insuranceName: 'MedCare', availability: 25 },
+    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', city: 'Alexandria', area: 'Gleem', insuranceName: 'HealthPlus', availability: 12 },
+    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', city: 'Aswan', area: 'Downtown', insuranceName: 'MedCare', availability: 8 },
+    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', city: 'Cairo', area: 'Maadi', insuranceName: 'LifeSecure', availability: 5 }
   ];
 
   filteredHospitalsList = this.hospitals;
@@ -71,7 +71,7 @@ export class SearchComponent {
   search() {
    
     this.filteredHospitalsList = this.hospitals.filter(h => {
-      // Hospital name filter (case-insensitive, startsWith)
+  
       const matchesHospital = this.searchText === '' || h.hospital.toLowerCase().startsWith(this.searchText.toLowerCase());
       // Department filter
       const matchesDepartment = this.selectedDepartment === '' || h.department === this.selectedDepartment;
