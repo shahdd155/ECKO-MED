@@ -17,7 +17,6 @@ export class SearchComponent {
   maxPrice = 10000;
   minLimit = 0;
   maxLimit = 10000;
-  hasInsurance = false;
 
   selectedCity = '';
   cities = ['Cairo', 'Alexandria', 'Aswan'];
@@ -42,16 +41,15 @@ export class SearchComponent {
   departments = ['Cardiology', 'Neurology', 'Pediatrics'];
 
   hospitals = [
-    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, healthInsurance: 'no', department: 'Cardiology', city: 'Cairo', area: 'Nasr City', insuranceName: 'MedCare' },
-    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, healthInsurance: 'yes', department: 'Neurology', city: 'Alexandria', area: 'Gleem', insuranceName: 'HealthPlus' },
-    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, healthInsurance: 'no', department: 'Pediatrics', city: 'Aswan', area: 'Downtown', insuranceName: 'MedCare' },
-    { hospital: 'Cairo Care', distance: 12, budget: 300, healthInsurance: 'yes', department: 'Cardiology', city: 'Cairo', area: 'Maadi', insuranceName: 'LifeSecure' }
+    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', city: 'Cairo', area: 'Nasr City', insuranceName: 'MedCare', traffic: 'high' },
+    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', city: 'Alexandria', area: 'Gleem', insuranceName: 'HealthPlus', traffic: 'moderate' },
+    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', city: 'Aswan', area: 'Downtown', insuranceName: 'MedCare', traffic: 'low' },
+    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', city: 'Cairo', area: 'Maadi', insuranceName: 'LifeSecure', traffic: 'high' }
   ];
 
   filteredHospitalsList = this.hospitals;
 
   get filteredHospitals() {
-    // Deprecated: use filteredHospitalsList instead
     return this.filteredHospitalsList;
   }
 
@@ -61,7 +59,7 @@ export class SearchComponent {
   }
 
   constructor() {
-    this.search(); // Initialize filteredHospitalsList
+    this.search(); 
   }
 
   validateRange(type: 'max') {
@@ -71,7 +69,7 @@ export class SearchComponent {
   }
 
   search() {
-    // Apply all filters to hospitals array
+   
     this.filteredHospitalsList = this.hospitals.filter(h => {
       // Hospital name filter (case-insensitive, startsWith)
       const matchesHospital = this.searchText === '' || h.hospital.toLowerCase().startsWith(this.searchText.toLowerCase());

@@ -4,7 +4,7 @@ import { ChartConfiguration, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-dentrydashboard',
-  imports: [BaseChartDirective],
+  imports: [],
   templateUrl: './dentrydashboard.component.html',
   styleUrl: './dentrydashboard.component.scss'
 })

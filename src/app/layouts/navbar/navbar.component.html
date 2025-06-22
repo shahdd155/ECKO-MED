@@ -1,6 +1,6 @@
 <nav class="flex flex-col h-full w-64 bg-gray-100 rounded-br-3xl shadow-md overflow-hidden">
  
- @if (!isPatient()) {
+ @if (isPatient()) {
   <ul class="flex-1 px-6 py-8 space-y-4">
     <li routerLinkActive="active-link" routerLink="/patientdashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
       <i class="fas fa-tachometer-alt"></i>

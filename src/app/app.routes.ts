@@ -30,6 +30,11 @@ export const routes: Routes = [
                 path: 'forgotpass',
                 title: 'forget password',
                 loadComponent: () => import('./pages/forgotPassword/forgotpass.component').then(m => m.ForgotpassComponent)
+            },
+            {
+                path: 'verifyemail',
+                title: 'Verify Email',
+                loadComponent: () => import('./pages/verifyemail/verifyemail.component').then(c => c.VerifyemailComponent)
             }
         ]
     },
@@ -83,8 +88,6 @@ export const routes: Routes = [
                     .then(m => m.MyvisitsComponent),
                 title: 'My Visits',
             },
-
-
             {
                 path: 'scans',
                 loadComponent: () => import('./pages/scans/scans.component')
@@ -92,19 +95,11 @@ export const routes: Routes = [
                 title: 'Scans'
             },
             {
-                path: 'receipts',
-                loadComponent: () => import('./pages/receipts/receipts.component')
-                    .then(m => m.ReceiptsComponent),
-                title: 'Receipts'
-            },
-            {
                 path: 'prescriptions',
                 loadComponent: () => import('./pages/prescriptions/prescriptions.component')
                     .then(m => m.PrescriptionsComponent),
                 title: 'Prescriptions'
             },
-
-
             {
                 path: 'patientprofile',
                 loadComponent: () => import('./pages/patientprofile/patientprofile.component')

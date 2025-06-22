@@ -19,7 +19,6 @@ export class MyvisitsComponent {
       date: '2021/12/10',
       actions: [
         { label: 'Scans', icon: 'fa-arrow-right' },
-        { label: 'Receipt', icon: 'fa-arrow-right' },
         { label: 'Prescription', icon: 'fa-arrow-right' }
       ]
     },
@@ -30,7 +29,6 @@ export class MyvisitsComponent {
       date: '2021/12/10',
       actions: [
         { label: 'Scans', icon: 'fa-arrow-right' },
-        { label: 'Receipt', icon: 'fa-arrow-right' },
         { label: 'Prescription', icon: 'fa-arrow-right' }
       ]
     },
@@ -41,7 +39,6 @@ export class MyvisitsComponent {
       date: '2021/12/10',
       actions: [
         { label: 'Scans', icon: 'fa-arrow-right' },
-        { label: 'Receipt', icon: 'fa-arrow-right' },
         { label: 'Prescription', icon: 'fa-arrow-right' }
       ]
     }

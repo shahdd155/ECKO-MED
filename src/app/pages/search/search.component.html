@@ -86,7 +86,7 @@
                 Budget: {{ hospital.budget | currency:'EGP'}}
               </div>
               <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Health Insurance: {{ hospital.department}}
+                  Department: {{ hospital.department}}
                 </div>
               <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 City: {{ hospital.city }}
@@ -96,6 +96,15 @@
               </div>
               <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                 Insurance Name: {{ hospital.insuranceName }}
+              </div>
+              <div class="bg-gray-300 text-black px-4 py-2 rounded text-center flex-1 min-w-[120px] flex items-center justify-center gap-2">
+                Availability:
+                <span class="w-4 h-4 rounded-full"
+                      [ngClass]="{
+                        'bg-red-500': hospital.traffic === 'high',
+                        'bg-orange-500': hospital.traffic === 'moderate',
+                        'bg-green-500': hospital.traffic === 'low'
+                      }"></span>
               </div>
             </div>
           </div>
