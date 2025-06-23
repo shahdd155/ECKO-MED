@@ -78,6 +78,7 @@ export const routes: Routes = [
                     .then(m => m.PatientInteractionComponent),
                 title: 'Patient Interaction'
             }
+            
         ]
     },
     {
@@ -140,6 +141,18 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/Patient/search/search.component')
                     .then(m => m.SearchComponent),
                 title: 'search'
+            },
+            {
+                path: 'searchmedicine',
+                loadComponent: () => import('./pages/Patient/searchmedicine/searchmedicine.component')
+                    .then(m => m.SearchmedicineComponent),
+                title: 'searchmedicine'
+            },
+            {
+                path: 'verifyemail',
+                loadComponent: () => import('./pages/verifyemail/verifyemail.component')
+                    .then(m => m.VerifyemailComponent),
+                title: 'Verify Email'
             }
         ]
     },

@@ -1,9 +1,11 @@
 import { Component, inject, input } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { NgxSpinnerModule } from 'ngx-spinner';
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink,RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, CommonModule, RouterModule, NgxSpinnerModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })

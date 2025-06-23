@@ -1,0 +1,89 @@
+<section>
+    <h2 class="text-3xl font-bold mb-6 text-center text-blue-800">Search Medicine in Nearby Pharmacies</h2>
+
+    <div class="min-h-screen w-full flex flex-col items-center justify-start bg-[#f5f6fa] py-10">
+        <div class="w-full max-w-6xl bg-white rounded-2xl shadow p-4 mb-8 border border-gray-200">
+         
+
+          <!-- for taking permission from user to acces his loc-->
+          @if (locationPermissionVisible) {
+            <div class="mb-4 p-4 rounded border flex items-center gap-3"
+                 [ngClass]="locationDenied ? 'border-red-400 bg-red-50' : 'border-blue-300 bg-blue-50'">
+              <svg class="w-6 h-6" [ngClass]="locationDenied ? 'text-red-500' : 'text-blue-500'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20.5C7.305 20.5 3.5 16.695 3.5 12S7.305 3.5 12 3.5 20.5 7.305 20.5 12 16.695 20.5 12 20.5z"/>
+              </svg>
+              <span class="font-medium" [ngClass]="locationDenied ? 'text-red-800' : 'text-blue-800'">{{ locationPermissionMessage }}</span>
+              @if (locationDenied) {
+                <button (click)="locationPermissionVisible = false" class="ml-auto px-2 py-1 rounded text-xs bg-red-200 text-red-800 hover:bg-red-300">Dismiss</button>
+              }
+            </div>
+          }
+      
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="w-full flex flex-col md:flex-row items-center gap-2">
+            <div class="flex-1 flex flex-col">
+              <label class="block text-xs text-gray-500 mb-1">Select a medicine</label>
+              <select formControlName="medicineId" class="border border-blue-400 text-blue-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white" required>
+                <option value=""  selected>Select a medicine</option>
+                @for (med of medicines; track med.id) {
+                  <option [value]="med.id">{{ med.name }} ({{ med.strength }})</option>
+                }
+              </select>
+            </div>
+            <div class="flex flex-col md:w-40">
+              <label class="block text-xs text-gray-500 mb-1">Quantity</label>
+              <input type="number" min="1" formControlName="quantity" class="border border-blue-400 text-blue-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white" required placeholder="Quantity" />
+            </div>
+            <div class="flex items-center h-full md:mt-6">
+              <button type="submit" [disabled]="loading || searchForm.invalid" class="bg-[#6c757d] hover:bg-[#495057] text-white font-bold px-6 py-3 rounded-lg text-md flex items-center gap-2">
+                @if (!loading) {
+                  <span><i class="fa-solid fa-magnifying-glass mr-2"></i>Search</span>
+                }
+                @if (loading) {
+                  <span>Searching...</span>
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      
+        @if (searchDone) {
+          <div class="w-full max-w-6xl">
+            @if (pharmacies.length === 0) {
+              <div class="text-gray-500 text-center">No pharmacies found with the selected medicine.</div>
+            }
+            @for (pharmacy of pharmacies; track pharmacy.pharmacyId) {
+              <div class="bg-[#7b8794] rounded-2xl p-6 mb-8 shadow flex flex-col gap-4">
+                <div class="text-xl font-bold text-white mb-4">{{ pharmacy.pharmacy.name }}</div>
+                <div class="flex flex-wrap gap-4">
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[120px] flex-1 text-black text-lg">Distance: {{ pharmacy.pharmacy.distance }} km</div>
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[120px] flex-1 text-black text-lg">Budget: {{ pharmacy.price | currency:pharmacy.currency }}</div>
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[120px] flex-1 text-black text-lg">Available: {{ pharmacy.quantity }}</div>
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[220px] flex-1 text-black text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-phone"></i>
+                    <span class="whitespace-nowrap">{{ pharmacy.pharmacy.phone }}</span>
+                  </div>
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[160px] flex-1 text-black text-lg">City: {{ pharmacy.pharmacy.city }}</div>
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[160px] flex-1 text-black text-lg">Status: <span class="font-semibold" [ngClass]="pharmacy.pharmacy.isOpen ? 'text-green-700' : 'text-red-700'">{{ pharmacy.pharmacy.isOpen ? 'Open' : 'Closed' }}</span></div>
+                </div>
+                <div class="flex flex-col gap-2 mt-4">
+                  <button (click)="sendRequest(pharmacy)" [disabled]="requestStatus[pharmacy.pharmacyId] === 'loading' || requestStatus[pharmacy.pharmacyId] === 'success'" class="bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 w-full md:w-1/4">
+                    @if (!requestStatus[pharmacy.pharmacyId]) {
+                      <span>Send Request</span>
+                    }
+                    @if (requestStatus[pharmacy.pharmacyId] === 'loading') {
+                      <span>Sending...</span>
+                    }
+                    @if (requestStatus[pharmacy.pharmacyId] === 'success') {
+                      <span>Request Sent <i class="fa-solid fa-check"></i></span>
+                    }
+                    @if (requestStatus[pharmacy.pharmacyId] === 'error') {
+                      <span>Error! Retry</span>
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+</section>
