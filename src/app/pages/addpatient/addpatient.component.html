@@ -1,1 +1,340 @@
-<p>addpatient works!</p>
+<!-- Add Patient Page -->
+<div class="h-full bg-gray-100 p-0">
+  <div class="w-full h-full">
+    
+    <!-- Page Header -->
+    <div class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 mb-0">
+      <h1 class="text-2xl font-normal text-gray-900">Patient Entry</h1>
+      <p class="mt-1 text-sm text-gray-600">Add a new patient to the system</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="p-6">
+      <div class="max-w-6xl mx-auto">
+        
+        <!-- Alert Messages -->
+        <div *ngIf="errorMessage" class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div class="flex">
+            <svg class="w-5 h-5 text-red-400 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+            {{ errorMessage }}
+          </div>
+        </div>
+
+        <div *ngIf="successMessage" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          <div class="flex">
+            <svg class="w-5 h-5 text-green-400 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            {{ successMessage }}
+          </div>
+        </div>
+
+        <!-- Patient Form -->
+        <form [formGroup]="patientForm" (ngSubmit)="savePatient()" class="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+          
+          <!-- Left Column - Patient Entry Form -->
+          <div class="xl:col-span-2 bg-white rounded-lg shadow-sm p-4 lg:p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-6">Patient Entry</h2>
+            
+            <div class="space-y-6">
+              
+              <!-- User ID -->
+              <div>
+                <label for="userId" class="block text-sm font-medium text-gray-700 mb-2">
+                  User ID <span class="text-red-500">*</span>
+                </label>
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="userId"
+                    formControlName="userId"
+                    placeholder="Enter user ID"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    [class.border-red-500]="patientForm.get('userId')?.invalid && patientForm.get('userId')?.touched"
+                  />
+                  <button
+                    type="button"
+                    (click)="fetchUserData()"
+                    [disabled]="isLoading || !patientForm.get('userId')?.value"
+                    class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    <svg *ngIf="isLoading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span *ngIf="!isLoading">Fetch</span>
+                    <span *ngIf="isLoading">Loading...</span>
+                  </button>
+                </div>
+                <div *ngIf="patientForm.get('userId')?.invalid && patientForm.get('userId')?.touched" class="mt-1 text-sm text-red-600">
+                  User ID is required
+                </div>
+                <div class="mt-1 text-xs text-gray-400">
+                  Enter user ID and click "Fetch" to load user information
+                </div>
+              </div>
+
+              <!-- User Information (Auto-filled from backend) -->
+              <div class="border-t pt-4 lg:pt-6">
+                <h3 class="text-md font-medium text-gray-900 mb-4">User Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+                  <!-- First Name -->
+                  <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      formControlName="firstName"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+
+                  <!-- Last Name -->
+                  <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      formControlName="lastName"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+
+                  <!-- Date of Birth -->
+                  <div>
+                    <label for="dateOfBirth" class="block text-sm font-medium text-gray-700 mb-2">
+                      Date of Birth
+                    </label>
+                    <input
+                      type="date"
+                      id="dateOfBirth"
+                      formControlName="dateOfBirth"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+
+                  <!-- Gender -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                      Gender
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="gender"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+
+                  <!-- Phone Number -->
+                  <div>
+                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      formControlName="phoneNumber"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+
+                  <!-- Email -->
+                  <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      formControlName="email"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Address Information (Auto-filled from backend) -->
+              <div class="border-t pt-4 lg:pt-6">
+                <h3 class="text-md font-medium text-gray-900 mb-4">Address Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+                  <!-- Street -->
+                  <div>
+                    <label for="street" class="block text-sm font-medium text-gray-700 mb-2">
+                      Street Address
+                    </label>
+                    <input
+                      type="text"
+                      id="street"
+                      formControlName="street"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+
+                  <!-- City -->
+                  <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      id="city"
+                      formControlName="city"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Auto-filled from user data</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Entry Information -->
+              <div class="border-t pt-4 lg:pt-6">
+                <h3 class="text-md font-medium text-gray-900 mb-4">Entry Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+                  <!-- Department -->
+                  <div>
+                    <label for="department" class="block text-sm font-medium text-gray-700 mb-2">
+                      Department <span class="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="department"
+                      formControlName="department"
+                      class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      [class.border-red-500]="patientForm.get('department')?.invalid && patientForm.get('department')?.touched"
+                    >
+                      <option value="">Select department</option>
+                      <option value="cardiology">Cardiology</option>
+                      <option value="dermatology">Dermatology</option>
+                      <option value="emergency">Emergency</option>
+                      <option value="neurology">Neurology</option>
+                      <option value="orthopedics">Orthopedics</option>
+                      <option value="pediatrics">Pediatrics</option>
+                    </select>
+                    <div *ngIf="patientForm.get('department')?.invalid && patientForm.get('department')?.touched" class="mt-1 text-sm text-red-600">
+                      Please select a department
+                    </div>
+                  </div>
+
+                  <!-- Entry Date and Time -->
+                  <div>
+                    <label for="entryDateTime" class="block text-sm font-medium text-gray-700 mb-2">
+                      Entry Date & Time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="entryDateTime"
+                      formControlName="entryDateTime"
+                      readonly
+                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                    />
+                    <div class="mt-1 text-xs text-gray-400">Current date and time</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-4 lg:pt-6 mt-4 lg:mt-6 border-t border-gray-200">
+              <!-- Save Button -->
+              <button
+                type="submit"
+                [disabled]="isSaving || patientForm.invalid"
+                class="flex-1 sm:flex-none inline-flex justify-center items-center px-6 py-2 border border-transparent text-base font-medium rounded text-white bg-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                <svg *ngIf="isSaving" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {{ isSaving ? 'Saving...' : 'Save Changes' }}
+              </button>
+
+              <!-- Cancel Button -->
+              <button
+                type="button"
+                (click)="cancelForm()"
+                [disabled]="isSaving"
+                class="flex-1 sm:flex-none inline-flex justify-center items-center px-6 py-2 border border-gray-300 text-base font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column - Contact Info & Language -->
+          <div class="space-y-4 lg:space-y-6">
+            
+            <!-- Contact Info Card -->
+            <div class="bg-slate-600 rounded-lg shadow-sm p-4 lg:p-6 text-white">
+              <h3 class="text-lg font-medium mb-4">Contact Info</h3>
+              
+              <!-- Phone Number Display -->
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-200 mb-2">Phone Number</label>
+                <div class="bg-white rounded px-3 py-2">
+                  <span class="text-gray-900">{{ patientForm.get('phoneNumber')?.value || 'Not entered' }}</span>
+                </div>
+              </div>
+
+              <!-- User ID Display -->
+              <div>
+                <label class="block text-sm font-medium text-slate-200 mb-2">User ID</label>
+                <div class="bg-white rounded px-3 py-2">
+                  <span class="text-gray-900">{{ patientForm.get('userId')?.value || 'Not entered' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Department Statistics (Optional) -->
+            <div class="bg-white rounded-lg shadow-sm p-4 lg:p-6">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">Department Statistics</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">Emergency</span>
+                  <div class="w-24 bg-gray-200 rounded-full h-2">
+                    <div class="bg-slate-600 h-2 rounded-full" style="width: 45%"></div>
+                  </div>
+                  <span class="text-sm text-gray-500">45%</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">Cardiology</span>
+                  <div class="w-24 bg-gray-200 rounded-full h-2">
+                    <div class="bg-slate-600 h-2 rounded-full" style="width: 30%"></div>
+                  </div>
+                  <span class="text-sm text-gray-500">30%</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">Surgery</span>
+                  <div class="w-24 bg-gray-200 rounded-full h-2">
+                    <div class="bg-slate-600 h-2 rounded-full" style="width: 25%"></div>
+                  </div>
+                  <span class="text-sm text-gray-500">25%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

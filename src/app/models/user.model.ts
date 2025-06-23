@@ -39,3 +39,62 @@ export interface UpdateDataEntryProfileDto {
     phoneNumber: string;
     departments: string[];
 }
+
+// Patient Interface
+export interface Patient {
+    id?: number;
+    patientId: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+    gender: 'male' | 'female';
+    phoneNumber: string;
+    email?: string;
+    address: {
+        street: string;
+        city: string;
+        state: string;
+        zipCode: string;
+        country: string;
+    };
+    emergencyContact: {
+        name: string;
+        relationship: string;
+        phoneNumber: string;
+    };
+    medicalInfo: {
+        bloodType?: string;
+        allergies: string[];
+        medications: string[];
+        medicalHistory: string[];
+    };
+    insurance?: {
+        provider: string;
+        policyNumber: string;
+        groupNumber?: string;
+    };
+    department: string;
+    admissionDate: Date;
+    amountPaid: number;
+    paymentStatus: 'paid' | 'pending' | 'partial';
+    language: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+// DTO for creating new patient entry
+export interface CreatePatientDto {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+    gender: 'male' | 'female';
+    phoneNumber: string;
+    email?: string;
+    address: {
+        street: string;
+        city: string;
+    };
+    department: string;
+    entryDateTime: Date;
+}
