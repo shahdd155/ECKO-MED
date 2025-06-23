@@ -129,6 +129,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/search/search.component')
                     .then(m => m.SearchComponent),
                 title: 'search'
+            },
+                  {
+                path: 'searchmedicine',
+                loadComponent: () => import('./pages/searchmedicine/searchmedicine.component')
+                    .then(m => m.SearchmedicineComponent),
+                title: 'search'
             }
         ]
     },
