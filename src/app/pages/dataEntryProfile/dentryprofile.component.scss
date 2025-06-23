@@ -1,0 +1,220 @@
+// Data Entry Profile Component Styles
+
+// Custom animations for smooth transitions
+.profile-card {
+  transition: all 0.3s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+// Profile picture upload area
+.profile-picture-container {
+  position: relative;
+  
+  .upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// Form field focus effects
+.form-field {
+  position: relative;
+  
+  input:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+  }
+  
+  .field-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+  }
+}
+
+// Department checkboxes styling
+.department-grid {
+  .department-item {
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: #f9fafb;
+      border-color: #d1d5db;
+    }
+    
+    &.selected {
+      background-color: #eff6ff;
+      border-color: #3b82f6;
+    }
+    
+    input[type="checkbox"] {
+      &:checked + label {
+        color: #1d4ed8;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Button enhancements
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+}
+
+// Alert message animations
+.alert {
+  animation: slideIn 0.3s ease-out;
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Loading spinner customization
+.loading-spinner {
+  .spinner {
+    border-top-color: #3b82f6;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+// Immutable field styling
+.immutable-field {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  position: relative;
+  
+  &::after {
+    content: '🔒';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+    font-size: 14px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    
+    .profile-picture-container {
+      margin-bottom: 16px;
+    }
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .department-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+// Custom scrollbar for long forms
+.form-container {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+}
+
+// Form validation styling
+.field-error {
+  animation: shake 0.5s ease-in-out;
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+}
+
+// Success state styling
+.success-state {
+  .form-field {
+    input:valid {
+      border-color: #10b981;
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+      }
+    }
+  }
+}
