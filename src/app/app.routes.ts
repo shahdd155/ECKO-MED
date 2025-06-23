@@ -71,6 +71,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/Pharmacy/manageRequests/manage-requests.component')
                     .then(m => m.ManageRequestsComponent),
                 title: 'Manage Pharmacy Requests'
+            },
+            {
+                path: 'patientinteraction',
+                loadComponent: () => import('./pages/dataEntry/PatientInteraction/PatientInteraction.component')
+                    .then(m => m.PatientInteractionComponent),
+                title: 'Patient Interaction'
             }
         ]
     },
