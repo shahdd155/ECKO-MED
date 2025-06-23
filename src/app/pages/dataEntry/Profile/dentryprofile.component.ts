@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DataEntryProfile, UpdateDataEntryProfileDto } from '../../models/user.model';
+import { DataEntryProfile, UpdateDataEntryProfileDto } from '../../../models/user.model';
 
 @Component({
   selector: 'app-dentryprofile',

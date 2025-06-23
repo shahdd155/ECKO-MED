@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Scan } from '../../models/scan'; // Import the Scan interface
+import { Scan } from '../../../models/scan'; // Import the Scan interface
 
 @Component({
   selector: 'app-scans',

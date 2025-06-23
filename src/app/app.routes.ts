@@ -38,26 +38,26 @@ export const routes: Routes = [
         children: [
             {
                 path: 'addpatient',
-                loadComponent: () => import('./pages/addpatient/addpatient.component')
+                loadComponent: () => import('./pages/dataEntry/addpatient/addpatient.component')
                     .then(m => m.AddpatientComponent),
                 title: 'Add Patient'
             },
             {
                 path: 'dEntrydashboard',
-                loadComponent: () => import('./pages/dataEntryDashboard/dentrydashboard.component')
+                loadComponent: () => import('./pages/dataEntry/Dashboard/dentrydashboard.component')
                     .then(m => m.DentrydashboardComponent),
                 title: 'DataEntryDashboard'
             },
             {
                 path: 'dentryprofile',
-                loadComponent: () => import('./pages/dataEntryProfile/dentryprofile.component')
+                loadComponent: () => import('./pages/dataEntry/Profile/dentryprofile.component')
                     .then(m => m.DentryprofileComponent),
                 title: 'DataEntry Profile'
             },
             {
                 path: 'departmentinteraction',
-                loadComponent: () => import('./pages/departmentinteraction/departmentinteraction.component')
-                    .then(m => m.DepartmentinteractionComponent),
+                loadComponent: () => import('./pages/dataEntry/Department/Department.component')
+                    .then(m => m.DepartmentComponent),
                 title: 'Department Interaction'
             },
             {
@@ -79,7 +79,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'myvisits',
-                loadComponent: () => import('./pages/myvisits/myvisits.component')
+                loadComponent: () => import('./pages/Patient/myvisits/myvisits.component')
                     .then(m => m.MyvisitsComponent),
                 title: 'My Visits',
             },
@@ -87,19 +87,19 @@ export const routes: Routes = [
 
             {
                 path: 'scans',
-                loadComponent: () => import('./pages/scans/scans.component')
+                loadComponent: () => import('./pages/Patient/scans/scans.component')
                     .then(m => m.ScansComponent),
                 title: 'Scans'
             },
             {
                 path: 'receipts',
-                loadComponent: () => import('./pages/receipts/receipts.component')
+                loadComponent: () => import('./pages/Patient/receipts/receipts.component')
                     .then(m => m.ReceiptsComponent),
                 title: 'Receipts'
             },
             {
                 path: 'prescriptions',
-                loadComponent: () => import('./pages/prescriptions/prescriptions.component')
+                loadComponent: () => import('./pages/Patient/prescriptions/prescriptions.component')
                     .then(m => m.PrescriptionsComponent),
                 title: 'Prescriptions'
             },
@@ -107,13 +107,13 @@ export const routes: Routes = [
 
             {
                 path: 'patientprofile',
-                loadComponent: () => import('./pages/patientprofile/patientprofile.component')
+                loadComponent: () => import('./pages/Patient/Profile/patientprofile.component')
                     .then(m => m.PatientprofileComponent),
                 title: 'Patient Profile'
             },
             {
                 path: 'patientdashboard',
-                loadComponent: () => import('./pages/patientDashboard/pdashboard.component')
+                loadComponent: () => import('./pages/Patient/Dashboard/pdashboard.component')
                     .then(m => m.PdashboardComponent),
                 title: 'Patient Dashboard'
             },
@@ -131,7 +131,7 @@ export const routes: Routes = [
             },
             {
                 path: 'search',
-                loadComponent: () => import('./pages/search/search.component')
+                loadComponent: () => import('./pages/Patient/search/search.component')
                     .then(m => m.SearchComponent),
                 title: 'search'
             }

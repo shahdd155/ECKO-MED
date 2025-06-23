@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Receipt } from '../../models/receipt'; // Import the Receipt interface
+import { Receipt } from '../../../models/receipt'; // Import the Receipt interface
 
 @Component({
   selector: 'app-receipts',
