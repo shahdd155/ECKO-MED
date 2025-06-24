@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MedicineService } from '../../../core/services/medicine/medicine.service';
 import { Medicine, PharmacyInventory } from '../../../models/medicine.model';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-searchmedicine',
-  imports: [CommonModule, ReactiveFormsModule, CurrencyPipe],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './searchmedicine.component.html',
   styleUrl: './searchmedicine.component.scss'
 })
@@ -99,7 +99,16 @@ export class SearchmedicineComponent implements OnInit {
       patientEmail,
       patientPhone
     }).subscribe(res => {
-      this.requestStatus[pharmacy.pharmacyId] = res.success ? 'success' : 'error';
+      if (res.success) {
+        this.requestStatus[pharmacy.pharmacyId] = 'success';
+        setTimeout(() => {
+        
+          this.pharmacies = this.pharmacies.filter(p => p.pharmacyId !== pharmacy.pharmacyId);
+          delete this.requestStatus[pharmacy.pharmacyId];
+        }, 1000);
+      } else {
+        this.requestStatus[pharmacy.pharmacyId] = 'error';
+      }
     }, () => {
       this.requestStatus[pharmacy.pharmacyId] = 'error';
     });
