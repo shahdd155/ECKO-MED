@@ -54,6 +54,20 @@ export class AuthService {
     console.log(this.userData)
   }
 
+  //-------------------to get the user type from the token----------------
+  getUserType(): string | null {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.userType || decodedToken.role || null;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
 
   setEmailVerify(data:object):Observable<any>{
     return this.httpClient.post(`${environment.baseUrl}/forgot-Password`,data)

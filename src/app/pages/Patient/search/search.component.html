@@ -108,6 +108,14 @@
                   Availability: {{ hospital.availability }}
                 </div>
               </div>
+              <div class="flex justify-start mt-2">
+                <button 
+                  (click)="openInMaps(hospital)" 
+                  class=" outline outline-blue-700 bg-white hover:bg-blue-700 text-blue-700 hover:text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-colors duration-200">
+                  <i class="fa-solid fa-map-location-dot"></i>
+                  View on Map
+                </button>
+              </div>
             </div>
           }
         </div>

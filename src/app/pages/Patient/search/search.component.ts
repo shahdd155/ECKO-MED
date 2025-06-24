@@ -39,10 +39,10 @@ export class SearchComponent {
   departments = ['Cardiology', 'Neurology', 'Pediatrics'];
 
   hospitals = [
-    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', area: 'Nasr City', insuranceName: 'MedCare', availability: 15 },
-    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', area: 'Gleem', insuranceName: 'HealthPlus', availability: 12 },
-    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', area: 'Downtown', insuranceName: 'MedCare', availability: 8 },
-    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', area: 'Maadi', insuranceName: 'LifeSecure', availability: 5 }
+    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', area: 'Nasr City', insuranceName: 'MedCare', availability: 15, coordinates: { lat: 30.0444, lng: 31.2357 } },
+    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', area: 'Gleem', insuranceName: 'HealthPlus', availability: 12, coordinates: { lat: 31.2001, lng: 29.9187 } },
+    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', area: 'Downtown', insuranceName: 'MedCare', availability: 8, coordinates: { lat: 24.0889, lng: 32.8998 } },
+    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', area: 'Maadi', insuranceName: 'LifeSecure', availability: 5, coordinates: { lat: 29.9792, lng: 31.1342 } }
   ];
 
   filteredHospitalsList = this.hospitals;
@@ -112,5 +112,18 @@ export class SearchComponent {
     } else {
       return 'bg-gray-400'; // fallback color
     }
+  }
+
+  openInMaps(hospital: any) {
+    const { lat, lng } = hospital.coordinates;
+    const hospitalName = encodeURIComponent(hospital.hospital);
+    
+    // Open in Google Maps
+    const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15&t=m`;
+    
+    // Alternative: Open in Apple Maps (for iOS users)
+    // const appleMapsUrl = `https://maps.apple.com/?q=${hospitalName}&ll=${lat},${lng}&z=15`;
+    
+    window.open(googleMapsUrl, '_blank');
   }
 }

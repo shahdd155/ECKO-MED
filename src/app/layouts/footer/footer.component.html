@@ -2,9 +2,15 @@
     <div class="flex-1 text-left font-semibold text-black">ECKO MED</div>
     <div class="flex-1 text-center text-gray-600 font-medium">We Always care</div>
     <div class="flex-1 text-right">
-        <a routerLink="/patientprofile" routerLinkActive="active-link">  
-            <i class="fa-solid fa-user p-3"></i>
-        </a>
+        @if (getUserType() === 'dataEntry') {
+            <a routerLink="/dentryprofile" routerLinkActive="active-link">  
+                <i class="fa-solid fa-user p-3"></i>
+            </a>
+        } @else if (getUserType() === 'patient') {
+            <a routerLink="/patientprofile" routerLinkActive="active-link">  
+                <i class="fa-solid fa-user p-3"></i>
+            </a>
+        }
        <a>
         <i class="fa-solid fa-bell p-3"></i>
        </a> 

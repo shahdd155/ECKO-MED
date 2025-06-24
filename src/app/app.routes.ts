@@ -90,12 +90,6 @@ export const routes: Routes = [
                 title: 'Scans'
             },
             {
-                path: 'receipts',
-                loadComponent: () => import('./pages/Patient/receipts/receipts.component')
-                    .then(m => m.ReceiptsComponent),
-                title: 'Receipts'
-            },
-            {
                 path: 'prescriptions',
                 loadComponent: () => import('./pages/Patient/prescriptions/prescriptions.component')
                     .then(m => m.PrescriptionsComponent),
@@ -151,13 +145,13 @@ export const routes: Routes = [
         path:'',component:PharmacyLayoutComponent,canActivate:[pharmacyGuard],
         children:[
             {
-        path: 'pharmacy/view-requests',
+        path: 'viewrequests',
         loadComponent: () => import('./pages/Pharmacy/viewRequests/view-requests.component')
             .then(m => m.ViewRequestsComponent),
         title: 'View Pharmacy Requests'
           },
       {
-        path: 'pharmacy/manage-requests',
+        path: 'managerequests',
         loadComponent: () => import('./pages/Pharmacy/manageRequests/manage-requests.component')
             .then(m => m.ManageRequestsComponent),
         title: 'Manage Pharmacy Requests'

@@ -1,37 +1,48 @@
 <nav class="flex flex-col h-full w-64 bg-gray-100 rounded-br-3xl shadow-md overflow-hidden">
  
-  @if (isPatient()) {
+  @if (getUserType() === 'patient') {
+    <ul class="flex-1 px-6 py-8 space-y-4">
+      <li routerLinkActive="active-link" routerLink="/patientdashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fas fa-tachometer-alt"></i>
+        <a class="cursor-pointer" >Dashboard</a>
+      </li>
+      <li routerLinkActive="active-link" routerLink="/myvisits" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fa-solid fa-users"></i>
+        <a class="cursor-pointer">Recent Interactions</a>
+      </li>
+      <li routerLinkActive="active-link" routerLink="/search" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <a class="cursor-pointer">Search</a>
+      </li>
+         <li routerLinkActive="active-link" routerLink="/searchmedicine" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <a class="cursor-pointer">Search pharmacy</a>
+      </li>
+    </ul>
+  } @else if (getUserType() === 'dataEntry') {
+    <ul class="flex-1 px-6 py-8 space-y-4">
+      <li routerLinkActive="active-link" routerLink="/dEntrydashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fas fa-tachometer-alt"></i>
+        <a class="cursor-pointer">Dashboard</a>
+      </li>
+      <li routerLinkActive="active-link" routerLink="/departmentinteraction" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fa-solid fa-building-user"></i>
+        <a class="cursor-pointer">departments</a>
+      </li>
+      <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fa-solid fa-users-viewfinder"></i>
+        <a class="cursor-pointer">interactions</a>
+      </li>
+    </ul>
+  } @else if (getUserType() === 'pharmacy') {
    <ul class="flex-1 px-6 py-8 space-y-4">
-     <li routerLinkActive="active-link" routerLink="/patientdashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fas fa-tachometer-alt"></i>
-       <a class="cursor-pointer" >Dashboard</a>
+     <li routerLinkActive="active-link" routerLink="/viewrequests" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+       <i class="fa-solid fa-list-check"></i>
+       <a class="cursor-pointer">View Requests</a>
      </li>
-     <li routerLinkActive="active-link" routerLink="/myvisits" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fa-solid fa-users"></i>
-       <a class="cursor-pointer">Recent Interactions</a>
-     </li>
-     <li routerLinkActive="active-link" routerLink="/search" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fa-solid fa-magnifying-glass"></i>
-       <a class="cursor-pointer">Search</a>
-     </li>
-        <li routerLinkActive="active-link" routerLink="/searchmedicine" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fa-solid fa-magnifying-glass"></i>
-       <a class="cursor-pointer">Search pharmacy</a>
-     </li>
-   </ul>
-  }@else {
-   <ul class="flex-1 px-6 py-8 space-y-4">
-     <li routerLinkActive="active-link" routerLink="/dEntrydashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fas fa-tachometer-alt"></i>
-       <a class="cursor-pointer">Dashboard</a>
-     </li>
-     <li routerLinkActive="active-link" routerLink="/departmentinteraction" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fa-solid fa-building-user"></i>
-       <a class="cursor-pointer">departments</a>
-     </li>
-     <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
-       <i class="fa-solid fa-users-viewfinder"></i>
-       <a class="cursor-pointer">interactions</a>
+     <li routerLinkActive="active-link" routerLink="/managerequests" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+       <i class="fa-solid fa-clipboard-list"></i>
+       <a class="cursor-pointer">Manage Requests</a>
      </li>
    </ul>
   }

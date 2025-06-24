@@ -1,1 +1,9 @@
-<p>pharmacy-layout works!</p>
+<div class="min-h-screen flex flex-col bg-gray-50">
+    <app-footer></app-footer>
+  <div class="flex flex-1">
+    <app-navbar class="w-64 flex-shrink-0"></app-navbar>
+    <main class="flex-1 p-0 md:p-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

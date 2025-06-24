@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { FlowbiteService } from './core/services/flowbite.service';
 import { NgxSpinnerModule,NgxSpinnerService } from "ngx-spinner";
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,NgxSpinnerModule],
