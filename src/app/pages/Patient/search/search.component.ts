@@ -18,8 +18,6 @@ export class SearchComponent {
   minLimit = 0;
   maxLimit = 10000;
 
-  selectedCity = '';
-  cities = ['Cairo', 'Alexandria', 'Aswan'];
   selectedArea = '';
   areas = ['Nasr City', 'Maadi', 'Zamalek'];
   insuranceName = '';
@@ -41,10 +39,10 @@ export class SearchComponent {
   departments = ['Cardiology', 'Neurology', 'Pediatrics'];
 
   hospitals = [
-    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', city: 'Cairo', area: 'Nasr City', insuranceName: 'MedCare', availability: 25 },
-    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', city: 'Alexandria', area: 'Gleem', insuranceName: 'HealthPlus', availability: 12 },
-    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', city: 'Aswan', area: 'Downtown', insuranceName: 'MedCare', availability: 8 },
-    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', city: 'Cairo', area: 'Maadi', insuranceName: 'LifeSecure', availability: 5 }
+    { hospital: 'El-Azhar Hospital', distance: 15, budget: 800, department: 'Cardiology', area: 'Nasr City', insuranceName: 'MedCare', availability: 15 },
+    { hospital: 'Alexandria Hospital', distance: 20, budget: 600, department: 'Neurology', area: 'Gleem', insuranceName: 'HealthPlus', availability: 12 },
+    { hospital: 'Aswan Medical Center', distance: 10, budget: 1000, department: 'Pediatrics', area: 'Downtown', insuranceName: 'MedCare', availability: 8 },
+    { hospital: 'Cairo Care', distance: 12, budget: 300, department: 'Cardiology', area: 'Maadi', insuranceName: 'LifeSecure', availability: 5 }
   ];
 
   filteredHospitalsList = this.hospitals;
@@ -75,8 +73,6 @@ export class SearchComponent {
       const matchesHospital = this.searchText === '' || h.hospital.toLowerCase().startsWith(this.searchText.toLowerCase());
       // Department filter
       const matchesDepartment = this.selectedDepartment === '' || h.department === this.selectedDepartment;
-      // City filter
-      const matchesCity = this.selectedCity === '' || h.city === this.selectedCity;
       // Area filter (case-insensitive)
       const matchesArea = this.selectedArea === '' || (h.area && h.area.toLowerCase() === this.selectedArea.toLowerCase());
       // Insurance name filter (case-insensitive)
@@ -101,7 +97,20 @@ export class SearchComponent {
           matchesDistance = h.distance >= +minD;
         }
       }
-      return matchesHospital && matchesDepartment && matchesCity && matchesArea && matchesInsurance && matchesPrice && matchesDistance;
+      return matchesHospital && matchesDepartment && matchesArea && matchesInsurance && matchesPrice && matchesDistance;
     });
+  }
+
+ 
+  getAvailabilityColor(availability: number): string {
+    if (availability >= 0 && availability <= 5) {
+      return 'bg-green-500';
+    } else if (availability >= 6 && availability <= 10) {
+      return 'bg-orange-500';
+    } else if (availability >= 11 && availability <= 15) {
+      return 'bg-red-500';
+    } else {
+      return 'bg-gray-400'; // fallback color
+    }
   }
 }

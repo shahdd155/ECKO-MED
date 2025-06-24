@@ -5,6 +5,9 @@ import { PatientLayoutComponent } from './layouts/patient-layout/patient-layout.
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { patientGuard } from './core/guards/patient.guard';
 import { dataEntryGuard } from './core/guards/data-entry.guard';
+import path from 'path';
+import { PharmacyLayoutComponent } from './layouts/pharmacy-layout/pharmacy-layout.component';
+import { pharmacyGuard } from './core/guards/pharmacy.guard';
 
 export const routes: Routes = [
     {
@@ -59,18 +62,6 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/dataEntry/Department/Department.component')
                     .then(m => m.DepartmentComponent),
                 title: 'Department Interaction'
-            },
-            {
-                path: 'pharmacy/view-requests',
-                loadComponent: () => import('./pages/Pharmacy/viewRequests/view-requests.component')
-                    .then(m => m.ViewRequestsComponent),
-                title: 'View Pharmacy Requests'
-            },
-            {
-                path: 'pharmacy/manage-requests',
-                loadComponent: () => import('./pages/Pharmacy/manageRequests/manage-requests.component')
-                    .then(m => m.ManageRequestsComponent),
-                title: 'Manage Pharmacy Requests'
             },
             {
                 path: 'patientinteraction',
@@ -154,6 +145,23 @@ export const routes: Routes = [
                     .then(m => m.VerifyemailComponent),
                 title: 'Verify Email'
             }
+        ]
+    },
+    {
+        path:'',component:PharmacyLayoutComponent,canActivate:[pharmacyGuard],
+        children:[
+            {
+        path: 'pharmacy/view-requests',
+        loadComponent: () => import('./pages/Pharmacy/viewRequests/view-requests.component')
+            .then(m => m.ViewRequestsComponent),
+        title: 'View Pharmacy Requests'
+          },
+      {
+        path: 'pharmacy/manage-requests',
+        loadComponent: () => import('./pages/Pharmacy/manageRequests/manage-requests.component')
+            .then(m => m.ManageRequestsComponent),
+        title: 'Manage Pharmacy Requests'
+         },
         ]
     },
     {
