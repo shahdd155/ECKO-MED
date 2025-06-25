@@ -116,6 +116,18 @@ export const routes: Routes = [
                 title: 'settings'
             }, 
             {
+                path: 'notifications',
+                loadComponent: () => import('./pages/allnotifications/allnotifications.component')
+                    .then(m => m.AllnotificationsComponent),
+                title: 'notifications'
+            },
+            {
+                path: 'allnotifications',
+                loadComponent: () => import('./pages/allnotifications/allnotifications.component')
+                    .then(m => m.AllnotificationsComponent),
+                title: 'All Notifications'
+            },
+            {
                 path: 'helpCenter',
                 loadComponent: () => import('./pages/help-center/help-center.component')
                     .then(m => m.HelpCenterComponent),

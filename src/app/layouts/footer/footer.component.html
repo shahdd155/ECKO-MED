@@ -1,6 +1,6 @@
-<section class="rounded-t-2xl bg-gray-200 flex items-center px-8 py-4 w-full shadow-sm">
-    <div class="flex-1 text-left font-semibold text-black">ECKO MED</div>
-    <div class="flex-1 text-center text-gray-600 font-medium">We Always care</div>
+<section class="rounded-t-2xl bg-[#E4ECEE] flex items-center px-8 py-4 w-full shadow-sm">
+    <div class="flex-1 text-left font-semibold"><img src="/images/favicon.jpg" alt="logo" class=" w-[320px] h-[80px] object-contain"></div>
+    <div class="flex-1 text-center text-gray-600 font-bold text-xl">We Always care</div>
     <div class="flex-1 text-right">
         @if (getUserType() === 'dataEntry') {
             <a routerLink="/dentryprofile" routerLinkActive="active-link">  
@@ -10,12 +10,75 @@
             <a routerLink="/patientprofile" routerLinkActive="active-link">  
                 <i class="fa-solid fa-user p-3"></i>
             </a>
-        }
-       <a>
-        <i class="fa-solid fa-bell p-3"></i>
-       </a> 
-       <a>
-        <i class="fa-solid fa-pen p-3"></i>
-       </a> 
+    
+            <div class="relative inline-block notification-dropdown-container">
+                <button 
+                    (click)="toggleDropdown(); $event.stopPropagation()"
+                    class="relative p-3 text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                    type="button">
+                    <i class="fa-solid fa-bell"></i>
+                    @if (unreadCount() > 0) {
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {{ unreadCount() }}
+                        </span>
+                    }
+                </button>
+             
+                @if (showDropdown()) {
+                    <div class="absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                        <!-- Header -->
+                        <div class="px-4 py-3 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Notifications</h3>
+                        </div>
+                        
+                        <div class="max-h-64 overflow-y-auto">
+                            @if (getRecentNotifications().length > 0) {
+                                @for (notification of getRecentNotifications(); track notification.id) {
+                                    <a 
+                                        routerLink="/allnotifications"
+                                        (click)="markAsRead(notification.id); closeDropdown()"
+                                        class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors duration-200">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="flex-shrink-0">
+                                                @if (!notification.read) {
+                                                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                                }
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-medium text-gray-900 truncate">
+                                                    {{ notification.title }}
+                                                </p>
+                                                <p class="text-sm text-gray-600 mt-1 overflow-hidden text-ellipsis">
+                                                    {{ notification.message }}
+                                                </p>
+                                                <p class="text-xs text-gray-400 mt-2">
+                                                    {{ formatTimestamp(notification.timestamp) }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                }
+                            } @else {
+                                <div class="px-4 py-6 text-center">
+                                    <i class="fa-solid fa-bell-slash text-gray-400 text-2xl mb-2"></i>
+                                    <p class="text-gray-500 text-sm">No new notifications</p>
+                                </div>
+                            }
+                        </div>
+                    
+                        @if (getRecentNotifications().length > 0) {
+                            <div class="px-4 py-3 border-t border-gray-200">
+                                <a 
+                                    routerLink="/allnotifications"
+                                    (click)="closeDropdown()"
+                                    class="block w-full text-center bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200 text-sm font-medium">
+                                    View All Notifications
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        } 
     </div>
-  </section>
+</section>
