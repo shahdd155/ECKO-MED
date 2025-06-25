@@ -35,9 +35,11 @@ export class AllnotificationsComponent {
 
   markAsRead(notificationId: string): void {
     this.notificationService.markAsRead(notificationId);
+    this.notificationService.removeNotification(notificationId);
   }
 
   markAllAsRead(): void {
     this.notificationService.markAllAsRead();
+    this.notificationService.clearAllNotifications();
   }
 }

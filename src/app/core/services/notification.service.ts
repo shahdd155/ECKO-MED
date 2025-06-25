@@ -59,4 +59,13 @@ export class NotificationService {
     const updated = this.notificationsSignal().map(n => ({ ...n, read: true }));
     this.notificationsSignal.set(updated);
   }
+
+  clearAllNotifications(): void {
+    this.notificationsSignal.set([]);
+  }
+
+  removeNotification(notificationId: string): void {
+    const updated = this.notificationsSignal().filter(n => n.id !== notificationId);
+    this.notificationsSignal.set(updated);
+  }
 } 

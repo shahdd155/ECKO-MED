@@ -14,6 +14,7 @@ export class HelpCenterComponent {
   ticket: SupportTicket = {
     name: '',
     email: '',
+    mobile: '',
     message: ''
   };
 

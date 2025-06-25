@@ -9,6 +9,5 @@ export * from './medical-note.model';
 export * from './user.model';
 export * from './PharmacyRequest';
 export * from './loginModels';
-export * from './receipt';
 export * from './scan';
 export * from './ticket'; 

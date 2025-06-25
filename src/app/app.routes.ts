@@ -109,12 +109,7 @@ export const routes: Routes = [
                     .then(m => m.PdashboardComponent),
                 title: 'Patient Dashboard'
             },
-            {
-                path: 'settings',
-                loadComponent: () => import('./pages/settings/settings.component')
-                    .then(m => m.SettingsComponent),
-                title: 'settings'
-            }, 
+          
             {
                 path: 'notifications',
                 loadComponent: () => import('./pages/allnotifications/allnotifications.component')
