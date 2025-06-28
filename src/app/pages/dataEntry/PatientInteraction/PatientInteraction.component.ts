@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 // Import model interfaces
 import { PatientData, LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
+import { DataEntryService, PatientInteractionData, CheckoutData } from '../../../core/services/DataEntry/DataEntry.service';
 
 @Component({
   selector: 'app-patientinteraction',
@@ -163,7 +164,10 @@ export class PatientInteractionComponent implements OnInit {
     { value: 'follow-up', label: 'Follow-up' }
   ];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private dataEntryService: DataEntryService
+  ) {
     this.initializeForms();
   }
 
@@ -227,88 +231,60 @@ export class PatientInteractionComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Simulate API call
-    setTimeout(() => {
-      // Sample patient data
-      this.patientData = {
-        userId: userId.trim(),
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1990-05-15',
-        gender: 'male',
-        phoneNumber: '+1-555-0123',
-        email: 'john.doe@email.com',
-        address: {
-          street: '123 Main Street',
-          city: 'New York'
-        }
-      };
+    this.dataEntryService.fetchPatientData(userId.trim()).subscribe({
+      next: (patientData) => {
+        this.patientData = patientData;
+        this.isLoading = false;
+        this.successMessage = 'Patient data loaded successfully!';
+        
+        // Load existing interactions
+        this.loadPatientInteractions(userId.trim());
+        
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
 
-      // Load existing interactions (sample data)
-      this.loadPatientInteractions();
-
-      this.isLoading = false;
-      this.successMessage = 'Patient data loaded successfully!';
-      
-      setTimeout(() => {
-        this.successMessage = '';
-      }, 3000);
-
-      console.log('Patient data fetched for ID:', userId.trim());
-    }, 1000);
+        console.log('Patient data fetched for ID:', userId.trim());
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to fetch patient data';
+        console.error('Error fetching patient data:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   /**
    * Load existing patient interactions
    */
-  private loadPatientInteractions(): void {
-    // Sample data - replace with actual API calls
-    this.labTests = [
-      {
-        id: '1',
-        testName: 'Complete Blood Count',
-        testType: 'Blood Test',
-        status: 'completed',
-        orderedDate: new Date('2024-01-10'),
-        resultDate: new Date('2024-01-12'),
-        notes: 'Normal results'
+  private loadPatientInteractions(patientId: string): void {
+    this.dataEntryService.fetchPatientInteractions(patientId).subscribe({
+      next: (interactions: PatientInteractionData) => {
+        this.labTests = interactions.labTests || [];
+        this.prescriptions = interactions.prescriptions || [];
+        this.scans = interactions.scans || [];
+        this.notes = interactions.notes || [];
+        
+        console.log('Patient interactions loaded:', {
+          labTests: this.labTests.length,
+          prescriptions: this.prescriptions.length,
+          scans: this.scans.length,
+          notes: this.notes.length
+        });
+      },
+      error: (error: any) => {
+        console.error('Error loading patient interactions:', error);
+        // Initialize with empty arrays if no interactions found
+        this.labTests = [];
+        this.prescriptions = [];
+        this.scans = [];
+        this.notes = [];
       }
-    ];
-
-          this.prescriptions = [
-        {
-          id: '1',
-          medicineName: 'Lisinopril',
-          dosage: '10mg',
-          frequency: 'Once daily',
-          duration: '3 months',
-          timing: 'Morning',
-          instructions: 'Take with water, monitor blood pressure regularly',
-          prescribedDate: new Date('2024-01-10')
-        }
-      ];
-
-    this.scans = [
-      {
-        id: '1',
-        scanType: 'X-Ray',
-        bodyPart: 'Chest',
-        status: 'completed',
-        scheduledDate: new Date('2024-01-15'),
-        completedDate: new Date('2024-01-15'),
-        notes: 'Clear chest X-ray'
-      }
-    ];
-
-    this.notes = [
-      {
-        id: '1',
-        noteType: 'general',
-        content: 'Patient reports feeling better after treatment. No adverse reactions noted.',
-        createdDate: new Date('2024-01-10'),
-        createdBy: 'Dr. Smith'
-      }
-    ];
+    });
   }
 
   /**
@@ -365,7 +341,7 @@ export class PatientInteractionComponent implements OnInit {
    * Add new lab test
    */
   addLabTest(): void {
-    if (this.labTestForm.valid) {
+    if (this.labTestForm.valid && this.patientData) {
       this.isSaving = true;
       
       const newLabTest: LabTest = {
@@ -380,17 +356,28 @@ export class PatientInteractionComponent implements OnInit {
         fileUrl: this.selectedLabTestFile ? URL.createObjectURL(this.selectedLabTestFile) : undefined
       };
 
-      setTimeout(() => {
-        this.labTests.unshift(newLabTest);
-        this.labTestForm.reset();
-        this.selectedLabTestFile = null;
-        // Reset file input
-        const fileInput = document.getElementById('labTestFile') as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-        
-        this.isSaving = false;
-        this.showSuccessMessage('Lab test added successfully!');
-      }, 500);
+      this.dataEntryService.saveLabTest(this.patientData.userId, newLabTest).subscribe({
+        next: (savedTest: LabTest) => {
+          this.labTests.unshift(savedTest);
+          this.labTestForm.reset();
+          this.selectedLabTestFile = null;
+          // Reset file input
+          const fileInput = document.getElementById('labTestFile') as HTMLInputElement;
+          if (fileInput) fileInput.value = '';
+          
+          this.isSaving = false;
+          this.showSuccessMessage('Lab test added successfully!');
+        },
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save lab test';
+          console.error('Error saving lab test:', error);
+          
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     }
   }
 
@@ -398,7 +385,7 @@ export class PatientInteractionComponent implements OnInit {
    * Add new prescription
    */
   addPrescription(): void {
-    if (this.prescriptionForm.valid) {
+    if (this.prescriptionForm.valid && this.patientData) {
       this.isSaving = true;
       
       const newPrescription: Prescription = {
@@ -412,12 +399,23 @@ export class PatientInteractionComponent implements OnInit {
         prescribedDate: new Date()
       };
 
-      setTimeout(() => {
-        this.prescriptions.unshift(newPrescription);
-        this.prescriptionForm.reset();
-        this.isSaving = false;
-        this.showSuccessMessage('Prescription added successfully!');
-      }, 500);
+      this.dataEntryService.savePrescription(this.patientData.userId, newPrescription).subscribe({
+        next: (savedPrescription: Prescription) => {
+          this.prescriptions.unshift(savedPrescription);
+          this.prescriptionForm.reset();
+          this.isSaving = false;
+          this.showSuccessMessage('Prescription added successfully!');
+        },
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save prescription';
+          console.error('Error saving prescription:', error);
+          
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     }
   }
 
@@ -425,7 +423,7 @@ export class PatientInteractionComponent implements OnInit {
    * Add new scan
    */
   addScan(): void {
-    if (this.scanForm.valid) {
+    if (this.scanForm.valid && this.patientData) {
       this.isSaving = true;
       
       const newScan: MedicalScan = {
@@ -440,17 +438,28 @@ export class PatientInteractionComponent implements OnInit {
         fileUrl: this.selectedScanFile ? URL.createObjectURL(this.selectedScanFile) : undefined
       };
 
-      setTimeout(() => {
-        this.scans.unshift(newScan);
-        this.scanForm.reset();
-        this.selectedScanFile = null;
-        // Reset file input
-        const fileInput = document.getElementById('scanFile') as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-        
-        this.isSaving = false;
-        this.showSuccessMessage('Scan scheduled successfully!');
-      }, 500);
+      this.dataEntryService.saveScan(this.patientData.userId, newScan).subscribe({
+        next: (savedScan: MedicalScan) => {
+          this.scans.unshift(savedScan);
+          this.scanForm.reset();
+          this.selectedScanFile = null;
+          // Reset file input
+          const fileInput = document.getElementById('scanFile') as HTMLInputElement;
+          if (fileInput) fileInput.value = '';
+          
+          this.isSaving = false;
+          this.showSuccessMessage('Scan scheduled successfully!');
+        },
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save scan';
+          console.error('Error saving scan:', error);
+          
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     }
   }
 
@@ -458,7 +467,7 @@ export class PatientInteractionComponent implements OnInit {
    * Add new note
    */
   addNote(): void {
-    if (this.noteForm.valid) {
+    if (this.noteForm.valid && this.patientData) {
       this.isSaving = true;
       
       const newNote: MedicalNote = {
@@ -469,13 +478,24 @@ export class PatientInteractionComponent implements OnInit {
         createdBy: 'Current User' // Replace with actual user
       };
 
-      setTimeout(() => {
-        this.notes.unshift(newNote);
-        this.noteForm.reset();
-        this.noteForm.patchValue({ noteType: 'general' });
-        this.isSaving = false;
-        this.showSuccessMessage('Note added successfully!');
-      }, 500);
+      this.dataEntryService.saveNote(this.patientData.userId, newNote).subscribe({
+        next: (savedNote: MedicalNote) => {
+          this.notes.unshift(savedNote);
+          this.noteForm.reset();
+          this.noteForm.patchValue({ noteType: 'general' });
+          this.isSaving = false;
+          this.showSuccessMessage('Note added successfully!');
+        },
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save note';
+          console.error('Error saving note:', error);
+          
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     }
   }
 
@@ -561,27 +581,36 @@ export class PatientInteractionComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Simulate API call to save all interactions
-    setTimeout(() => {
-      const interactionData = {
-        patientId: this.patientData?.userId,
-        labTests: this.labTests,
-        prescriptions: this.prescriptions,
-        scans: this.scans,
-        notes: this.notes,
-        savedAt: new Date()
-      };
+    const interactionData: PatientInteractionData = {
+      patientId: this.patientData.userId,
+      labTests: this.labTests,
+      prescriptions: this.prescriptions,
+      scans: this.scans,
+      notes: this.notes,
+      savedAt: new Date()
+    };
 
-      this.isSaving = false;
-      this.successMessage = 'All patient interactions saved successfully!';
-      
-      setTimeout(() => {
-        this.successMessage = '';
-      }, 3000);
+    this.dataEntryService.savePatientInteractions(interactionData).subscribe({
+      next: (savedData) => {
+        this.isSaving = false;
+        this.successMessage = 'All patient interactions saved successfully!';
+        
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
 
-      console.log('Patient interactions saved:', interactionData);
-      // TODO: Implement actual API call to save patient interactions
-    }, 1500);
+        console.log('Patient interactions saved:', savedData);
+      },
+      error: (error) => {
+        this.isSaving = false;
+        this.errorMessage = error.message || 'Failed to save patient interactions';
+        console.error('Error saving patient interactions:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   /**
@@ -611,33 +640,42 @@ export class PatientInteractionComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Simulate API call to checkout patient
-    setTimeout(() => {
-      const checkoutData = {
-        patientId: this.patientData?.userId,
-        checkoutTime: new Date(),
-        totalLabTests: this.labTests.length,
-        totalPrescriptions: this.prescriptions.length,
-        totalScans: this.scans.length,
-        totalNotes: this.notes.length,
-        pendingItems: {
-          labTests: this.labTests.filter(test => test.status === 'pending').length,
-          scans: this.scans.filter(scan => scan.status === 'scheduled').length
-        }
-      };
+    const checkoutData: CheckoutData = {
+      patientId: this.patientData.userId,
+      checkoutTime: new Date(),
+      totalLabTests: this.labTests.length,
+      totalPrescriptions: this.prescriptions.length,
+      totalScans: this.scans.length,
+      totalNotes: this.notes.length,
+      pendingItems: {
+        labTests: this.labTests.filter(test => test.status === 'pending').length,
+        scans: this.scans.filter(scan => scan.status === 'scheduled').length
+      }
+    };
 
-      this.isCheckingOut = false;
-      this.successMessage = 'Patient checkout completed successfully!';
-      
-      setTimeout(() => {
-        this.successMessage = '';
-        // Clear all data after checkout
-        this.clearPatientData();
-      }, 3000);
+    this.dataEntryService.checkoutPatient(checkoutData).subscribe({
+      next: (result) => {
+        this.isCheckingOut = false;
+        this.successMessage = 'Patient checkout completed successfully!';
+        
+        setTimeout(() => {
+          this.successMessage = '';
+          // Clear all data after checkout
+          this.clearPatientData();
+        }, 3000);
 
-      console.log('Patient checkout completed:', checkoutData);
-      // TODO: Implement actual API call to checkout patient
-    }, 2000);
+        console.log('Patient checkout completed:', result);
+      },
+      error: (error) => {
+        this.isCheckingOut = false;
+        this.errorMessage = error.message || 'Failed to checkout patient';
+        console.error('Error during patient checkout:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   /**

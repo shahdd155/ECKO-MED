@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PharmacyRequest, PharmacyRequestStatus } from '../../../models/PharmacyRequest';
+import { PharmacyService, RequestStatusUpdateResponse, PharmacyStats } from '../../../core/services/Pharmacy/Pharmacy.service';
 
 // Component that manages processed (non-pending) pharmacy requests
 @Component({
@@ -9,7 +10,7 @@ import { PharmacyRequest, PharmacyRequestStatus } from '../../../models/Pharmacy
   imports: [CommonModule],
   templateUrl: './manage-requests.component.html'
 })
-export class ManageRequestsComponent {
+export class ManageRequestsComponent implements OnInit {
 
   // Exposes the PharmacyRequestStatus enum to the template
   PharmacyRequestStatus = PharmacyRequestStatus;
@@ -17,98 +18,65 @@ export class ManageRequestsComponent {
   // Tracks the request ID that is currently being actioned
   activeActionRequestId: number | null = null;
 
-  // All pharmacy requests (sample data for the component)
-  allRequests: PharmacyRequest[] = [
-    {
-      id: 2,
-      patientId: 102,
-      patientName: 'Jane Smith',
-      patientEmail: 'jane.smith@email.com',
-      patientPhone: '+1 (555) 987-6543',
-      medication: 'Ibuprofen 200mg',
-      medicationId: 1002,
-      dosage: '200mg',
-      quantity: 20,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.APPROVED,
-      requestDate: '2024-01-14',
-      approvedDate: '2024-01-14T14:30:00Z',
-      approvedBy: 401,
-      approvedByName: 'Pharmacist Brown',
-      notes: 'Patient experiencing inflammation',
-      cost: 18.75,
-      currency: 'USD',
-      insuranceCovered: false,
-      createdAt: '2024-01-14T10:00:00Z',
-      updatedAt: '2024-01-14T14:30:00Z'
-    },
-    {
-      id: 4,
-      patientId: 104,
-      patientName: 'Sarah Wilson',
-      patientEmail: 'sarah.wilson@email.com',
-      patientPhone: '+1 (555) 234-5678',
-      medication: 'Codeine 30mg',
-      medicationId: 1004,
-      dosage: '30mg',
-      quantity: 10,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.REJECTED,
-      requestDate: '2024-01-13',
-      rejectedDate: '2024-01-13T16:45:00Z',
-      rejectedBy: 401,
-      rejectedByName: 'Pharmacist Brown',
-      rejectionReason: 'Patient has history of substance abuse',
-      notes: 'Alternative pain management recommended',
-      cost: 45.00,
-      currency: 'USD',
-      insuranceCovered: true,
-      createdAt: '2024-01-13T11:00:00Z',
-      updatedAt: '2024-01-13T16:45:00Z'
-    },
-    {
-      id: 5,
-      patientId: 105,
-      patientName: 'Robert Chen',
-      patientEmail: 'robert.chen@email.com',
-      patientPhone: '+1 (555) 345-6789',
-      medication: 'Insulin Glargine 100U/mL',
-      medicationId: 1005,
-      dosage: '100U/mL',
-      quantity: 1,
-      unit: 'vial',
-      status: PharmacyRequestStatus.APPROVED,
-      requestDate: '2024-01-15',
-      approvedDate: '2024-01-15T09:15:00Z',
-      approvedBy: 402,
-      approvedByName: 'Pharmacist Lee',
-      notes: 'Diabetic patient, refrigeration required',
-      cost: 125.00,
-      currency: 'USD',
-      insuranceCovered: true,
-      createdAt: '2024-01-15T08:00:00Z',
-      updatedAt: '2024-01-15T10:30:00Z'
-    },
-    {
-      id: 1,
-      patientId: 101,
-      patientName: 'John Doe',
-      patientEmail: 'john.doe@email.com',
-      patientPhone: '+1 (555) 123-4567',
-      medication: 'Aspirin 100mg',
-      medicationId: 1001,
-      dosage: '100mg',
-      quantity: 30,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.PENDING,
-      requestDate: '2024-01-15',
-      cost: 25.50,
-      currency: 'USD',
-      insuranceCovered: true,
-      createdAt: '2024-01-15T08:00:00Z',
-      updatedAt: '2024-01-15T08:00:00Z'
-    }
-  ];
+  // All pharmacy requests loaded from backend
+  allRequests: PharmacyRequest[] = [];
+
+  // Pharmacy statistics
+  pharmacyStats: PharmacyStats | null = null;
+
+  // Loading and error states
+  isLoading: boolean = false;
+  isUpdating: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
+
+  constructor(private pharmacyService: PharmacyService) {}
+
+  ngOnInit(): void {
+    this.loadProcessedRequests();
+    this.loadPharmacyStats();
+  }
+
+  /**
+   * Load processed (non-pending) pharmacy requests from backend
+   */
+  loadProcessedRequests(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.pharmacyService.getProcessedRequests().subscribe({
+      next: (requests: PharmacyRequest[]) => {
+        this.allRequests = requests;
+        this.isLoading = false;
+        console.log('Processed requests loaded successfully:', requests.length, 'requests');
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to load requests';
+        console.error('Error loading processed requests:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
+  }
+
+  /**
+   * Load pharmacy statistics from backend
+   */
+  loadPharmacyStats(): void {
+    this.pharmacyService.getPharmacyStats().subscribe({
+      next: (stats: PharmacyStats) => {
+        this.pharmacyStats = stats;
+        console.log('Pharmacy stats loaded successfully:', stats);
+      },
+      error: (error: any) => {
+        console.error('Error loading pharmacy stats:', error);
+        // Stats are optional, so we don't show error to user
+      }
+    });
+  }
 
   // Returns only non-pending (processed) requests
   get processedRequests(): PharmacyRequest[] {
@@ -147,6 +115,7 @@ export class ManageRequestsComponent {
   // Logs request details for viewing (to be implemented)
   viewDetails(requestId: number): void {
     console.log('Viewing details for processed request:', requestId);
+    // TODO: Implement detailed view modal or navigation
   }
 
   // Starts the take-action workflow for a request
@@ -164,30 +133,62 @@ export class ManageRequestsComponent {
   // Executes the action to update a request's status
   executeAction(requestId: number, newStatus: PharmacyRequestStatus, reason?: string): void {
     console.log('Executing action:', { requestId, newStatus, reason });
-    const request = this.allRequests.find(r => r.id === requestId);
-    if (request) {
-      const oldStatus = request.status;
-      request.status = newStatus;
-      request.updatedAt = new Date().toISOString();
-      if (reason && reason.trim()) {
-        request.notes = reason.trim();
+    
+    this.isUpdating = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    // TODO: Get actual user ID from auth service
+    const currentUserId = 401; // Replace with actual user ID
+
+    let updateObservable;
+    
+    if (newStatus === PharmacyRequestStatus.APPROVED) {
+      updateObservable = this.pharmacyService.approveRequest(requestId, currentUserId, reason);
+    } else if (newStatus === PharmacyRequestStatus.REJECTED) {
+      if (!reason || reason.trim() === '') {
+        this.errorMessage = 'Rejection reason is required';
+        this.isUpdating = false;
+        return;
       }
-      switch (newStatus) {
-        case PharmacyRequestStatus.APPROVED:
-          request.approvedDate = new Date().toISOString();
-          delete request.rejectedDate;
-          break;
-        case PharmacyRequestStatus.REJECTED:
-          request.rejectedDate = new Date().toISOString();
-          if (reason) {
-            request.rejectionReason = reason;
-          }
-          delete request.approvedDate;
-          break;
-      }
-      console.log(`✅ Request #${requestId} status changed from ${oldStatus} to ${newStatus}`);
-      this.activeActionRequestId = null;
+      updateObservable = this.pharmacyService.rejectRequest(requestId, currentUserId, reason);
+    } else {
+      this.errorMessage = 'Invalid status transition';
+      this.isUpdating = false;
+      return;
     }
+
+    updateObservable.subscribe({
+      next: (response: RequestStatusUpdateResponse) => {
+        // Update the local request with the response data
+        const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
+        if (requestIndex !== -1) {
+          this.allRequests[requestIndex] = response.request;
+        }
+
+        this.isUpdating = false;
+        this.successMessage = response.message || `Request ${newStatus.toLowerCase()} successfully`;
+        this.activeActionRequestId = null;
+
+        // Refresh stats after status update
+        this.loadPharmacyStats();
+
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+
+        console.log(`✅ Request #${requestId} status changed to ${newStatus}`);
+      },
+      error: (error: any) => {
+        this.isUpdating = false;
+        this.errorMessage = error.message || 'Failed to update request status';
+        console.error('Error updating request status:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   // Returns available status transitions for a request
@@ -227,5 +228,43 @@ export class ManageRequestsComponent {
   // Generates initials from patient name
   getPatientInitials(name: string): string {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  }
+
+  /**
+   * Refresh all data from backend
+   */
+  refreshData(): void {
+    this.loadProcessedRequests();
+    this.loadPharmacyStats();
+  }
+
+  /**
+   * Search requests by query
+   */
+  searchRequests(query: string): void {
+    if (!query || query.trim() === '') {
+      this.loadProcessedRequests();
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.pharmacyService.searchRequests(query.trim()).subscribe({
+      next: (requests: PharmacyRequest[]) => {
+        this.allRequests = requests.filter(request => request.status !== PharmacyRequestStatus.PENDING);
+        this.isLoading = false;
+        console.log('Search results loaded:', this.allRequests.length, 'requests');
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to search requests';
+        console.error('Error searching requests:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 }

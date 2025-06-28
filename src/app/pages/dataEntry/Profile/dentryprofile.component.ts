@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DataEntryProfile, UpdateDataEntryProfileDto } from '../../../models/user.model';
+import { DataEntryService, DataEntryProfile, UpdateDataEntryProfileDto, ProfileUpdateResponse } from '../../../core/services/DataEntry/DataEntry.service';
 
 @Component({
   selector: 'app-dentryprofile',
@@ -17,21 +17,8 @@ export class DentryprofileComponent implements OnInit {
   // Current profile data
   currentProfile: DataEntryProfile | null = null;
   
-  // Available departments list
-  availableDepartments: string[] = [
-    'Emergency',
-    'Cardiology',
-    'Neurology',
-    'Orthopedics',
-    'Pediatrics',
-    'Radiology',
-    'Laboratory',
-    'Pharmacy',
-    'Surgery',
-    'Internal Medicine',
-    'Oncology',
-    'Psychiatry'
-  ];
+  // Available departments list - will be loaded from backend
+  availableDepartments: string[] = [];
   
   // Selected file for profile picture
   selectedFile: File | null = null;
@@ -45,7 +32,10 @@ export class DentryprofileComponent implements OnInit {
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private dataEntryService: DataEntryService
+  ) {
     // Initialize the reactive form
     this.profileForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -58,44 +48,75 @@ export class DentryprofileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProfile();
+    this.loadAvailableDepartments();
   }
 
   /**
-   * Loads the current user's profile data
-   * In a real application, this would fetch from a backend service
+   * Loads the current user's profile data from backend
    */
   loadProfile(): void {
     this.isLoading = true;
+    this.errorMessage = '';
     
-    // Sample data - replace with actual API call
-    setTimeout(() => {
-      this.currentProfile = {
-        id: 1,
-        firstName: 'Abdico',
-        lastName: 'ElGEn',
-        email: 'abdico.elgen@hospital.com',
-        phoneNumber: '+1-555-0123',
-        profilePicture: '/images/default-avatar.jpg',
-        city: 'Cairo', // Immutable
-        hospitalName: 'Shawerma el reem', // Immutable
-        departments: ['Emergency', 'Cardiology'],
-        employeeId: 'DE001',
-        dateJoined: new Date('2025-06-23'),
-        isActive: true,
-        lastUpdated: new Date()
-      };
-      
-      // Populate the form with current data
-      this.profileForm.patchValue({
-        firstName: this.currentProfile.firstName,
-        lastName: this.currentProfile.lastName,
-        email: this.currentProfile.email,
-        phoneNumber: this.currentProfile.phoneNumber,
-        departments: this.currentProfile.departments
-      });
-      
-      this.isLoading = false;
-    }, 1000);
+    // TODO: Get actual user ID from auth service
+    const userId = 'current-user-id'; // Replace with actual user ID
+    
+    this.dataEntryService.fetchDataEntryProfile(userId).subscribe({
+      next: (profile: DataEntryProfile) => {
+        this.currentProfile = profile;
+        
+        // Populate the form with current data
+        this.profileForm.patchValue({
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          email: profile.email,
+          phoneNumber: profile.phoneNumber,
+          departments: profile.departments
+        });
+        
+        this.isLoading = false;
+        console.log('Profile loaded successfully:', profile);
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to load profile';
+        console.error('Error loading profile:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
+  }
+
+  /**
+   * Load available departments from backend
+   */
+  private loadAvailableDepartments(): void {
+    this.dataEntryService.getDataEntryDepartments().subscribe({
+      next: (departments: string[]) => {
+        this.availableDepartments = departments;
+        console.log('Departments loaded successfully:', departments.length, 'departments');
+      },
+      error: (error: any) => {
+        console.error('Failed to load departments:', error);
+        // Fallback to default departments
+        this.availableDepartments = [
+          'Emergency',
+          'Cardiology',
+          'Neurology',
+          'Orthopedics',
+          'Pediatrics',
+          'Radiology',
+          'Laboratory',
+          'Pharmacy',
+          'Surgery',
+          'Internal Medicine',
+          'Oncology',
+          'Psychiatry'
+        ];
+      }
+    });
   }
 
   /**
@@ -161,7 +182,7 @@ export class DentryprofileComponent implements OnInit {
   }
 
   /**
-   * Saves the profile changes
+   * Saves the profile changes to backend
    */
   saveProfile(): void {
     if (this.profileForm.valid && this.currentProfile) {
@@ -177,31 +198,72 @@ export class DentryprofileComponent implements OnInit {
         departments: this.profileForm.get('departments')?.value
       };
       
-      // Simulate API call
-      setTimeout(() => {
-        // Update current profile with new data
-        this.currentProfile = {
-          ...this.currentProfile!,
-          ...updateData,
-          lastUpdated: new Date()
-        };
-        
-        this.isSaving = false;
-        this.successMessage = 'Profile updated successfully!';
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 3000);
-        
-        console.log('Profile updated:', updateData);
-        // TODO: Implement actual API call to update profile
-        // TODO: Handle profile picture upload if selectedFile exists
-      }, 1500);
+      // TODO: Get actual user ID from auth service
+      const userId = 'current-user-id'; // Replace with actual user ID
+      
+      this.dataEntryService.updateDataEntryProfile(userId, updateData).subscribe({
+        next: (response: ProfileUpdateResponse) => {
+          // Update current profile with new data
+          this.currentProfile = response.profile;
+          
+          this.isSaving = false;
+          this.successMessage = response.message || 'Profile updated successfully!';
+          
+          // Clear success message after 3 seconds
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+          
+          console.log('Profile updated successfully:', response);
+          
+          // Handle profile picture upload if selectedFile exists
+          if (this.selectedFile) {
+            this.uploadProfilePicture(userId);
+          }
+        },
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to update profile';
+          console.error('Error updating profile:', error);
+          
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     } else {
       this.errorMessage = 'Please fill in all required fields correctly.';
       this.markFormGroupTouched();
     }
+  }
+
+  /**
+   * Upload profile picture to backend
+   */
+  private uploadProfilePicture(userId: string): void {
+    if (!this.selectedFile) return;
+    
+    this.dataEntryService.uploadProfilePicture(userId, this.selectedFile).subscribe({
+      next: (response: { profilePicture: string }) => {
+        if (this.currentProfile) {
+          this.currentProfile.profilePicture = response.profilePicture;
+        }
+        
+        // Clear file selection after successful upload
+        this.selectedFile = null;
+        this.imagePreviewUrl = null;
+        
+        console.log('Profile picture uploaded successfully:', response.profilePicture);
+      },
+      error: (error: any) => {
+        console.error('Error uploading profile picture:', error);
+        this.errorMessage = 'Profile updated but failed to upload picture. Please try again.';
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   /**

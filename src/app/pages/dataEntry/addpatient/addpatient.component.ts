@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CreatePatientDto } from '../../../models/user.model';
+import { DataEntryService, UserData, CreatePatientDto } from '../../../core/services/DataEntry/DataEntry.service';
 
 @Component({
   selector: 'app-addpatient',
@@ -14,26 +14,8 @@ export class AddpatientComponent implements OnInit {
   // Form for patient data
   patientForm: FormGroup;
   
-  // Available departments list
-  availableDepartments: string[] = [
-    'Emergency',
-    'Cardiology', 
-    'Neurology',
-    'Orthopedics',
-    'Pediatrics',
-    'Radiology',
-    'Laboratory',
-    'Pharmacy',
-    'Surgery',
-    'Internal Medicine',
-    'Oncology',
-    'Psychiatry',
-    'Dermatology',
-    'Ophthalmology',
-    'Obstetrics and Gynecology'
-  ];
-
-
+  // Available departments list - will be loaded from backend
+  availableDepartments: string[] = [];
 
   // Loading and error states
   isLoading: boolean = false;
@@ -41,7 +23,10 @@ export class AddpatientComponent implements OnInit {
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private dataEntryService: DataEntryService
+  ) {
     // Initialize the reactive form
     this.patientForm = this.formBuilder.group({
       // User Information
@@ -66,7 +51,57 @@ export class AddpatientComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // No automatic fetching - user will click button to fetch data
+    // Load available departments on component initialization
+    this.loadAvailableDepartments();
+  }
+
+  /**
+   * Load available departments from backend
+   */
+  private loadAvailableDepartments(): void {
+    // Show loading state for departments
+    this.isLoading = true;
+    
+    this.dataEntryService.getAvailableDepartments().subscribe({
+      next: (departments) => {
+        this.availableDepartments = departments;
+        this.isLoading = false;
+        console.log('Departments loaded successfully:', departments.length, 'departments');
+      },
+      error: (error) => {
+        console.error('Failed to load departments:', error);
+        this.isLoading = false;
+        
+        // Show user-friendly error message
+        this.errorMessage = 'Failed to load departments. Using default list.';
+        
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+        
+        // Fallback to default departments if API fails
+        this.availableDepartments = [
+          'Emergency',
+          'Cardiology', 
+          'Neurology',
+          'Orthopedics',
+          'Pediatrics',
+          'Radiology',
+          'Laboratory',
+          'Pharmacy',
+          'Surgery',
+          'Internal Medicine',
+          'Oncology',
+          'Psychiatry',
+          'Dermatology',
+          'Ophthalmology',
+          'Obstetrics and Gynecology'
+        ];
+        
+        console.log('Using fallback departments:', this.availableDepartments.length, 'departments');
+      }
+    });
   }
 
   /**
@@ -92,46 +127,38 @@ export class AddpatientComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
     
-    // Simulate API call to fetch user data
-    setTimeout(() => {
-      // Sample user data - replace with actual API call
-      const userData = {
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1990-05-15',
-        gender: 'male',
-        phoneNumber: '+1-555-0123',
-        email: 'john.doe@email.com',
-        street: '123 Main Street',
-        city: 'New York'
-      };
-      
-      // Fill the form with fetched data
-      this.patientForm.patchValue({
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        dateOfBirth: userData.dateOfBirth,
-        gender: userData.gender,
-        phoneNumber: userData.phoneNumber,
-        email: userData.email,
-        street: userData.street,
-        city: userData.city
-      });
-      
-      this.isLoading = false;
-      this.successMessage = 'User data fetched successfully!';
-      
-      // Clear success message after 3 seconds
-      setTimeout(() => {
-        this.successMessage = '';
-      }, 3000);
-      
-      console.log('User data fetched for ID:', userId.trim());
-      // TODO: Implement actual API call to fetch user data
-    }, 1000);
+    // Call the service to fetch user data
+    this.dataEntryService.fetchUserData(userId.trim()).subscribe({
+      next: (userData: UserData) => {
+        // Fill the form with fetched data
+        this.patientForm.patchValue({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          dateOfBirth: userData.dateOfBirth,
+          gender: userData.gender,
+          phoneNumber: userData.phoneNumber,
+          email: userData.email,
+          street: userData.street,
+          city: userData.city
+        });
+        
+        this.isLoading = false;
+        this.successMessage = 'User data fetched successfully!';
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+        
+        console.log('User data fetched for ID:', userId.trim());
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to fetch user data';
+        console.error('Error fetching user data:', error);
+      }
+    });
   }
-
-
 
   /**
    * Saves the new patient
@@ -160,24 +187,61 @@ export class AddpatientComponent implements OnInit {
         entryDateTime: new Date(formValues.entryDateTime)
       };
       
-      // Simulate API call
-      setTimeout(() => {
-        this.isSaving = false;
-        this.successMessage = 'Patient added successfully!';
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-          this.successMessage = '';
-          this.resetForm();
-        }, 3000);
-        
-        console.log('New patient created:', newPatient);
-        // TODO: Implement actual API call to create patient
-      }, 1500);
+      // Call the service to create patient
+      this.dataEntryService.createPatient(newPatient).subscribe({
+        next: (response) => {
+          this.isSaving = false;
+          this.successMessage = response.message || 'Patient added successfully!';
+          
+          // Clear success message after 3 seconds
+          setTimeout(() => {
+            this.successMessage = '';
+            this.resetForm();
+          }, 3000);
+          
+          console.log('New patient created:', response);
+        },
+        error: (error) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to create patient';
+          console.error('Error creating patient:', error);
+        }
+      });
     } else {
       this.errorMessage = 'Please fill in all required fields correctly.';
       this.markFormGroupTouched();
     }
+  }
+
+  /**
+   * Validates if user ID exists before fetching data
+   */
+  validateUserId(): void {
+    const userId = this.patientForm.get('userId')?.value;
+    
+    if (!userId || !userId.trim()) {
+      this.errorMessage = 'Please enter a User ID first';
+      return;
+    }
+    
+    this.isLoading = true;
+    this.errorMessage = '';
+    
+    this.dataEntryService.validateUserId(userId.trim()).subscribe({
+      next: (exists) => {
+        this.isLoading = false;
+        if (exists) {
+          this.fetchUserData();
+        } else {
+          this.errorMessage = 'User ID not found. Please check the ID and try again.';
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to validate User ID';
+        console.error('Error validating user ID:', error);
+      }
+    });
   }
 
   /**

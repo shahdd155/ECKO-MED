@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PharmacyRequest, PharmacyRequestStatus } from '../../../models/PharmacyRequest';
+import { PharmacyService, RequestStatusUpdateResponse } from '../../../core/services/Pharmacy/Pharmacy.service';
 
 @Component({
   selector: 'app-view-requests',
@@ -16,6 +17,7 @@ export class ViewRequestsComponent implements OnInit {
 
   // UI state variables
   isLoading = false;
+  isUpdating = false;
   searchQuery = '';
   selectedRequests: Set<number> = new Set();
   showSuccessMessage = false;
@@ -27,121 +29,37 @@ export class ViewRequestsComponent implements OnInit {
   sortBy: 'date' | 'patient' | 'medication' = 'date';
   sortOrder: 'asc' | 'desc' = 'desc';
 
-  // Sample data for pharmacy requests (patient direct requests)
-  allRequests: PharmacyRequest[] = [
-    {
-      id: 1,
-      patientId: 101,
-      patientName: 'John Doe',
-      patientEmail: 'john.doe@email.com',
-      patientPhone: '+1 (555) 123-4567',
-      medication: 'Aspirin 100mg',
-      medicationId: 1001,
-      dosage: '100mg',
-      quantity: 30,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.PENDING,
-      requestDate: '2024-01-15',
-      cost: 25.50,
-      currency: 'USD',
-      insuranceCovered: true,
-      createdAt: '2024-01-15T08:00:00Z',
-      updatedAt: '2024-01-15T08:00:00Z'
-    },
-    {
-      id: 3,
-      patientId: 103,
-      patientName: 'Mike Johnson',
-      patientEmail: 'mike.johnson@email.com',
-      patientPhone: '+1 (555) 234-5678',
-      medication: 'Amoxicillin 500mg',
-      medicationId: 1003,
-      dosage: '500mg',
-      quantity: 21,
-      unit: 'capsules',
-      status: PharmacyRequestStatus.PENDING,
-      requestDate: '2024-01-15',
-      cost: 32.00,
-      currency: 'USD',
-      insuranceCovered: true,
-      createdAt: '2024-01-15T09:30:00Z',
-      updatedAt: '2024-01-15T09:30:00Z'
-    },
-    {
-      id: 6,
-      patientId: 106,
-      patientName: 'Lisa Rodriguez',
-      patientEmail: 'lisa.rodriguez@email.com',
-      patientPhone: '+1 (555) 345-6789',
-      medication: 'Metformin 850mg',
-      medicationId: 1006,
-      dosage: '850mg',
-      quantity: 60,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.PENDING,
-      requestDate: '2024-01-16',
-      cost: 45.75,
-      currency: 'USD',
-      insuranceCovered: true,
-      createdAt: '2024-01-16T10:15:00Z',
-      updatedAt: '2024-01-16T10:15:00Z'
-    },
-    {
-      id: 7,
-      patientId: 107,
-      patientName: 'David Thompson',
-      patientEmail: 'david.thompson@email.com',
-      patientPhone: '+1 (555) 456-7890',
-      medication: 'Lisinopril 10mg',
-      medicationId: 1007,
-      dosage: '10mg',
-      quantity: 30,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.PENDING,
-      requestDate: '2024-01-16',
-      cost: 28.90,
-      currency: 'USD',
-      insuranceCovered: false,
-      createdAt: '2024-01-16T11:45:00Z',
-      updatedAt: '2024-01-16T11:45:00Z'
-    },
-    // Non-pending request (won't show in this view)
-    {
-      id: 2,
-      patientId: 102,
-      patientName: 'Jane Smith',
-      patientEmail: 'jane.smith@email.com',
-      patientPhone: '+1 (555) 987-6543',
-      medication: 'Ibuprofen 200mg',
-      medicationId: 1002,
-      dosage: '200mg',
-      quantity: 20,
-      unit: 'tablets',
-      status: PharmacyRequestStatus.APPROVED,
-      requestDate: '2024-01-14',
-      approvedDate: '2024-01-14T14:30:00Z',
-      approvedBy: 401,
-      approvedByName: 'Pharmacist Brown',
-      cost: 18.75,
-      currency: 'USD',
-      insuranceCovered: false,
-      createdAt: '2024-01-14T10:00:00Z',
-      updatedAt: '2024-01-14T14:30:00Z'
-    }
-  ];
+  // All pharmacy requests loaded from backend
+  allRequests: PharmacyRequest[] = [];
+
+  constructor(private pharmacyService: PharmacyService) {}
 
   // Initialize component on load
   ngOnInit() {
     this.loadRequests();
   }
 
-  // Load requests with loading state
+  // Load pending requests from backend
   loadRequests(): void {
     this.isLoading = true;
-    // Simulate API call delay
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 500);
+    this.errorMessage = '';
+
+    this.pharmacyService.getRequestsByStatus(PharmacyRequestStatus.PENDING).subscribe({
+      next: (requests: PharmacyRequest[]) => {
+        this.allRequests = requests;
+        this.isLoading = false;
+        console.log('Pending requests loaded successfully:', requests.length, 'requests');
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to load requests';
+        console.error('Error loading pending requests:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   // Filter and sort pending requests based on current criteria
@@ -276,21 +194,35 @@ export class ViewRequestsComponent implements OnInit {
     const request = this.allRequests.find(r => r.id === requestId);
     
     if (request && request.status === PharmacyRequestStatus.PENDING) {
-      this.isLoading = true;
-      
-      // Simulate API call
-      setTimeout(() => {
-        request.status = PharmacyRequestStatus.APPROVED;
-        request.approvedDate = new Date().toISOString();
-        request.updatedAt = new Date().toISOString();
-        request.approvedBy = 401;
-        request.approvedByName = 'Current Pharmacist';
-        
-        this.selectedRequests.delete(requestId);
-        this.isLoading = false;
-        
-        this.showNotification(`Request #${requestId} approved successfully`, 'success');
-      }, 800);
+      this.isUpdating = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      // TODO: Get actual user ID from auth service
+      const currentUserId = 401; // Replace with actual user ID
+
+      this.pharmacyService.approveRequest(requestId, currentUserId).subscribe({
+        next: (response: RequestStatusUpdateResponse) => {
+          // Update the local request with the response data
+          const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
+          if (requestIndex !== -1) {
+            this.allRequests[requestIndex] = response.request;
+          }
+
+          this.selectedRequests.delete(requestId);
+          this.isUpdating = false;
+          this.showNotification(response.message || `Request #${requestId} approved successfully`, 'success');
+        },
+        error: (error: any) => {
+          this.isUpdating = false;
+          this.errorMessage = error.message || 'Failed to approve request';
+          console.error('Error approving request:', error);
+          
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     }
   }
 
@@ -302,25 +234,35 @@ export class ViewRequestsComponent implements OnInit {
       const request = this.allRequests.find(r => r.id === requestId);
       
       if (request && request.status === PharmacyRequestStatus.PENDING) {
-        this.isLoading = true;
-        
-        // Simulate API call
-        setTimeout(() => {
-          request.status = PharmacyRequestStatus.REJECTED;
-          request.rejectedDate = new Date().toISOString();
-          request.updatedAt = new Date().toISOString();
-          request.rejectedBy = 401;
-          request.rejectedByName = 'Current Pharmacist';
-          
-          if (reason.trim()) {
-            request.rejectionReason = reason.trim();
+        this.isUpdating = true;
+        this.errorMessage = '';
+        this.successMessage = '';
+
+        // TODO: Get actual user ID from auth service
+        const currentUserId = 401; // Replace with actual user ID
+
+        this.pharmacyService.rejectRequest(requestId, currentUserId, reason.trim() || 'No reason provided').subscribe({
+          next: (response: RequestStatusUpdateResponse) => {
+            // Update the local request with the response data
+            const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
+            if (requestIndex !== -1) {
+              this.allRequests[requestIndex] = response.request;
+            }
+
+            this.selectedRequests.delete(requestId);
+            this.isUpdating = false;
+            this.showNotification(response.message || `Request #${requestId} rejected successfully`, 'success');
+          },
+          error: (error: any) => {
+            this.isUpdating = false;
+            this.errorMessage = error.message || 'Failed to reject request';
+            console.error('Error rejecting request:', error);
+            
+            setTimeout(() => {
+              this.errorMessage = '';
+            }, 5000);
           }
-          
-          this.selectedRequests.delete(requestId);
-          this.isLoading = false;
-          
-          this.showNotification(`Request #${requestId} rejected successfully`, 'success');
-        }, 800);
+        });
       }
     }
   }
@@ -333,26 +275,51 @@ export class ViewRequestsComponent implements OnInit {
     const count = selectedIds.length;
     
     if (confirm(`Are you sure you want to approve ${count} selected request(s)?`)) {
-      this.isLoading = true;
-      
-      // Simulate API call
-      setTimeout(() => {
-        selectedIds.forEach(id => {
-          const request = this.allRequests.find(r => r.id === id);
-          if (request && request.status === PharmacyRequestStatus.PENDING) {
-            request.status = PharmacyRequestStatus.APPROVED;
-            request.approvedDate = new Date().toISOString();
-            request.updatedAt = new Date().toISOString();
-            request.approvedBy = 401;
-            request.approvedByName = 'Current Pharmacist';
+      this.isUpdating = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      // TODO: Get actual user ID from auth service
+      const currentUserId = 401; // Replace with actual user ID
+
+      // Process each request sequentially
+      let processedCount = 0;
+      let errorCount = 0;
+
+      const processNext = (index: number) => {
+        if (index >= selectedIds.length) {
+          // All requests processed
+          this.isUpdating = false;
+          this.selectedRequests.clear();
+          
+          if (errorCount === 0) {
+            this.showNotification(`${processedCount} request(s) approved successfully`, 'success');
+          } else {
+            this.showNotification(`${processedCount} approved, ${errorCount} failed`, 'error');
+          }
+          return;
+        }
+
+        const requestId = selectedIds[index];
+        this.pharmacyService.approveRequest(requestId, currentUserId).subscribe({
+          next: (response: RequestStatusUpdateResponse) => {
+            // Update the local request with the response data
+            const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
+            if (requestIndex !== -1) {
+              this.allRequests[requestIndex] = response.request;
+            }
+            processedCount++;
+            processNext(index + 1);
+          },
+          error: (error: any) => {
+            console.error(`Error approving request ${requestId}:`, error);
+            errorCount++;
+            processNext(index + 1);
           }
         });
-        
-        this.selectedRequests.clear();
-        this.isLoading = false;
-        
-        this.showNotification(`${count} request(s) approved successfully`, 'success');
-      }, 1200);
+      };
+
+      processNext(0);
     }
   }
 
@@ -365,30 +332,53 @@ export class ViewRequestsComponent implements OnInit {
     const reason = prompt('Please provide a reason for bulk rejection (optional):');
     
     if (reason !== null && confirm(`Are you sure you want to reject ${count} selected request(s)?`)) {
-      this.isLoading = true;
-      
-      // Simulate API call
-      setTimeout(() => {
-        selectedIds.forEach(id => {
-          const request = this.allRequests.find(r => r.id === id);
-          if (request && request.status === PharmacyRequestStatus.PENDING) {
-            request.status = PharmacyRequestStatus.REJECTED;
-            request.rejectedDate = new Date().toISOString();
-            request.updatedAt = new Date().toISOString();
-            request.rejectedBy = 401;
-            request.rejectedByName = 'Current Pharmacist';
-            
-            if (reason?.trim()) {
-              request.rejectionReason = reason.trim();
+      this.isUpdating = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      // TODO: Get actual user ID from auth service
+      const currentUserId = 401; // Replace with actual user ID
+
+      const rejectionReason = reason.trim() || 'No reason provided';
+
+      // Process each request sequentially
+      let processedCount = 0;
+      let errorCount = 0;
+
+      const processNext = (index: number) => {
+        if (index >= selectedIds.length) {
+          // All requests processed
+          this.isUpdating = false;
+          this.selectedRequests.clear();
+          
+          if (errorCount === 0) {
+            this.showNotification(`${processedCount} request(s) rejected successfully`, 'success');
+          } else {
+            this.showNotification(`${processedCount} rejected, ${errorCount} failed`, 'error');
+          }
+          return;
+        }
+
+        const requestId = selectedIds[index];
+        this.pharmacyService.rejectRequest(requestId, currentUserId, rejectionReason).subscribe({
+          next: (response: RequestStatusUpdateResponse) => {
+            // Update the local request with the response data
+            const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
+            if (requestIndex !== -1) {
+              this.allRequests[requestIndex] = response.request;
             }
+            processedCount++;
+            processNext(index + 1);
+          },
+          error: (error: any) => {
+            console.error(`Error rejecting request ${requestId}:`, error);
+            errorCount++;
+            processNext(index + 1);
           }
         });
-        
-        this.selectedRequests.clear();
-        this.isLoading = false;
-        
-        this.showNotification(`${count} request(s) rejected successfully`, 'success');
-      }, 1200);
+      };
+
+      processNext(0);
     }
   }
 
@@ -396,6 +386,39 @@ export class ViewRequestsComponent implements OnInit {
   clearFilters(): void {
     this.searchQuery = '';
     this.selectedRequests.clear();
+  }
+
+  // Refresh data from backend
+  refreshData(): void {
+    this.loadRequests();
+  }
+
+  // Search requests by query
+  searchRequests(): void {
+    if (!this.searchQuery || this.searchQuery.trim() === '') {
+      this.loadRequests();
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.pharmacyService.searchRequests(this.searchQuery.trim()).subscribe({
+      next: (requests: PharmacyRequest[]) => {
+        this.allRequests = requests.filter(request => request.status === PharmacyRequestStatus.PENDING);
+        this.isLoading = false;
+        console.log('Search results loaded:', this.allRequests.length, 'requests');
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        this.errorMessage = error.message || 'Failed to search requests';
+        console.error('Error searching requests:', error);
+        
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   // Display success or error messages to user
