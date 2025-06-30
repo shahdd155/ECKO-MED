@@ -44,7 +44,7 @@ export class ViewRequestsComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.pharmacyService.getRequestsByStatus(PharmacyRequestStatus.PENDING).subscribe({
+    this.pharmacyService.getRequestsByStatus().subscribe({
       next: (requests: PharmacyRequest[]) => {
         this.allRequests = requests;
         this.isLoading = false;

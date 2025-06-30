@@ -65,7 +65,7 @@ export class PharmacyService {
    * Fetch processed (non-pending) pharmacy requests
    */
   getProcessedRequests(): Observable<PharmacyRequest[]> {
-    const url = `${this.baseUrl}/requests/processed`;
+    const url = `${this.baseUrl}/Closed-requests`;
     
     return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
@@ -81,8 +81,8 @@ export class PharmacyService {
   /**
    * Fetch requests by status
    */
-  getRequestsByStatus(status: PharmacyRequestStatus): Observable<PharmacyRequest[]> {
-    const url = `${this.baseUrl}/requests/status/${status}`;
+  getRequestsByStatus(): Observable<PharmacyRequest[]> {
+    const url = `${this.baseUrl}/pending-requests`;
     
     return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
