@@ -10,7 +10,7 @@
                 <div class="text-xs text-black">{{ scan.date }}</div>
               </div>
               <div class="flex flex-col md:flex-row gap-4">
-                <img [src]="scan.imageUrl" alt="{{ scan.type }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
+                <img [src]="scan.imageBase64" alt="{{ scan.type }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
                 <p class="text-sm text-black md:flex-1">{{ scan.description }}</p>
               </div>
             </div>
