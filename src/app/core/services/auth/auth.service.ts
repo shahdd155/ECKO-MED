@@ -117,6 +117,10 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  getUserId(): string | undefined {
+    return this.currentUserSubject.value?.id;
+  }
+
   isLoggedIn(): Observable<boolean> {
      return this.currentUser$.pipe(map(user => !!user));
   }

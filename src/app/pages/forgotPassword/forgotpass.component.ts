@@ -12,36 +12,71 @@ import { CommonModule } from '@angular/common';
   styleUrl: './forgotpass.component.scss'
 })
 export class ForgotpassComponent {
+  step = 1;
   isSubmitting = false;
-  successMessage = '';
   errorMessage = '';
+  
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  forgotPasswordForm: FormGroup = new FormGroup({
+  verifyEmail = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email])
   });
 
-  private readonly authService = inject(AuthService);
+  verifyCode = new FormGroup({
+    resetCode: new FormControl('', [Validators.required])
+  });
 
-  submitRequest(): void {
-    if (this.forgotPasswordForm.invalid) {
-      return;
-    }
+  resetPassword = new FormGroup({
+    email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)])
+  });
 
+  verifyEmailSubmit(): void {
+    if (this.verifyEmail.invalid) return;
     this.isSubmitting = true;
     this.errorMessage = '';
-    this.successMessage = '';
 
-    const email = this.forgotPasswordForm.get('email')?.value;
-
-    this.authService.forgotPassword(email).subscribe({
-      next: (response) => {
+    this.authService.forgotPassword(this.verifyEmail.value.email!).subscribe({
+      next: () => {
         this.isSubmitting = false;
-        this.successMessage = response.message || 'If an account with that email exists, a password reset link has been sent.';
-        this.forgotPasswordForm.reset();
+        this.resetPassword.controls.email.setValue(this.verifyEmail.value.email!);
+        this.step = 2;
       },
-      error: (error) => {
+      error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = error.message || 'An error occurred. Please try again.';
+        this.errorMessage = err.message || 'An error occurred while verifying the email.';
+      }
+    });
+  }
+
+  verifyCodeSubmit(): void {
+    if (this.verifyCode.invalid) return;
+    // The "token" is the code the user received.
+    // We don't verify it with the backend here, we just pass to the next step.
+    this.step = 3;
+  }
+  
+  verifyPasswordSubmit(): void {
+    if (this.resetPassword.invalid) return;
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
+    const resetData = {
+      email: this.verifyEmail.value.email!,
+      token: this.verifyCode.value.resetCode!,
+      newPassword: this.resetPassword.value.newPassword!
+    };
+
+    this.authService.resetPassword(resetData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        // Optionally show a success message before redirecting
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.errorMessage = err.message || 'An error occurred while resetting the password.';
       }
     });
   }

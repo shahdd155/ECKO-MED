@@ -15,6 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class HelpCenterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  isUserLoggedIn = false;
 
   // Form for ticket submission
   ticketForm: FormGroup;
@@ -59,27 +60,21 @@ export class HelpCenterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadInitialData();
+    this.authService.isLoggedIn().pipe(takeUntil(this.destroy$)).subscribe(loggedIn => {
+      this.isUserLoggedIn = loggedIn;
+      if (loggedIn) {
+        this.prefillUserData();
+        this.loadUserTicketHistory();
+      }
+    });
+    this.loadFaqCategories();
+    this.loadContactInfo();
     this.setupFormListeners();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  /**
-   * Load initial data
-   */
-  private loadInitialData(): void {
-    this.loadFaqCategories();
-    this.loadContactInfo();
-    
-    // Pre-fill form with user data if logged in
-    if (this.authService.isLoggedIn()) {
-      this.prefillUserData();
-      this.loadUserTicketHistory();
-    }
   }
 
   /**
@@ -90,7 +85,7 @@ export class HelpCenterComponent implements OnInit, OnDestroy {
     this.ticketForm.get('email')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(email => {
-        if (email && this.authService.isLoggedIn()) {
+        if (email && this.isUserLoggedIn) {
           // You might want to validate if the email matches the logged-in user
         }
       });
@@ -277,7 +272,7 @@ export class HelpCenterComponent implements OnInit, OnDestroy {
         });
         
         // Refresh ticket history if user is logged in
-        if (this.authService.isLoggedIn()) {
+        if (this.isUserLoggedIn) {
           this.loadUserTicketHistory();
         }
         
@@ -364,7 +359,7 @@ export class HelpCenterComponent implements OnInit, OnDestroy {
     // Load data for the selected section
     if (section === 'faq' && this.faqCategories.length > 0) {
       this.loadFaqByCategory(this.faqCategories[0].id);
-    } else if (section === 'history' && this.authService.isLoggedIn()) {
+    } else if (section === 'history' && this.isUserLoggedIn) {
       this.loadUserTicketHistory();
     }
   }
@@ -460,6 +455,6 @@ export class HelpCenterComponent implements OnInit, OnDestroy {
    * Check if user is logged in
    */
   isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    return this.isUserLoggedIn;
   }
 }
