@@ -14,33 +14,33 @@ export class PatientsService {
   private readonly router= inject(Router);
 
   getProfileData(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/Profile`);
+    return this.httpClient.get(`${this.apiUrl}/Profile`, { withCredentials: true });
   }
 
   updateProfile(profileData: any): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/Profile`, profileData);
+    return this.httpClient.post(`${this.apiUrl}/Profile`, profileData, { withCredentials: true });
   }
 
   updateProfileImage(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.httpClient.post(`${this.apiUrl}/UpdateProfileImage`, formData);
+    return this.httpClient.post(`${this.apiUrl}/UpdateProfileImage`, formData, { withCredentials: true });
   }
 
   getDashboardData(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/dashboardData`);
+    return this.httpClient.get(`${this.apiUrl}/dashboardData`, { withCredentials: true });
   }
 
   getVisits(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/get-records`);
+    return this.httpClient.get(`${this.apiUrl}/get-records`, { withCredentials: true });
   }
 
   getPrescriptions(visitId: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/prescription`, { params: { Id: visitId.toString() } });
+    return this.httpClient.get(`${this.apiUrl}/prescription`, { params: { Id: visitId.toString() }, withCredentials: true });
   }
 
   getScans(visitId: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/scans`, { params: { Id: visitId.toString() } });
+    return this.httpClient.get(`${this.apiUrl}/scans`, { params: { Id: visitId.toString() }, withCredentials: true });
   }
 
   searchHospitals(searchParams: any): Observable<any> {
@@ -53,6 +53,6 @@ export class PatientsService {
     if (searchParams.Lat) params = params.append('Lat', searchParams.Lat);
     if (searchParams.Lang) params = params.append('Lang', searchParams.Lang);
 
-    return this.httpClient.get(`${this.apiUrl}/hospitalsearch`, { params });
+    return this.httpClient.get(`${this.apiUrl}/hospitalsearch`, { params, withCredentials: true });
   }
 }

@@ -50,7 +50,7 @@ export class PharmacyService {
   getAllRequests(): Observable<PharmacyRequest[]> {
     const url = `${this.baseUrl}/requests`;
     
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No requests data received');
@@ -67,7 +67,7 @@ export class PharmacyService {
   getProcessedRequests(): Observable<PharmacyRequest[]> {
     const url = `${this.baseUrl}/requests/processed`;
     
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No processed requests data received');
@@ -84,7 +84,7 @@ export class PharmacyService {
   getRequestsByStatus(status: PharmacyRequestStatus): Observable<PharmacyRequest[]> {
     const url = `${this.baseUrl}/requests/status/${status}`;
     
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No requests data received');
@@ -101,7 +101,7 @@ export class PharmacyService {
   getPharmacyStats(): Observable<PharmacyStats> {
     const url = `${this.baseUrl}/stats`;
     
-    return this.http.get<ApiResponse<PharmacyStats>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyStats>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No statistics data received');
@@ -118,7 +118,7 @@ export class PharmacyService {
   getRequestById(requestId: number): Observable<PharmacyRequest> {
     const url = `${this.baseUrl}/requests/${requestId}`;
     
-    return this.http.get<ApiResponse<PharmacyRequest>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequest>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No request data received');
@@ -135,7 +135,7 @@ export class PharmacyService {
   updateRequestStatus(updateData: UpdateRequestStatusDto): Observable<RequestStatusUpdateResponse> {
     const url = `${this.baseUrl}/requests/${updateData.requestId}/status`;
     
-    return this.http.put<ApiResponse<RequestStatusUpdateResponse>>(url, updateData).pipe(
+    return this.http.put<ApiResponse<RequestStatusUpdateResponse>>(url, updateData, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No update response received');
@@ -180,7 +180,7 @@ export class PharmacyService {
   getAvailableStatusTransitions(currentStatus: PharmacyRequestStatus): Observable<PharmacyRequestStatus[]> {
     const url = `${this.baseUrl}/requests/status-transitions/${currentStatus}`;
     
-    return this.http.get<ApiResponse<PharmacyRequestStatus[]>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequestStatus[]>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No status transitions data received');
@@ -197,7 +197,7 @@ export class PharmacyService {
   searchRequests(query: string): Observable<PharmacyRequest[]> {
     const url = `${this.baseUrl}/requests/search?q=${encodeURIComponent(query)}`;
     
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No search results received');
@@ -214,7 +214,7 @@ export class PharmacyService {
   getRequestsByDateRange(startDate: string, endDate: string): Observable<PharmacyRequest[]> {
     const url = `${this.baseUrl}/requests/date-range?start=${startDate}&end=${endDate}`;
     
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url).pipe(
+    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
       map(response => {
         if (!response.data) {
           throw new Error('No requests data received');

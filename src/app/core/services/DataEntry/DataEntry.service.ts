@@ -127,19 +127,19 @@ export class DataEntryService {
 
   fetchUserData(userId: string): Observable<UserData> {
     const params = new HttpParams().set('Id', userId);
-    return this.http.get<UserData>(`${this.baseUrl}/FetchData`, { params }).pipe(
+    return this.http.get<UserData>(`${this.baseUrl}/FetchData`, { params, withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   createPatient(patientData: AddPatientDto): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/AddPatient`, patientData).pipe(
+    return this.http.post<any>(`${this.baseUrl}/AddPatient`, patientData, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   getAvailableDepartments(): Observable<Department[]> {
-    return this.http.get<Department[]>(`${this.baseUrl}/Departments`).pipe(
+    return this.http.get<Department[]>(`${this.baseUrl}/Departments`, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
@@ -150,35 +150,35 @@ export class DataEntryService {
 
   fetchPatientData(userId: string): Observable<PatientDataResponse> {
     const params = new HttpParams().set('Id', userId);
-    return this.http.get<PatientDataResponse>(`${this.baseUrl}/PatientData`, { params }).pipe(
+    return this.http.get<PatientDataResponse>(`${this.baseUrl}/PatientData`, { params, withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   fetchLabTests(patientId: string): Observable<LabTest[]> {
     const params = new HttpParams().set('Id', patientId);
-    return this.http.get<LabTest[]>(`${this.baseUrl}/LabTests`, { params }).pipe(
+    return this.http.get<LabTest[]>(`${this.baseUrl}/LabTests`, { params, withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
 
   fetchPrescriptions(patientId: string): Observable<Prescription[]> {
       const params = new HttpParams().set('Id', patientId);
-      return this.http.get<Prescription[]>(`${this.baseUrl}/Medicines`, { params }).pipe(
+      return this.http.get<Prescription[]>(`${this.baseUrl}/Medicines`, { params, withCredentials: true }).pipe(
           catchError(this.handleError)
       );
   }
 
   fetchScans(patientId: string): Observable<MedicalScan[]> {
       const params = new HttpParams().set('Id', patientId);
-      return this.http.get<MedicalScan[]>(`${this.baseUrl}/Scans`, { params }).pipe(
+      return this.http.get<MedicalScan[]>(`${this.baseUrl}/Scans`, { params, withCredentials: true }).pipe(
           catchError(this.handleError)
       );
   }
 
   fetchNotes(patientId: string): Observable<MedicalNote[]> {
       const params = new HttpParams().set('Id', patientId);
-      return this.http.get<MedicalNote[]>(`${this.baseUrl}/Notes`, { params }).pipe(
+      return this.http.get<MedicalNote[]>(`${this.baseUrl}/Notes`, { params, withCredentials: true }).pipe(
           catchError(this.handleError)
       );
   }
@@ -192,13 +192,13 @@ export class DataEntryService {
     if (testData.image) {
       formData.append('Image', testData.image, testData.image.name);
     }
-    return this.http.post(`${this.baseUrl}/Add-Test`, formData).pipe(
+    return this.http.post(`${this.baseUrl}/Add-Test`, formData, { withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
 
   addPrescription(prescriptionData: AddMedicineDto): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Add-medicine`, prescriptionData).pipe(
+    return this.http.post(`${this.baseUrl}/Add-medicine`, prescriptionData, { withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
@@ -212,13 +212,13 @@ export class DataEntryService {
     if (scanData.image) {
         formData.append('Image', scanData.image, scanData.image.name);
     }
-    return this.http.post(`${this.baseUrl}/Add-Scan`, formData).pipe(
+    return this.http.post(`${this.baseUrl}/Add-Scan`, formData, { withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
 
   addNote(noteData: AddNoteDto): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Add-Note`, noteData).pipe(
+    return this.http.post(`${this.baseUrl}/Add-Note`, noteData, { withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
@@ -226,7 +226,7 @@ export class DataEntryService {
   checkoutPatient(patientId: string): Observable<any> {
     const formData = new FormData();
     formData.append('Id', patientId);
-    return this.http.post(`${this.baseUrl}/CheckOut`, formData).pipe(
+    return this.http.post(`${this.baseUrl}/CheckOut`, formData, { withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
@@ -237,7 +237,7 @@ export class DataEntryService {
 
   getDepartmentPatients(departmentName: string): Observable<PatientInDepartment[]> {
     const params = new HttpParams().set('Department', departmentName);
-    return this.http.get<PatientInDepartment[]>(`${this.baseUrl}/DepartmentPatients`, { params }).pipe(
+    return this.http.get<PatientInDepartment[]>(`${this.baseUrl}/DepartmentPatients`, { params, withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
@@ -247,13 +247,13 @@ export class DataEntryService {
   // =================================================================
   
   getWeeklyDashboard(): Observable<DashboardData> {
-      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardWeakly`).pipe(
+      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardWeakly`, { withCredentials: true }).pipe(
           catchError(this.handleError)
       );
   }
 
   getMonthlyDashboard(): Observable<DashboardData> {
-      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardMonthly`).pipe(
+      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardMonthly`, { withCredentials: true }).pipe(
           catchError(this.handleError)
       );
   }
@@ -263,13 +263,13 @@ export class DataEntryService {
   // =================================================================
   
   fetchDataEntryProfile(): Observable<DataEntryProfile> {
-    return this.http.get<DataEntryProfile>(`${this.baseUrl}/DataEntryprofile`).pipe(
+    return this.http.get<DataEntryProfile>(`${this.baseUrl}/DataEntryprofile`, { withCredentials: true }).pipe(
         catchError(this.handleError)
     );
   }
   
   updateDataEntryProfile(profileData: UpdateDataEntryProfileDto): Observable<any> {
-      return this.http.post<any>(`${this.baseUrl}/UpdateDataEntryProfile`, profileData).pipe(
+      return this.http.post<any>(`${this.baseUrl}/UpdateDataEntryProfile`, profileData, { withCredentials: true }).pipe(
           catchError(this.handleError)
       );
   }

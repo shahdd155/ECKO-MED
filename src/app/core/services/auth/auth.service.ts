@@ -36,7 +36,7 @@ export class AuthService {
 
   // Check authentication status on startup
   checkAuthenticationStatus(): Observable<boolean> {
-    return this.httpClient.get<boolean>(`${this.baseUrl}/is-authenticated`).pipe(
+    return this.httpClient.get<boolean>(`${this.baseUrl}/is-authenticated`, { withCredentials: true }).pipe(
       switchMap(isAuthenticated => {
         if (isAuthenticated) {
           return this.fetchUserProfile().pipe(map(() => true));
@@ -64,7 +64,7 @@ export class AuthService {
     // Backend expects 'User' role, not 'patient'
     const loginPayload = { ...credentials, role: 'User' };
     
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/userlogin`, loginPayload).pipe(
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/userlogin`, loginPayload, { withCredentials: true }).pipe(
       switchMap(response => {
         return this.fetchUserProfile().pipe(
           map(() => response) // Pass original login response
@@ -76,7 +76,7 @@ export class AuthService {
 
   // LOGOUT
   logout(): void {
-    this.httpClient.post(`${this.baseUrl}/logout`, {}).subscribe({
+    this.httpClient.post(`${this.baseUrl}/logout`, {}, { withCredentials: true }).subscribe({
       next: () => this.clearLocalUserData(),
       error: () => this.clearLocalUserData()
     });
@@ -89,27 +89,27 @@ export class AuthService {
 
   // REGISTER
   register(userData: FormData): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/user-register`, userData).pipe(
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/user-register`, userData, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   // PASSWORD RECOVERY
   forgotPassword(email: string): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/forgot-password`, { email }).pipe(
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/forgot-password`, { email }, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   resetPassword(data: ResetPasswordViewModel): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/reset-password`, data).pipe(
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/reset-password`, data, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   // EMAIL CONFIRMATION (called from a component handling the link)
   confirmEmail(userId: string, token: string): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/confirm-email`, { params: { userId, token } });
+    return this.httpClient.get(`${this.baseUrl}/confirm-email`, { params: { userId, token }, withCredentials: true });
   }
 
   // HELPERS
