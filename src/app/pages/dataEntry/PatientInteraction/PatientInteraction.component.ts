@@ -453,7 +453,7 @@ export class PatientInteractionComponent implements OnInit {
     this.successMessage = '';
 
     this.dataEntryService.checkoutPatient(this.patientId).subscribe({
-      next: (result) => {
+      next: () => {
         this.isCheckingOut = false;
         this.successMessage = 'Patient checkout completed successfully!';
         setTimeout(() => {
