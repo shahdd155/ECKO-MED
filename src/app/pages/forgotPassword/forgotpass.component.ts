@@ -12,60 +12,37 @@ import { CommonModule } from '@angular/common';
   styleUrl: './forgotpass.component.scss'
 })
 export class ForgotpassComponent {
-  private readonly router = inject(Router);
-  step: number = 1;
+  isSubmitting = false;
+  successMessage = '';
+  errorMessage = '';
 
-  verifyEmail: FormGroup = new FormGroup({
+  forgotPasswordForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email])
-  });
-
-  verifyCode: FormGroup = new FormGroup({
-    resetCode: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{5,}$/)])
-  });
-
-  resetPassword: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    newPassword: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
-    ])
   });
 
   private readonly authService = inject(AuthService);
 
-  verifyEmailSubmit(): void {
-    let emailValue = this.verifyEmail.get('email')?.value;
-    this.resetPassword.get('email')?.patchValue(emailValue);
-    this.authService.setEmailVerify(this.verifyEmail.value).subscribe({
-      next: (res:any) => {
-        if (res.statusMsg === "success") {
-          this.step = 2;
-        }
-      }
-    });
-  }
+  submitRequest(): void {
+    if (this.forgotPasswordForm.invalid) {
+      return;
+    }
 
-  verifyCodeSubmit(): void {
-    this.authService.setCodeVerify(this.verifyCode.value).subscribe({
-      next: (res) => {
-        if (res.status === "Success") {
-          this.step = 3;
-        }
-      }
-    });
-  }
+    this.isSubmitting = true;
+    this.errorMessage = '';
+    this.successMessage = '';
 
-  verifyPasswordSubmit(): void {
-    this.authService.resetPassword(this.resetPassword.value).subscribe({
-      next: (res) => {
-        localStorage.setItem('token', res.token);
-        // this.authService.getUserData();
-        this.router.navigate(['/login']);
+    const email = this.forgotPasswordForm.get('email')?.value;
+
+    this.authService.forgotPassword(email).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        this.successMessage = response.message || 'If an account with that email exists, a password reset link has been sent.';
+        this.forgotPasswordForm.reset();
       },
       error: (error) => {
-        console.error('Reset password error:', error);
-      } 
+        this.isSubmitting = false;
+        this.errorMessage = error.message || 'An error occurred. Please try again.';
+      }
     });
   }
 }

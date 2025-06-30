@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth/auth.service';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { UserLogin } from '../../models/loginModels'; // Import UserLogin interface
+import { UserLogin } from '../../models/loginModels';
 
 @Component({
   selector: 'app-login',
@@ -16,19 +16,18 @@ export class LoginComponent {
   private readonly router = inject(Router);
 
   loginForm: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required, Validators.email]), // Added email control
+    email: new FormControl(null, [Validators.required, Validators.email]),
     password: new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
-    rememberMe: new FormControl(false),  // Added rememberMe control
-    role: new FormControl('patient')
+    rememberMe: new FormControl(false),
   });
 
   submitLogin(): void {
     if (this.loginForm.valid) {
-      const credentials: UserLogin = this.loginForm.value; // Type credentials as UserLogin
+      const credentials: UserLogin = this.loginForm.value;
       this.authService.login(credentials).subscribe({
         next: (response) => {
           console.log('Login successful', response);
-          this.router.navigate(['/patientdashboard']);
+          this.router.navigate(['/patient/dashboard']);
         },
         error: (error) => {
           console.error('Login failed', error);

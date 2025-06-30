@@ -42,38 +42,25 @@
               
               <!-- User ID -->
               <div>
-                <label for="userId" class="block text-sm font-medium text-gray-700 mb-2">
-                  User ID <span class="text-red-500">*</span>
-                </label>
-                <div class="flex gap-2">
-                  <input
-                    type="text"
-                    id="userId"
-                    formControlName="userId"
-                    placeholder="Enter user ID"
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
-                    [class.border-red-500]="patientForm.get('userId')?.invalid && patientForm.get('userId')?.touched"
-                  />
-                  <button
-                    type="button"
-                    (click)="fetchUserData()"
-                    [disabled]="isLoading || !patientForm.get('userId')?.value"
-                    class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                  >
-                    <svg *ngIf="isLoading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <div class="relative">
+                  <input type="text" id="userId" formControlName="userId"
+                    class="block w-full px-4 py-3 text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" " />
+                  <label for="userId"
+                    class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                    User ID <span class="text-red-500">*</span>
+                  </label>
+                </div>
+                <button type="button" (click)="fetchUserData()" [disabled]="isLoading"
+                  class="px-5 py-3 text-sm font-medium text-center text-white bg-gray-800 rounded-lg hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 disabled:opacity-50">
+                  <span *ngIf="!isLoading">Fetch User Data</span>
+                  <span *ngIf="isLoading">
+                    <svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                     </svg>
-                    <span *ngIf="!isLoading">Fetch</span>
-                    <span *ngIf="isLoading">Loading...</span>
-                  </button>
-                </div>
-                <div *ngIf="patientForm.get('userId')?.invalid && patientForm.get('userId')?.touched" class="mt-1 text-sm text-red-600">
-                  User ID is required
-                </div>
-                <div class="mt-1 text-xs text-gray-400">
-                  Enter user ID and click "Fetch" to load user information
-                </div>
+                  </span>
+                </button>
               </div>
 
               <!-- User Information (Auto-filled from backend) -->
@@ -210,45 +197,38 @@
               <!-- Entry Information -->
               <div class="border-t pt-4 lg:pt-6">
                 <h3 class="text-md font-medium text-gray-900 mb-4">Entry Information</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
-                  <!-- Department -->
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div>
-                    <label for="department" class="block text-sm font-medium text-gray-700 mb-2">
-                      Department <span class="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="department"
-                      formControlName="department"
-                      class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
-                      [class.border-red-500]="patientForm.get('department')?.invalid && patientForm.get('department')?.touched"
-                    >
-                      <option value="">Select department</option>
-                      <option value="cardiology">Cardiology</option>
-                      <option value="dermatology">Dermatology</option>
-                      <option value="emergency">Emergency</option>
-                      <option value="neurology">Neurology</option>
-                      <option value="orthopedics">Orthopedics</option>
-                      <option value="pediatrics">Pediatrics</option>
+                    <label for="department" class="block mb-2 text-sm font-medium text-gray-900">Department</label>
+                    <select id="department" formControlName="department"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                      <option value="" disabled>Select Department</option>
+                      @for (department of availableDepartments; track department.name) {
+                        <option [value]="department.name">{{ department.name }}</option>
+                      }
                     </select>
-                    <div *ngIf="patientForm.get('department')?.invalid && patientForm.get('department')?.touched" class="mt-1 text-sm text-red-600">
-                      Please select a department
-                    </div>
                   </div>
-
-                  <!-- Entry Date and Time -->
                   <div>
-                    <label for="entryDateTime" class="block text-sm font-medium text-gray-700 mb-2">
-                      Entry Date & Time
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="entryDateTime"
-                      formControlName="entryDateTime"
-                      readonly
-                      class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
-                    />
-                    <div class="mt-1 text-xs text-gray-400">Current date and time</div>
+                    <label for="doctorName" class="block mb-2 text-sm font-medium text-gray-900">Doctor Name</label>
+                    <input type="text" id="doctorName" formControlName="doctorName"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      placeholder="Enter doctor's name">
                   </div>
+                </div>
+
+                <!-- Entry Date and Time -->
+                <div class="mt-4">
+                  <label for="entryDateTime" class="block text-sm font-medium text-gray-700 mb-2">
+                    Entry Date & Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="entryDateTime"
+                    formControlName="entryDateTime"
+                    readonly
+                    class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600 cursor-not-allowed"
+                  />
+                  <div class="mt-1 text-xs text-gray-400">Current date and time</div>
                 </div>
               </div>
 

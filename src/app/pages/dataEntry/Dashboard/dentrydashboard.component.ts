@@ -1,36 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../../core/services/dashboard.service';
-
-interface ChartSeries {
-  name: string;
-  value: number;
-}
+import { DataEntryService, DashboardData } from '../../../core/services/DataEntry/DataEntry.service';
 
 interface ChartData {
   name: string;
-  series: ChartSeries[];
-}
-
-interface ExpenseData {
-  name: string;
-  value: number;
+  series: { name: string; value: number }[];
 }
 
 @Component({
   selector: 'app-dentrydashboard',
   imports: [NgxChartsModule, CommonModule],
   templateUrl: './dentrydashboard.component.html',
-  styleUrl: './dentrydashboard.component.scss'
+  styleUrls: ['./dentrydashboard.component.scss']
 })
 export class DentrydashboardComponent implements OnInit {
-  userName = 'Loading...'; 
+  userName = 'Loading...';
   totalPatients = 0;
   totalLabResults = 0;
   maleCount = 0;
   femaleCount = 0;
+  
+  // Change percentages
+  totalPatientsPercent = '0%';
+  malePatientsPercent = '0%';
+  femalePatientsPercent = '0%';
+  labTestsPercent = '0%';
+
   isLoading = true;
+  timeframe: 'weekly' | 'monthly' = 'weekly';
 
   // Line chart data for Patient Overview
   patientOverviewData: ChartData[] = [];
@@ -41,16 +39,7 @@ export class DentrydashboardComponent implements OnInit {
     domain: ['#374151', '#f59e42']
   };
 
-  // Donut chart data for Expenses
-  expensesData: ExpenseData[] = [];
-  expensesColorScheme = {
-    name: 'customScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#f59e42', '#374151']
-  };
-
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dataEntryService: DataEntryService) {}
 
   ngOnInit(): void {
     this.loadDashboardData();
@@ -58,15 +47,28 @@ export class DentrydashboardComponent implements OnInit {
 
   loadDashboardData(): void {
     this.isLoading = true;
-    this.dashboardService.getDashboardData().subscribe({
-      next: (data) => {
-        this.userName = data.userName;
-        this.totalPatients = data.totalPatients;
-        this.totalLabResults = data.totalLabResults;
-        this.patientOverviewData = data.patientOverviewData;
-        this.expensesData = data.expensesData;
-        this.maleCount = data.genderStats?.male || 0;
-        this.femaleCount = data.genderStats?.female || 0;
+    const dataObservable = this.timeframe === 'weekly' 
+      ? this.dataEntryService.getWeeklyDashboard() 
+      : this.dataEntryService.getMonthlyDashboard();
+
+    dataObservable.subscribe({
+      next: (data: DashboardData) => {
+        const currentPeriod = this.timeframe === 'weekly' ? data.currentWeek : data.currentMonth;
+        const changeFromLastPeriod = this.timeframe === 'weekly' ? data.changeFromLastWeek : data.changeFromLastMonth;
+        
+        this.userName = data.dataEntryName;
+        this.totalPatients = currentPeriod.totalPatients;
+        this.totalLabResults = currentPeriod.labTests;
+        this.maleCount = currentPeriod.malePatients;
+        this.femaleCount = currentPeriod.femalePatients;
+
+        this.totalPatientsPercent = changeFromLastPeriod.totalPatientsPercent;
+        this.malePatientsPercent = changeFromLastPeriod.malePatientsPercent;
+        this.femalePatientsPercent = changeFromLastPeriod.femalePatientsPercent;
+        this.labTestsPercent = changeFromLastPeriod.labTestsPercent;
+
+        this.patientOverviewData = this.formatChartData(data.dailyBreakdown);
+        
         this.isLoading = false;
       },
       error: (error) => {
@@ -76,19 +78,37 @@ export class DentrydashboardComponent implements OnInit {
     });
   }
 
+  formatChartData(dailyBreakdown: any): ChartData[] {
+    const currentPeriodData = this.timeframe === 'weekly' ? dailyBreakdown.currentWeek : dailyBreakdown.currentMonth;
+    const lastPeriodData = this.timeframe === 'weekly' ? dailyBreakdown.lastWeek : dailyBreakdown.lastMonth;
+
+    const currentSeries = {
+      name: `This ${this.timeframe === 'weekly' ? 'Week' : 'Month'}`,
+      series: Object.keys(currentPeriodData).map(day => ({
+        name: day,
+        value: currentPeriodData[day]
+      }))
+    };
+
+    const lastSeries = {
+      name: `Last ${this.timeframe === 'weekly' ? 'Week' : 'Month'}`,
+      series: Object.keys(lastPeriodData).map(day => ({
+        name: day,
+        value: lastPeriodData[day]
+      }))
+    };
+    
+    return [currentSeries, lastSeries];
+  }
+
+  setTimeframe(timeframe: 'weekly' | 'monthly'): void {
+    this.timeframe = timeframe;
+    this.loadDashboardData();
+  }
+
   getPeakValue(): number {
     if (this.patientOverviewData.length === 0) return 0;
     const currentMonthData = this.patientOverviewData[0]?.series || [];
-    return Math.max(...currentMonthData.map((item: ChartSeries) => item.value));
-  }
-
-  getMedicationValue(): number {
-    const medicationItem = this.expensesData.find(item => item.name === 'Medications');
-    return medicationItem?.value || 0;
-  }
-
-  getScansValue(): number {
-    const scansItem = this.expensesData.find(item => item.name === 'Scans and tests');
-    return scansItem?.value || 0;
+    return Math.max(0, ...currentMonthData.map(item => item.value));
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DataEntryService, UserData, CreatePatientDto } from '../../../core/services/DataEntry/DataEntry.service';
+import { DataEntryService, UserData, AddPatientDto, Department } from '../../../core/services/DataEntry/DataEntry.service';
 
 @Component({
   selector: 'app-addpatient',
@@ -15,7 +15,7 @@ export class AddpatientComponent implements OnInit {
   patientForm: FormGroup;
   
   // Available departments list - will be loaded from backend
-  availableDepartments: string[] = [];
+  availableDepartments: Department[] = [];
 
   // Loading and error states
   isLoading: boolean = false;
@@ -41,11 +41,12 @@ export class AddpatientComponent implements OnInit {
       email: [''],
       
       // Address Information (from backend)
-      street: ['', [Validators.required]],
+      street: ['', [Validators.required]], // Mapped from 'address' in backend
       city: ['', [Validators.required]],
       
       // Patient Entry Information
       department: ['', [Validators.required]],
+      doctorName: ['Dr. Default', [Validators.required]], // Added field
       entryDateTime: [this.getCurrentDateTime(), [Validators.required]]
     });
   }
@@ -59,7 +60,6 @@ export class AddpatientComponent implements OnInit {
    * Load available departments from backend
    */
   private loadAvailableDepartments(): void {
-    // Show loading state for departments
     this.isLoading = true;
     
     this.dataEntryService.getAvailableDepartments().subscribe({
@@ -68,38 +68,19 @@ export class AddpatientComponent implements OnInit {
         this.isLoading = false;
         console.log('Departments loaded successfully:', departments.length, 'departments');
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Failed to load departments:', error);
         this.isLoading = false;
         
-        // Show user-friendly error message
         this.errorMessage = 'Failed to load departments. Using default list.';
-        
-        // Clear error message after 5 seconds
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 5000);
+        setTimeout(() => this.errorMessage = '', 5000);
         
         // Fallback to default departments if API fails
         this.availableDepartments = [
-          'Emergency',
-          'Cardiology', 
-          'Neurology',
-          'Orthopedics',
-          'Pediatrics',
-          'Radiology',
-          'Laboratory',
-          'Pharmacy',
-          'Surgery',
-          'Internal Medicine',
-          'Oncology',
-          'Psychiatry',
-          'Dermatology',
-          'Ophthalmology',
-          'Obstetrics and Gynecology'
+          { name: 'Emergency', description: '', capacity: 0, numOfDoctors: 0 },
+          { name: 'Cardiology', description: '', capacity: 0, numOfDoctors: 0 },
+          { name: 'Neurology', description: '', capacity: 0, numOfDoctors: 0 }
         ];
-        
-        console.log('Using fallback departments:', this.availableDepartments.length, 'departments');
       }
     });
   }
@@ -127,32 +108,26 @@ export class AddpatientComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
     
-    // Call the service to fetch user data
     this.dataEntryService.fetchUserData(userId.trim()).subscribe({
       next: (userData: UserData) => {
-        // Fill the form with fetched data
         this.patientForm.patchValue({
           firstName: userData.firstName,
           lastName: userData.lastName,
-          dateOfBirth: userData.dateOfBirth,
+          dateOfBirth: new Date(userData.dateOfBirth).toISOString().split('T')[0],
           gender: userData.gender,
           phoneNumber: userData.phoneNumber,
           email: userData.email,
-          street: userData.street,
+          street: userData.address, // Map 'address' from backend to 'street' in form
           city: userData.city
         });
         
         this.isLoading = false;
         this.successMessage = 'User data fetched successfully!';
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 3000);
+        setTimeout(() => this.successMessage = '', 3000);
         
         console.log('User data fetched for ID:', userId.trim());
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
         this.errorMessage = error.message || 'Failed to fetch user data';
         console.error('Error fetching user data:', error);
@@ -171,29 +146,18 @@ export class AddpatientComponent implements OnInit {
       
       const formValues = this.patientForm.value;
       
-      const newPatient: CreatePatientDto = {
+      const newPatient: AddPatientDto = {
         userId: formValues.userId,
-        firstName: formValues.firstName,
-        lastName: formValues.lastName,
-        dateOfBirth: new Date(formValues.dateOfBirth),
-        gender: formValues.gender,
-        phoneNumber: formValues.phoneNumber,
-        email: formValues.email || undefined,
-        address: {
-          street: formValues.street,
-          city: formValues.city
-        },
-        department: formValues.department,
-        entryDateTime: new Date(formValues.entryDateTime)
+        departmentName: formValues.department,
+        doctorName: formValues.doctorName,
+        dateTime: new Date(formValues.entryDateTime)
       };
       
-      // Call the service to create patient
       this.dataEntryService.createPatient(newPatient).subscribe({
         next: (response) => {
           this.isSaving = false;
           this.successMessage = response.message || 'Patient added successfully!';
           
-          // Clear success message after 3 seconds
           setTimeout(() => {
             this.successMessage = '';
             this.resetForm();
@@ -201,7 +165,7 @@ export class AddpatientComponent implements OnInit {
           
           console.log('New patient created:', response);
         },
-        error: (error) => {
+        error: (error: any) => {
           this.isSaving = false;
           this.errorMessage = error.message || 'Failed to create patient';
           console.error('Error creating patient:', error);
@@ -211,37 +175,6 @@ export class AddpatientComponent implements OnInit {
       this.errorMessage = 'Please fill in all required fields correctly.';
       this.markFormGroupTouched();
     }
-  }
-
-  /**
-   * Validates if user ID exists before fetching data
-   */
-  validateUserId(): void {
-    const userId = this.patientForm.get('userId')?.value;
-    
-    if (!userId || !userId.trim()) {
-      this.errorMessage = 'Please enter a User ID first';
-      return;
-    }
-    
-    this.isLoading = true;
-    this.errorMessage = '';
-    
-    this.dataEntryService.validateUserId(userId.trim()).subscribe({
-      next: (exists) => {
-        this.isLoading = false;
-        if (exists) {
-          this.fetchUserData();
-        } else {
-          this.errorMessage = 'User ID not found. Please check the ID and try again.';
-        }
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.errorMessage = error.message || 'Failed to validate User ID';
-        console.error('Error validating user ID:', error);
-      }
-    });
   }
 
   /**

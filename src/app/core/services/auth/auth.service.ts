@@ -1,297 +1,159 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environment/environment';
 import { User } from '../../../models/user.model';
-import { jwtDecode } from 'jwt-decode';
+import { UserLogin } from '../../../models/loginModels';
 
 // Interfaces for API responses
 interface AuthResponse {
-  success: boolean;
   message: string;
-  token?: string;
-  user?: User;
+  userName?: string; // For registration
 }
 
-interface RegisterResponse {
-  success: boolean;
-  message: string;
-  userId?: string;
-  email?: string;
-}
-
-interface ValidationResponse {
-  available: boolean;
-  message: string;
+interface ResetPasswordViewModel {
+  email: string;
+  token: string;
+  newPassword: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly baseUrl = environment.apiUrl + '/account';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private httpClient: HttpClient, @Inject(Router) private router: Router) {
-    this.loadUserFromToken();
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router
+  ) {
+    this.checkAuthenticationStatus().subscribe();
   }
 
-  userData: any;
-
-  // Function to log in a user
-  login(credentials: { email: string; password: string }): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${environment.baseUrl}/login`, credentials).pipe(
-      tap(response => {
-        if (response.success && response.token) {
-          localStorage.setItem('authToken', response.token);
-          localStorage.setItem('token', response.token); // Keep for backward compatibility
-          if (response.user) {
-            this.currentUserSubject.next(response.user);
-          }
+  // Check authentication status on startup
+  checkAuthenticationStatus(): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${this.baseUrl}/is-authenticated`).pipe(
+      switchMap(isAuthenticated => {
+        if (isAuthenticated) {
+          return this.fetchUserProfile().pipe(map(() => true));
         }
+        return of(false);
       }),
-      catchError(this.handleError)
+      catchError(() => {
+        this.currentUserSubject.next(null);
+        return of(false);
+      })
     );
   }
 
-  // Function to register a new user
-  register(userData: User | FormData): Observable<RegisterResponse> {
-    return this.httpClient.post<RegisterResponse>(`${environment.baseUrl}/register`, userData).pipe(
-      tap(response => {
-        if (response.success) {
-          console.log('Registration successful:', response.message);
-        }
-      }),
-      catchError(this.handleError)
+  // Fetch the user profile from a dedicated endpoint
+  private fetchUserProfile(): Observable<User> {
+    // This assumes a general profile endpoint exists that returns the logged-in user's data.
+    // This needs to be created in the backend.
+    return this.httpClient.get<User>(`${environment.apiUrl}/user/profile`).pipe(
+      tap(user => this.currentUserSubject.next(user))
     );
   }
 
-  // Validate username availability
-  validateUsername(username: string): Observable<ValidationResponse> {
-    return this.httpClient.get<ValidationResponse>(`${environment.baseUrl}/validate/username/${username}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Validate email availability
-  validateEmail(email: string): Observable<ValidationResponse> {
-    return this.httpClient.get<ValidationResponse>(`${environment.baseUrl}/validate/email/${email}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Validate phone number availability
-  validatePhone(phoneNumber: string): Observable<ValidationResponse> {
-    return this.httpClient.get<ValidationResponse>(`${environment.baseUrl}/validate/phone/${phoneNumber}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Function to check if a user is logged in
-  isLoggedIn(): boolean {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-    if (!token) return false;
+  // LOGIN
+  login(credentials: UserLogin): Observable<AuthResponse> {
+    // Backend expects 'User' role, not 'patient'
+    const loginPayload = { ...credentials, role: 'User' };
     
-    try {
-      const decodedToken: any = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      return decodedToken.exp > currentTime;
-    } catch (error) {
-      console.error('Error checking token validity:', error);
-      this.logout();
-      return false;
-    }
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/userlogin`, loginPayload).pipe(
+      switchMap(response => {
+        return this.fetchUserProfile().pipe(
+          map(() => response) // Pass original login response
+        );
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  // Function to log out a user
+  // LOGOUT
   logout(): void {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-    
-    if (token) {
-      // Call the backend logout endpoint
-      this.httpClient.post(`${environment.baseUrl}/logout`, {}).subscribe({
-        next: () => {
-          this.clearUserData();
-        },
-        error: (error) => {
-          console.error('Logout error:', error);
-          // Even if logout fails, clear local data
-          this.clearUserData();
-        }
-      });
-    } else {
-      this.clearUserData();
-    }
+    this.httpClient.post(`${this.baseUrl}/logout`, {}).subscribe({
+      next: () => this.clearLocalUserData(),
+      error: () => this.clearLocalUserData()
+    });
   }
 
-  // Clear user data and navigate to login
-  private clearUserData(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('token');
-    this.userData = null;
+  private clearLocalUserData(): void {
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  // Load user data from token
-  private loadUserFromToken(): void {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-    if (token && this.isLoggedIn()) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        this.userData = decodedToken;
-        // You might want to fetch full user data from backend here
-        console.log('User data loaded from token:', decodedToken);
-      } catch (error) {
-        console.error('Error loading user from token:', error);
-        this.clearUserData();
-      }
-    }
+  // REGISTER
+  register(userData: FormData): Observable<AuthResponse> {
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/user-register`, userData).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  // Get current user data
+  // PASSWORD RECOVERY
+  forgotPassword(email: string): Observable<AuthResponse> {
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/forgot-password`, { email }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  resetPassword(data: ResetPasswordViewModel): Observable<AuthResponse> {
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/reset-password`, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // EMAIL CONFIRMATION (called from a component handling the link)
+  confirmEmail(userId: string, token: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/confirm-email`, { params: { userId, token } });
+  }
+
+  // HELPERS
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  //-------------------to get the user id from the token----------------
-  getUserData(): void {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-    if (token) {
-      try {
-        this.userData = jwtDecode(token);
-        console.log('User data:', this.userData);
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        this.userData = null;
-      }
-    }
+  isLoggedIn(): Observable<boolean> {
+     return this.currentUser$.pipe(map(user => !!user));
   }
 
-  // Get user ID from token
-  getUserId(): string | null {
-    try {
-      const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-      if (token) {
-        const decodedToken: any = jwtDecode(token);
-        return decodedToken.userId || decodedToken.sub || null;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error getting user ID:', error);
-      return null;
-    }
-  }
-
-  //-------------------to get the user type from the token----------------
-  getUserType(): string | null {
-    try {
-      const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-      if (token) {
-        const decodedToken: any = jwtDecode(token);
-        return decodedToken.userType || decodedToken.role || null;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
-  }
-
-  // Refresh user data from backend
-  refreshUserData(): Observable<User> {
-    return this.httpClient.get<User>(`${environment.baseUrl}/user/profile`).pipe(
-      tap(user => {
-        this.currentUserSubject.next(user);
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  // Update user profile
-  updateProfile(userData: Partial<User>): Observable<User> {
-    return this.httpClient.put<User>(`${environment.baseUrl}/user/profile`, userData).pipe(
-      tap(user => {
-        this.currentUserSubject.next(user);
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  // Change password
-  changePassword(passwordData: { currentPassword: string; newPassword: string }): Observable<any> {
-    return this.httpClient.put(`${environment.baseUrl}/user/change-password`, passwordData).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  setEmailVerify(data: object): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/forgot-Password`, data).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  setCodeVerify(data: object): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/verify-code`, data).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  resetPassword(data: object): Observable<any> {
-    return this.httpClient.put(`${environment.baseUrl}/reset-password`, data).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Verify email
-  verifyEmail(token: string): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/verify-email`, { token }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Resend verification email
-  resendVerificationEmail(email: string): Observable<any> {
-    return this.httpClient.post(`${environment.baseUrl}/resend-verification`, { email }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Handle HTTP errors
+  // ERROR HANDLER
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An error occurred';
     
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
       errorMessage = error.error.message;
     } else {
-      // Server-side error
-      switch (error.status) {
-        case 400:
-          errorMessage = error.error?.message || 'Invalid request data';
-          break;
-        case 401:
-          errorMessage = 'Invalid credentials';
-          break;
-        case 403:
-          errorMessage = 'Access forbidden';
-          break;
-        case 404:
-          errorMessage = 'Resource not found';
-          break;
-        case 409:
-          errorMessage = error.error?.message || 'Resource already exists';
-          break;
-        case 422:
-          errorMessage = error.error?.message || 'Validation error';
-          break;
-        case 500:
-          errorMessage = 'Internal server error';
-          break;
-        default:
-          errorMessage = error.error?.message || `Server error: ${error.status}`;
+      if (typeof error.error === 'string' && error.error.length < 200) {
+        errorMessage = error.error;
+      } else if (error.error?.message) {
+        errorMessage = error.error.message;
+      } else if (error.error?.title) { // For validation errors
+        errorMessage = error.error.title;
+      } else {
+        switch (error.status) {
+          case 400:
+            errorMessage = 'Invalid request. Please check your input.';
+            break;
+          case 401:
+            errorMessage = 'Invalid credentials or access denied.';
+            break;
+          case 403:
+            errorMessage = 'You do not have permission to perform this action.';
+            break;
+          case 404:
+            errorMessage = 'The requested resource was not found.';
+            break;
+          case 500:
+            errorMessage = 'An unexpected server error occurred.';
+            break;
+          default:
+            errorMessage = `An unexpected error occurred. Status: ${error.status}`;
+        }
       }
     }
     
