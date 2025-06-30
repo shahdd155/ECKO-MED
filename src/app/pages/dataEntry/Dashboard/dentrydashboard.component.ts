@@ -113,9 +113,11 @@ export class DentrydashboardComponent implements OnInit {
     return [currentSeries, lastSeries];
   }
 
-  setTimeframe(timeframe: 'weekly' | 'monthly'): void {
-    this.timeframe = timeframe;
-    this.loadDashboardData();
+  setTimeframe(timeframe: string): void {
+    if (timeframe === 'weekly' || timeframe === 'monthly') {
+      this.timeframe = timeframe;
+      this.loadDashboardData();
+    }
   }
 
   getPeakValue(): number {

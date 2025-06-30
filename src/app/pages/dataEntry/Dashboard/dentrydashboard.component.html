@@ -50,9 +50,9 @@
             <span class="font-semibold text-lg text-gray-900">Patient Overview</span>
             <div class="flex items-center space-x-2">
               <div class="relative">
-                <select class="border border-gray-300 rounded px-2 py-1 text-sm pr-6 appearance-none focus:outline-none">
-                  <option>Monthly</option>
-                  <option>Weekly</option>
+                <select #timeframeSelect class="border border-gray-300 rounded px-2 py-1 text-sm pr-6 appearance-none focus:outline-none" (change)="setTimeframe(timeframeSelect.value)">
+                  <option value="monthly" [selected]="timeframe === 'monthly'">Monthly</option>
+                  <option value="weekly" [selected]="timeframe === 'weekly'">Weekly</option>
                 </select>
               </div>
               <button class="text-gray-400 p-1">

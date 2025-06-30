@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // Import model interfaces
 import { LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
@@ -173,14 +174,26 @@ export class PatientInteractionComponent implements OnInit {
     { value: 'follow-up', label: 'Follow-up' }
   ];
 
+  selectedPatient: any = null;
+
   constructor(
     private formBuilder: FormBuilder,
-    private dataEntryService: DataEntryService
+    private dataEntryService: DataEntryService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.initializeForms();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const userId = params['userId'];
+      if (userId) {
+        this.userSearchForm.get('userId')?.setValue(userId);
+        this.fetchPatientData();
+      }
+    });
+  }
 
   private initializeForms(): void {
     this.userSearchForm = this.formBuilder.group({ userId: ['', [Validators.required]] });
@@ -506,5 +519,13 @@ export class PatientInteractionComponent implements OnInit {
     this.userSearchForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
+  }
+
+  startPatientInteraction(): void {
+    if (this.selectedPatient && this.selectedPatient.id) {
+      this.router.navigate(['/data-entry/patient-interaction'], {
+        queryParams: { userId: this.selectedPatient.id }
+      });
+    }
   }
 }

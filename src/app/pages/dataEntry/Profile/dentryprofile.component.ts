@@ -125,7 +125,7 @@ export class DentryprofileComponent implements OnInit {
   }
 
   getProfilePictureUrl(): string {
-    return this.currentProfile?.profilePicture || '/images/default-avatar.png';
+    return this.currentProfile?.profilePicture || '';
   }
 
   getInitials(): string {
@@ -137,11 +137,6 @@ export class DentryprofileComponent implements OnInit {
 
   hasUnsavedChanges(): boolean {
     return this.profileForm.dirty;
-  }
-
-  handleImageError(event: Event): void {
-    const target = event.target as HTMLImageElement;
-    target.src = '/images/default-avatar.png';
   }
 
   onFileSelected(event: Event): void {
