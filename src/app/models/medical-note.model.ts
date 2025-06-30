@@ -1,7 +1,6 @@
 export interface MedicalNote {
-  id?: string;
-  noteType: 'general' | 'diagnosis' | 'treatment' | 'follow-up';
-  content: string;
-  createdDate: Date;
-  createdBy: string;
+  Id?: string;
+  type: 'general' | 'diagnosis' | 'treatment' | 'follow-up';
+  Text: string;
+  dateTime: Date;
 } 

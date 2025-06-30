@@ -774,17 +774,14 @@
                   @for (note of notes; track note) {
                     <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                        <span [class]="getNoteTypeBadgeClass(note.noteType)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize">
-                          {{ note.noteType.replace('-', ' ') }}
+                        <span [class]="getNoteTypeBadgeClass(note.type)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize">
+                          {{ note.type.replace('-', ' ') }}
                         </span>
-                        <span class="text-sm text-gray-500 mt-2 sm:mt-0">{{ note.createdDate | date:'short' }}</span>
+                        <span class="text-sm text-gray-500 mt-2 sm:mt-0">{{ note.dateTime | date:'short' }}</span>
                       </div>
                       
-                      <div class="text-gray-900 mb-3 whitespace-pre-wrap">{{ note.content }}</div>
+                      <div class="text-gray-900 mb-3 whitespace-pre-wrap">{{ note.Text }}</div>
                       
-                      <div class="text-sm text-gray-500">
-                        <span class="font-medium">Created by:</span> {{ note.createdBy }}
-                      </div>
                     </div>
                   }
                 </div>

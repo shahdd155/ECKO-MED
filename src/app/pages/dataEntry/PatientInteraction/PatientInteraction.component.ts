@@ -302,6 +302,7 @@ export class PatientInteractionComponent implements OnInit {
           this.loadPatientInteractions(this.patientId);
           this.labTestForm.reset();
           this.selectedLabTestFile = null;
+          this.fetchPatientData();
         },
         error: (error: any) => this.handleSaveError(error, 'lab test')
       });
@@ -330,6 +331,7 @@ export class PatientInteractionComponent implements OnInit {
           this.showSuccessMessage('Prescription added successfully!');
           this.loadPatientInteractions(this.patientId);
           this.prescriptionForm.reset();
+          this.fetchPatientData();
         },
         error: (error: any) => this.handleSaveError(error, 'prescription')
       });
@@ -357,6 +359,7 @@ export class PatientInteractionComponent implements OnInit {
           this.loadPatientInteractions(this.patientId);
           this.scanForm.reset();
           this.selectedScanFile = null;
+          this.fetchPatientData();
         },
         error: (error: any) => this.handleSaveError(error, 'scan')
       });
@@ -381,6 +384,7 @@ export class PatientInteractionComponent implements OnInit {
           this.showSuccessMessage('Note added successfully!');
           this.loadPatientInteractions(this.patientId);
           this.noteForm.reset({ noteType: 'general' });
+          this.fetchPatientData();
         },
         error: (error: any) => this.handleSaveError(error, 'note')
       });
