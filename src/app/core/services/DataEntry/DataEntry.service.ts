@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environment/environment';
 import { PatientData, LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
+import { DataEntryProfile } from '../../../models/user.model';
 
 // ### NEW INTERFACES TO MATCH BACKEND ###
 
@@ -67,16 +68,6 @@ export interface DashboardData {
     currentMonth?: any;
     changeFromLastMonth?: any;
     dailyBreakdown: any;
-}
-
-export interface DataEntryProfile {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  emailAddress: string;
-  hospitalName: string;
-  city: string;
-  profilePicture?: string; // Kept for UI, but not from backend
 }
 
 export interface UpdateDataEntryProfileDto {

@@ -1,46 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { PatientsService } from '../../../core/services/patient/patients.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-myvisits',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './myvisits.component.html',
   styleUrls: ['./myvisits.component.scss']
 })
-export class MyvisitsComponent {
+export class MyvisitsComponent implements OnInit {
 
-  // Visits data from backend 
-  visits = [
-    {
-      doctor: 'Dr. Ali',
-      department: 'Neurology',
-      hospital: 'Al Salam El Dawly',
-      date: '2021/12/10',
-      actions: [
-        { label: 'Scans', icon: 'fa-arrow-right' },
-        { label: 'Prescription', icon: 'fa-arrow-right' }
-      ]
-    },
-    {
-      doctor: 'Dr. Ali',
-      department: 'Neurology',
-      hospital: 'Al Salam El Dawly',
-      date: '2021/12/10',
-      actions: [
-        { label: 'Scans', icon: 'fa-arrow-right' },
-        { label: 'Prescription', icon: 'fa-arrow-right' }
-      ]
-    },
-    {
-      doctor: 'Dr. Ali',
-      department: 'Neurology',
-      hospital: 'Al Salam El Dawly',
-      date: '2021/12/10',
-      actions: [
-        { label: 'Scans', icon: 'fa-arrow-right' },
-        { label: 'Prescription', icon: 'fa-arrow-right' }
-      ]
-    }
-  ];
+  visits: any[] = [];
+  private patientsService = inject(PatientsService);
+
+  ngOnInit(): void {
+    this.patientsService.getVisits().subscribe(data => {
+      this.visits = data;
+    });
+  }
 }

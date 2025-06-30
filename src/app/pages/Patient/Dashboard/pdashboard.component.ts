@@ -1,26 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { PatientsService } from '../../../core/services/patient/patients.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-pdashboard',
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './pdashboard.component.html',
   styleUrl: './pdashboard.component.scss'
 })
-export class PdashboardComponent {
-  //user name from backend
+export class PdashboardComponent implements OnInit {
   
-  userName = 'Fawaz Al-Momtaz';
+  userName = '';
+  userImage: string | null = null;
+  
+  // These seem to be static or from another source, leaving them for now.
   hospitalName= 'alsalam';
   dName='Ahmed';
 
-  // visits list from backend
-  // visits = [];
+  private patientsService = inject(PatientsService);
 
-  //clinics/news/cards from backend
+  ngOnInit(): void {
+    this.patientsService.getDashboardData().subscribe(data => {
+      this.userName = data.username;
+      if (data.imageBase64) {
+        this.userImage = 'data:image/png;base64,' + data.imageBase64;
+      }
+    });
+  }
+
+  // visits = [];
   // clinics = [];
   // news = [];
-
-  //user profile info from backend
   // profile = {};
-
 }

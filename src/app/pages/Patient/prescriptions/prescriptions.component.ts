@@ -1,20 +1,28 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { PatientsService } from '../../../core/services/patient/patients.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-prescriptions',
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './prescriptions.component.html',
   styleUrl: './prescriptions.component.scss'
 })
-export class PrescriptionsComponent {
-  // Define the prescriptions property with dummy data
-  prescriptions = [
-    { medicineName: 'Medicine A', date: '2023-10-01', dosage: '10mg', frequency: 'Once a day', duration: '1 month', notes: 'Take with food.' },
-    { medicineName: 'Medicine B', date: '2023-09-15', dosage: '5mg', frequency: 'Twice a day', duration: '2 weeks', notes: 'Avoid alcohol.' },
-    { medicineName: 'Medicine C', date: '2023-08-20', dosage: '20mg', frequency: 'Once every 12 hours', duration: '3 months', notes: 'Take as directed.' }
-  ];
+export class PrescriptionsComponent implements OnInit {
+  prescriptions: any[] = [];
+  
+  private patientsService = inject(PatientsService);
+  private route = inject(ActivatedRoute);
 
   constructor(private router: Router) {}
 
+  ngOnInit(): void {
+    const visitId = this.route.snapshot.paramMap.get('id');
+    if (visitId) {
+      this.patientsService.getPrescriptions(+visitId).subscribe(data => {
+        this.prescriptions = data;
+      });
+    }
+  }
 }

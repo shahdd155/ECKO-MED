@@ -82,35 +82,32 @@ export class SearchmedicineComponent implements OnInit {
   }
 
   sendRequest(pharmacy: PharmacyInventory): void {
-    // For demo, use mock patient info
-    const patientId = 1;
-    const patientName = 'John Doe';
-    const patientEmail = 'john@example.com';
-    const patientPhone = '+1234567890';
-    const { medicineId, quantity } = this.searchForm.value;
+    const selectedMedicine = this.medicines.find(m => m.id === this.searchForm.value.medicineId);
+    if (!selectedMedicine) {
+      console.error('Medicine not found');
+      return;
+    }
+
+    const { quantity } = this.searchForm.value;
     this.requestStatus[pharmacy.pharmacyId] = 'loading';
+
     this.medicineService.sendPharmacyRequest({
-      pharmacyId: pharmacy.pharmacyId,
-      medicineId,
+      pharmacyId: pharmacy.pharmacy.id.toString(), // pharmacyId is a number in the mock, but string in backend
+      medicineName: selectedMedicine.name,
       quantity,
-      unit: pharmacy.unit,
-      patientId,
-      patientName,
-      patientEmail,
-      patientPhone
-    }).subscribe(res => {
-      if (res.success) {
+    }).subscribe({
+      next: (res) => {
+        // Assuming the backend returns a success property or similar.
+        // Based on UserController, it just returns Ok("Request sent successfully.")
         this.requestStatus[pharmacy.pharmacyId] = 'success';
         setTimeout(() => {
-        
           this.pharmacies = this.pharmacies.filter(p => p.pharmacyId !== pharmacy.pharmacyId);
           delete this.requestStatus[pharmacy.pharmacyId];
         }, 1000);
-      } else {
+      },
+      error: (err) => {
         this.requestStatus[pharmacy.pharmacyId] = 'error';
       }
-    }, () => {
-      this.requestStatus[pharmacy.pharmacyId] = 'error';
     });
   }
 }

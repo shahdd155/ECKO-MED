@@ -1,79 +1,152 @@
-<div class="p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-screen">
-  <!-- Header -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-    <div>
-      <h1 class="text-3xl font-bold text-gray-900">Welcome, {{ userName }}!</h1>
-      <p class="mt-1 text-md text-gray-600">Here's your data entry summary.</p>
-    </div>
-    <div class="mt-4 sm:mt-0 flex items-center rounded-lg bg-white shadow-sm p-1">
-      <button (click)="setTimeframe('weekly')" 
-              [ngClass]="{'bg-gray-800 text-white': timeframe === 'weekly', 'text-gray-500 hover:bg-gray-100': timeframe !== 'weekly'}"
-              class="px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none">
-        Weekly
-      </button>
-      <button (click)="setTimeframe('monthly')" 
-              [ngClass]="{'bg-gray-800 text-white': timeframe === 'monthly', 'text-gray-500 hover:bg-gray-100': timeframe !== 'monthly'}"
-              class="px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none">
-        Monthly
-      </button>
+<div class="p-6 bg-gray-100 min-h-screen rounded-2xl">
+  <div class="mb-6">
+    <div class="w-full text-2xl font-bold text-gray-900 text-left">
+      Data Entry - {{ userName }}
     </div>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Total Patients -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="text-lg font-medium text-gray-500">Total Patients</h3>
-      <p class="text-4xl font-bold text-gray-900 mt-2">{{ totalPatients }}</p>
-      <p class="text-sm mt-2" [ngClass]="totalPatientsPercent.startsWith('+') ? 'text-green-600' : 'text-red-600'">
-        {{ totalPatientsPercent }} from last {{ timeframe === 'weekly' ? 'week' : 'month' }}
-      </p>
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="flex justify-center items-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <span class="ml-3 text-gray-600">Loading dashboard data...</span>
     </div>
-    <!-- Male Patients -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="text-lg font-medium text-gray-500">Male Patients</h3>
-      <p class="text-4xl font-bold text-gray-900 mt-2">{{ maleCount }}</p>
-      <p class="text-sm mt-2" [ngClass]="malePatientsPercent.startsWith('+') ? 'text-green-600' : 'text-red-600'">
-        {{ malePatientsPercent }} from last {{ timeframe === 'weekly' ? 'week' : 'month' }}
-      </p>
-    </div>
-    <!-- Female Patients -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="text-lg font-medium text-gray-500">Female Patients</h3>
-      <p class="text-4xl font-bold text-gray-900 mt-2">{{ femaleCount }}</p>
-      <p class="text-sm mt-2" [ngClass]="femalePatientsPercent.startsWith('+') ? 'text-green-600' : 'text-red-600'">
-        {{ femalePatientsPercent }} from last {{ timeframe === 'weekly' ? 'week' : 'month' }}
-      </p>
-    </div>
-    <!-- Total Lab Results -->
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h3 class="text-lg font-medium text-gray-500">Lab Results</h3>
-      <p class="text-4xl font-bold text-gray-900 mt-2">{{ totalLabResults }}</p>
-      <p class="text-sm mt-2" [ngClass]="labTestsPercent.startsWith('+') ? 'text-green-600' : 'text-red-600'">
-        {{ labTestsPercent }} from last {{ timeframe === 'weekly' ? 'week' : 'month' }}
-      </p>
-    </div>
-  </div>
+  }
 
-  <!-- Main Chart -->
-  <div class="bg-white p-6 rounded-2xl shadow-lg">
-    <h3 class="text-xl font-bold text-gray-800 mb-1">Patient Overview</h3>
-    <p class="text-gray-600 mb-4">Daily patient admissions for this and last period.</p>
-    <div class="h-96">
-      <ngx-charts-line-chart
-        [scheme]="colorScheme"
-        [results]="patientOverviewData"
-        [gradient]="false"
-        [xAxis]="true"
-        [yAxis]="true"
-        [legend]="true"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        xAxisLabel="Day"
-        yAxisLabel="Patients"
-        [autoScale]="true">
-      </ngx-charts-line-chart>
+  @if (!isLoading) {
+    <div class="space-y-4">
+      <div class="flex w-full gap-4 mb-4">
+        <!-- Total Patients -->
+        <div class="flex flex-col ">
+          <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-gray-500 text-base font-medium mb-1">Total Patients</div>
+                <div class="text-4xl font-extrabold text-gray-900">{{ totalPatients | number }}</div>
+                <div class="text-sm text-green-600 font-medium mt-1">+2.9% from last month</div>
+              </div>
+              <button class="text-gray-400 p-1">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+            </div>
+          </div>
+          <!-- Total Lab Results -->
+          <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-gray-500 text-base font-medium mb-1">Total Lab Results</div>
+                <div class="text-4xl font-extrabold text-gray-900">{{ totalLabResults | number }}</div>
+                <div class="text-sm text-red-600 font-medium mt-1">-1.5% from last month</div>
+              </div>
+              <button class="text-gray-400 p-1">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Patient Overview Chart -->
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col min-h-[200px] relative flex-1">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-lg text-gray-900">Patient Overview</span>
+            <div class="flex items-center space-x-2">
+              <div class="relative">
+                <select class="border border-gray-300 rounded px-2 py-1 text-sm pr-6 appearance-none focus:outline-none">
+                  <option>Monthly</option>
+                  <option>Weekly</option>
+                </select>
+              </div>
+              <button class="text-gray-400 p-1">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </button>
+            </div>
+          </div>
+          <div class="flex h-full">
+            <div class="flex-1 relative">
+              @if (patientOverviewData.length > 0) {
+                <ngx-charts-line-chart 
+                  [results]="patientOverviewData" 
+                  [scheme]="colorScheme" 
+                  [xAxis]="true" 
+                  [yAxis]="true" 
+                  [legend]="false" 
+                  [showXAxisLabel]="false" 
+                  [showYAxisLabel]="false" 
+                  [autoScale]="true"
+                  [animations]="true"
+                  class="h-48 w-full">
+                </ngx-charts-line-chart>
+            
+                <div class="absolute left-[52%] top-[18%] text-xs font-bold text-gray-900 bg-white px-2 py-1 rounded shadow border border-gray-200">
+                  {{ getPeakValue() | number }}
+                </div>
+              }
+            </div>
+         
+            <div class="flex flex-col justify-center ml-4 min-w-[120px]">
+              <div class="font-bold text-base mb-2">Legend</div>
+              <div class="flex items-center mb-2">
+                <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#374151"></span>
+                <span class="text-sm text-gray-900">Patients Number This Month</span>
+              </div>
+              <div class="flex items-center">
+                <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#f59e42"></span>
+                <span class="text-sm text-gray-900">Patients Number Last Month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col md:flex-row items-center min-h-[250px] relative">
+          <div class="flex flex-col justify-center mr-6">
+            <div class="flex items-center mb-2">
+              <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#f59e42"></span>
+              <span class="text-base text-gray-900">Medications</span>
+              <span class="ml-2 font-bold text-gray-900">{{ getMedicationValue() | number }} EGP</span>
+            </div>
+            <div class="flex items-center">
+              <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#374151"></span>
+              <span class="text-base text-gray-900">Scans and tests</span>
+              <span class="ml-2 font-bold text-gray-900">{{ getScansValue() | number }} EGP</span>
+            </div>
+          </div>
+          <div class="relative flex-1 flex justify-center items-center">
+            @if (expensesData.length > 0) {
+              <ngx-charts-pie-chart
+                [results]="expensesData"
+                [scheme]="expensesColorScheme"
+                [doughnut]="true"
+                [legend]="false"
+                [labels]="false"
+                [explodeSlices]="false"
+                [arcWidth]="0.3"
+                [animations]="true"
+                class="h-44 w-44">
+              </ngx-charts-pie-chart>
+            }
+            <!-- Center label overlay -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span class="text-base font-semibold text-gray-700">Total Expenses</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col md:flex-row col-span-2 min-h-[250px]">
+          <div class="flex-1 flex flex-col items-center justify-center border-r border-gray-200">
+            <div class="text-gray-500 text-base font-medium">Total no. of male</div>
+            <div class="text-4xl font-extrabold text-gray-900">{{ maleCount | number }}</div>
+            <i class="fa-solid fa-person text-orange-500 text-8xl"></i>
+            <div class="text-sm text-red-600 font-medium">-10% from last week</div>
+          </div>
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="text-gray-500 text-base font-medium">Total no. of female</div>
+            <div class="text-4xl font-extrabold text-gray-900">{{ femaleCount | number }}</div>
+            <i class="fa-solid fa-person-dress text-8xl"></i>
+            <div class="text-sm text-orange-400 font-medium">+20% from last week</div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  }
 </div>
 

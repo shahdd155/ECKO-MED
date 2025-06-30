@@ -15,15 +15,16 @@ import {
   providedIn: 'root'
 })
 export class MedicineService {
-  private baseUrl = environment.baseUrl;
+  private apiUrl = `${environment.apiUrl}/User`;
 
   constructor(private http: HttpClient) { }
 
   // Get all available medicines from backend
   getMedicines(): Observable<Medicine[]> {
     // TODO: Replace with actual API call when backend is ready
+    // This endpoint does not exist in UserController.cs
     // return this.http.get<Medicine[]>(`${this.baseUrl}/api/medicines`);
-    
+
     // Mock data for now
     return of([
       {
@@ -55,61 +56,17 @@ export class MedicineService {
         activeIngredients: ['Ibuprofen'],
         sideEffects: ['Stomach irritation', 'Kidney problems'],
         interactions: ['Blood pressure medications']
-      },
-      {
-        id: 3,
-        name: 'Amoxicillin',
-        genericName: 'Amoxicillin',
-        dosage: '500mg',
-        form: 'capsule',
-        strength: '500mg',
-        manufacturer: 'Generic',
-        description: 'Antibiotic for bacterial infections',
-        prescriptionRequired: true,
-        category: 'Antibiotics',
-        activeIngredients: ['Amoxicillin'],
-        sideEffects: ['Diarrhea', 'Nausea'],
-        interactions: ['Birth control pills']
-      },
-      {
-        id: 4,
-        name: 'Metformin',
-        genericName: 'Metformin',
-        dosage: '850mg',
-        form: 'tablet',
-        strength: '850mg',
-        manufacturer: 'Generic',
-        description: 'Oral diabetes medicine',
-        prescriptionRequired: true,
-        category: 'Diabetes',
-        activeIngredients: ['Metformin'],
-        sideEffects: ['Nausea', 'Diarrhea'],
-        interactions: ['Alcohol']
-      },
-      {
-        id: 5,
-        name: 'Lisinopril',
-        genericName: 'Lisinopril',
-        dosage: '10mg',
-        form: 'tablet',
-        strength: '10mg',
-        manufacturer: 'Generic',
-        description: 'ACE inhibitor for high blood pressure',
-        prescriptionRequired: true,
-        category: 'Cardiovascular',
-        activeIngredients: ['Lisinopril'],
-        sideEffects: ['Dry cough', 'Dizziness'],
-        interactions: ['Potassium supplements']
       }
     ]);
   }
 
   // Search for pharmacies with specific medicine in stock
   searchPharmacies(request: MedicineSearchRequest): Observable<MedicineSearchResponse> {
-    // TODO: Replace with actual API call when backend is ready
-    // return this.http.post<MedicineSearchResponse>(`${this.baseUrl}/api/pharmacies/search`, request);
+    // TODO: Replace with actual API call when backend is ready.
+    // The pharmacysearch endpoint in UserController.cs does not support searching by medicine ID.
+    // Leaving mock data for now.
     
-    // Mock data for now
+    // Mock data
     const mockPharmacies: PharmacyInventory[] = [
       {
         id: 1,
@@ -258,29 +215,19 @@ export class MedicineService {
         lastUpdated: new Date().toISOString()
       }
     ];
-
-    return of({
-      success: true,
-      message: 'Pharmacies found successfully',
-      data: mockPharmacies,
-      total: mockPharmacies.length
-    });
+    return of({ data: mockPharmacies, success: true, message: 'Mock search successful', total: mockPharmacies.length });
   }
 
-  // Send request to pharmacy
-  sendPharmacyRequest(request: PharmacyRequest): Observable<PharmacyRequestResponse> {
-    // TODO: Replace with actual API call when backend is ready
-    // return this.http.post<PharmacyRequestResponse>(`${this.baseUrl}/api/pharmacy-requests`, request);
-    
-    // Mock response
-    return of({
-      success: true,
-      message: 'Request sent successfully to pharmacy',
-      requestId: Math.floor(Math.random() * 1000) + 1
-    });
+  // Send a medicine request to a pharmacy
+  sendPharmacyRequest(request: {pharmacyId: string, medicineName: string, quantity: number}): Observable<any> {
+    const payload = {
+      pharmacyId: request.pharmacyId,
+      medicineName: request.medicineName,
+      qty: request.quantity
+    };
+    return this.http.post<any>(`${this.apiUrl}/medicine-request`, payload);
   }
 
-  // Get user's current location
   getCurrentLocation(): Promise<{latitude: number, longitude: number}> {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -292,21 +239,12 @@ export class MedicineService {
             });
           },
           (error) => {
-            console.error('Error getting location:', error);
-            // Default to New York coordinates if location access is denied
-            resolve({
-              latitude: 40.7128,
-              longitude: -74.0060
-            });
+            reject(error);
           }
         );
       } else {
-        // Default to New York coordinates if geolocation is not supported
-        resolve({
-          latitude: 40.7128,
-          longitude: -74.0060
-        });
+        reject('Geolocation is not supported by this browser.');
       }
     });
   }
-} 
+}

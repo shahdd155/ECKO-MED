@@ -1,73 +1,96 @@
-<div class="container mx-auto p-4 md:p-6 lg:p-8">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-    <!-- Departments List -->
-    <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Departments</h2>
-      @if (isLoadingDepartments) {
-        <p>Loading departments...</p>
-      }
-      <ul class="space-y-2">
-        @for (dept of departments; track dept.name) {
-          <li (click)="onDepartmentSelect(dept)"
-              [ngClass]="{'bg-blue-100 text-blue-800': selectedDepartment?.name === dept.name}"
-              class="p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
-            <h3 class="font-semibold">{{ dept.name }}</h3>
-            <p class="text-sm text-gray-600">{{ dept.description }}</p>
-          </li>
-        }
-      </ul>
-    </div>
-
-    <!-- Patients List -->
-    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-      @if (selectedDepartment) {
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">
-          Patients in {{ selectedDepartment.name }}
-        </h2>
-
-        @if (isLoading) {
-          <p>Loading patients...</p>
-        } @else if (patients.length > 0) {
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            @for (patient of patients; track patient.name) {
-              <div (click)="onPatientSelect(patient)"
-                   [ngClass]="{'ring-2 ring-blue-500': selectedPatient === patient}"
-                   class="p-4 rounded-lg shadow-sm cursor-pointer border hover:border-blue-400">
-                <h4 class="font-bold text-lg">{{ patient.name }}</h4>
-                <p class="text-sm text-gray-600">
-                  {{ patient.age }} years old, {{ patient.gender }}
-                </p>
-                <p class="text-sm text-gray-500 mt-1">Waiting: {{ patient.waiting }} mins</p>
-              </div>
-            }
-          </div>
-        } @else {
-          <p class="text-gray-500">No patients found in this department.</p>
-        }
-      } @else {
-        <p class="text-gray-500">Select a department to view patients.</p>
+<div class="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
+  <!-- Department Selection Section -->
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Select Department</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for(dept of departments; track dept.name) {
+        <div (click)="onDepartmentSelect(dept)"
+             [class.border-blue-500]="selectedDepartment?.name === dept.name"
+             class="bg-white rounded-lg shadow-md p-4 cursor-pointer border-2 transition-all hover:shadow-lg">
+          <h3 class="text-lg font-semibold text-gray-800">{{dept.name}}</h3>
+          <p class="text-gray-600 mt-2">{{dept.description}}</p>
+        </div>
       }
     </div>
-
   </div>
 
-  <!-- Selected Patient Details and Actions -->
-  @if (selectedPatient) {
-    <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
-      <h3 class="text-xl font-bold mb-4">
-        Selected Patient: {{ selectedPatient.name }}
-      </h3>
-      <div class="mb-4">
-        <p><strong>Age:</strong> {{ selectedPatient.age }}</p>
-        <p><strong>Gender:</strong> {{ selectedPatient.gender }}</p>
+  <!-- Patient List Section -->
+  @if (selectedDepartment) {
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">
+          {{selectedDepartment.name}} Patients
+        </h2>
       </div>
-      <button (click)="startPatientInteraction()"
-              [disabled]="true"
-              title="Patient ID not available from backend"
-              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-        Start Interaction
-      </button>
+
+      <!-- Loading Spinner -->
+      @if (isLoading) {
+        <div class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      }
+
+      <!-- Patient Cards -->
+      @if (!isLoading) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for(patient of patients; track patient.name) {
+            <div (click)="onPatientSelect(patient)"
+                 [class.border-blue-500]="selectedPatient?.name === patient.name"
+                 class="bg-white rounded-lg shadow-md p-4 cursor-pointer border-2 transition-all hover:shadow-lg">
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">{{patient.name}}</h3>
+              </div>
+              <div class="space-y-2">
+                <p class="text-gray-600">
+                  <span class="font-medium">Age:</span> {{patient.age}}
+                </p>
+                <p class="text-gray-600">
+                  <span class="font-medium">Gender:</span> {{patient.gender}}
+                </p>
+                <p class="text-gray-600">
+                  <span class="font-medium">Waiting:</span> {{patient.waiting}}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- No Patients Message -->
+        @if (patients.length === 0) {
+          <div class="text-center py-8 bg-white rounded-lg shadow-md">
+            <p class="text-gray-600">No patients currently in this department</p>
+          </div>
+        }
+      }
+    </div>
+  }
+
+  <!-- Selected Patient Details and Action -->
+  @if (selectedPatient) {
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 md:p-6">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <span class="text-blue-600 font-semibold text-lg">
+                {{selectedPatient.name.charAt(0)}}
+              </span>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800">
+              {{selectedPatient.name}}
+            </h3>
+            <p class="text-gray-600">
+              Waiting: {{selectedPatient.waiting}}
+            </p>
+          </div>
+        </div>
+        <button (click)="startPatientInteraction()"
+                class="w-full md:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          Start Patient Interaction
+        </button>
+      </div>
     </div>
   }
 </div>

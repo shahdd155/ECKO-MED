@@ -37,15 +37,10 @@
     </div>
   
     <div class="flex flex-col items-center px-2 py-2 border-r w-full sm:w-auto">
-      <label class="text-xs text-gray-500 mb-1">Price range</label>
+      <label class="text-xs text-gray-500 mb-1">Price range (Max Budget)</label>
       <div class="flex items-center w-full border border-blue-700 rounded px-2 py-1">
         <i class="fa-solid fa-hand-holding-dollar text-blue-500 mr-2"></i>
-        <select class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" [(ngModel)]="selectedPriceRange">
-          <option value="">price</option>
-          @for (range of priceRanges; track range) {
-            <option [value]="range.value">{{ range.label }}</option>
-          }
-        </select>
+        <input type="number" class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" placeholder="Max Budget" [(ngModel)]="maxPrice" />
       </div>
     </div>
   
@@ -82,12 +77,12 @@
       <div class="bg-white rounded-2xl shadow-xl border border-gray-300 p-0 w-full">
     
         <div class="bg-gray-100 rounded-xl mx-4 mb-4 p-4 transition-all duration-300 flex flex-col mx-auto gap-4 w-full">
-          @for (hospital of filteredHospitals; track hospital) {
+          @for (hospital of filteredHospitalsList; track hospital) {
             <div class="bg-slate-500 bg-opacity-90 text-white rounded-xl p-6 flex flex-col gap-3 shadow-md w-full">
-              <div class="text-lg font-semibold">{{ hospital.hospital }}</div>
+              <div class="text-lg font-semibold">{{ hospital.hospitalName }}</div>
               <div class="flex flex-wrap gap-4 w-full">
                 <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Distance: {{ hospital.distance }} km
+                  Distance: {{ hospital.distance | number:'1.0-1' }} km
                 </div>
                 <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                   Budget: {{ hospital.budget | currency:'EGP'}}
@@ -96,22 +91,20 @@
                     Department: {{ hospital.department}}
                   </div>
                 <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Area: {{ hospital.area }}
-                </div>
-                <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Insurance Name: {{ hospital.insuranceName }}
+                  Insurance: {{ hospital.insurance ? 'Accepted' : 'Not Accepted' }}
                 </div>
                 <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
                   <span class="mr-2">
-                    <span class="inline-block w-5 h-5 rounded-full border border-gray-400" [ngClass]="getAvailabilityColor(hospital.availability)"></span>
+                    <span class="inline-block w-5 h-5 rounded-full border border-gray-400" [ngClass]="getAvailabilityColor(hospital.totalPatients)"></span>
                   </span>
-                  Availability: {{ hospital.availability }}
+                  Waiting Patients: {{ hospital.totalPatients }}
                 </div>
               </div>
               <div class="flex justify-start mt-2">
                 <button 
                   (click)="openInMaps(hospital)" 
-                  class=" outline outline-blue-700 bg-white hover:bg-blue-700 text-blue-700 hover:text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-colors duration-200">
+                  class=" outline outline-blue-700 bg-white hover:bg-blue-700 text-blue-700 hover:text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-colors duration-200"
+                  [disabled]="!hospital.coordinates">
                   <i class="fa-solid fa-map-location-dot"></i>
                   View on Map
                 </button>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DataEntryService, DataEntryProfile, UpdateDataEntryProfileDto, Department } from '../../../core/services/DataEntry/DataEntry.service';
+import { DataEntryService, UpdateDataEntryProfileDto, Department } from '../../../core/services/DataEntry/DataEntry.service';
+import { DataEntryProfile } from '../../../models/user.model';
 
 @Component({
   selector: 'app-dentryprofile',
@@ -47,7 +48,7 @@ export class DentryprofileComponent implements OnInit {
         this.profileForm.patchValue({
           firstName: profile.firstName,
           lastName: profile.lastName,
-          email: profile.emailAddress,
+          email: profile.email,
           phoneNumber: profile.phoneNumber
         });
         
@@ -78,11 +79,10 @@ export class DentryprofileComponent implements OnInit {
       this.dataEntryService.updateDataEntryProfile(updateData).subscribe({
         next: (response: any) => {
           this.currentProfile = {
+            ...this.currentProfile!,
             ...updateData,
-            emailAddress: this.currentProfile!.emailAddress,
-            hospitalName: this.currentProfile?.hospitalName || '',
-            city: this.currentProfile?.city || '',
-            profilePicture: this.currentProfile?.profilePicture
+            email: this.currentProfile!.email,
+            // departments will be handled separately if needed
           };
           
           this.isSaving = false;
@@ -107,7 +107,7 @@ export class DentryprofileComponent implements OnInit {
       this.profileForm.patchValue({
         firstName: this.currentProfile.firstName,
         lastName: this.currentProfile.lastName,
-        email: this.currentProfile.emailAddress,
+        email: this.currentProfile.email,
         phoneNumber: this.currentProfile.phoneNumber
       });
       this.errorMessage = '';
@@ -142,5 +142,32 @@ export class DentryprofileComponent implements OnInit {
   handleImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
     target.src = '/images/default-avatar.png';
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      // You can implement upload logic here
+      console.log('Selected file:', input.files[0]);
+    }
+  }
+
+  isDepartmentSelected(department: string): boolean {
+    return this.profileForm.value.departments
+      ? this.profileForm.value.departments.includes(department)
+      : (this.currentProfile?.departments?.includes(department) ?? false);
+  }
+
+  onDepartmentChange(department: string, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    let departments = this.profileForm.value.departments || [...(this.currentProfile?.departments || [])];
+    if (checked) {
+      if (!departments.includes(department)) {
+        departments.push(department);
+      }
+    } else {
+      departments = departments.filter((d: string) => d !== department);
+    }
+    this.profileForm.patchValue({ departments });
   }
 }

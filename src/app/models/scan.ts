@@ -1,7 +1,7 @@
 export interface Scan {
     type: string;
-    date: string; // or use `Date` if parsed
-    imageUrl: string;
+    date: string;
     description: string;
+    imageBase64: string;
   }
   
