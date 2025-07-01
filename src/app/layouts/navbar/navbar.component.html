@@ -19,6 +19,16 @@
         <a class="cursor-pointer">Search pharmacy</a>
       </li>
     </ul>
+    <ul class="px-6 py-6 mt-auto space-y-4">
+     <li routerLink="/p-helpCenter" class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+       <i class="fa-solid fa-circle-question"></i>
+       <a class="cursor-pointer">Help Center</a>
+     </li>
+     <li class="flex items-center w-full space-x-3 text-gray-600 focus:outline-none">
+       <i class="fa-solid fa-arrow-right-from-bracket"></i>
+       <a class="cursor-pointer" role="button" (click)="logOut()">Log Out</a>
+     </li>
+   </ul>
   } @else if (getUserType() === 'dataEntry') {
     <ul class="flex-1 px-6 py-8 space-y-4">
       <li routerLinkActive="active-link" routerLink="/dEntrydashboard" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
@@ -38,6 +48,16 @@
         <a class="cursor-pointer">Add new patient</a>
       </li>
     </ul>
+    <ul class="px-6 py-6 mt-auto space-y-4">
+     <li routerLink="/dentry-helpcenter" class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+       <i class="fa-solid fa-circle-question"></i>
+       <a class="cursor-pointer">Help Center</a>
+     </li>
+     <li class="flex items-center w-full space-x-3 text-gray-600 focus:outline-none">
+       <i class="fa-solid fa-arrow-right-from-bracket"></i>
+       <a class="cursor-pointer" role="button" (click)="logOut()">Log Out</a>
+     </li>
+   </ul>
   } @else if (getUserType() === 'pharmacy') {
    <ul class="flex-1 px-6 py-8 space-y-4">
      <li routerLinkActive="active-link" routerLink="/viewrequests" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
@@ -49,12 +69,8 @@
        <a class="cursor-pointer">Manage Requests</a>
      </li>
    </ul>
-  }
-  
-  
- 
-   <ul class="px-6 py-6 mt-auto space-y-4">
-     <li routerLink="/helpCenter" class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
+      <ul class="px-6 py-6 mt-auto space-y-4">
+     <li routerLink="/pharmacy-helpcenter" class="flex items-center w-full space-x-3 text-gray-600 hover:text-blue-600 focus:outline-none">
        <i class="fa-solid fa-circle-question"></i>
        <a class="cursor-pointer">Help Center</a>
      </li>
@@ -63,5 +79,7 @@
        <a class="cursor-pointer" role="button" (click)="logOut()">Log Out</a>
      </li>
    </ul>
+  }
+  
  </nav>
  

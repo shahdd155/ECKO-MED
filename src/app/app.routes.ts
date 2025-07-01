@@ -46,6 +46,13 @@ export const routes: Routes = [
                 title: 'Add Patient'
             },
             {
+                path: 'dentry-helpcenter',
+                loadComponent: () => import('./pages/dataEntry/dentry-helpcenter/dentry-helpcenter.component')
+                    .then(m => m.DentryHelpcenterComponent),
+                title: 'dentry-helpcenter'
+            },
+           
+            {
                 path: 'dEntrydashboard',
                 loadComponent: () => import('./pages/dataEntry/Dashboard/dentrydashboard.component')
                     .then(m => m.DentrydashboardComponent),
@@ -57,6 +64,7 @@ export const routes: Routes = [
                     .then(m => m.DentryprofileComponent),
                 title: 'DataEntry Profile'
             },
+            
             {
                 path: 'departmentinteraction',
                 loadComponent: () => import('./pages/dataEntry/Department/Department.component')
@@ -96,7 +104,12 @@ export const routes: Routes = [
                 title: 'Prescriptions'
             },
 
-
+           {
+                path: 'p-helpCenter',
+                loadComponent: () => import('./pages/Patient/help-center/help-center.component')
+                    .then(m => m.HelpCenterComponent),
+                title: 'p-helpCenter'
+            },
             {
                 path: 'patientprofile',
                 loadComponent: () => import('./pages/Patient/Profile/patientprofile.component')
@@ -151,6 +164,12 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/Pharmacy/viewRequests/view-requests.component')
             .then(m => m.ViewRequestsComponent),
         title: 'View Pharmacy Requests'
+          },
+        {
+        path: 'pharmacy-helpcenter',
+        loadComponent: () => import('./pages/Pharmacy/pharmacy-helpcenter/pharmacy-helpcenter.component')
+            .then(m => m.PharmacyHelpcenterComponent),
+        title: 'pharmacy-helpcenter'
           },
       {
         path: 'managerequests',

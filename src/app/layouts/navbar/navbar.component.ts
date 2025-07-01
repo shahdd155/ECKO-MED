@@ -24,13 +24,16 @@ export class NavbarComponent {
     if (currentUrl.includes('dEntrydashboard') || 
         currentUrl.includes('addpatient') || 
         currentUrl.includes('dentryprofile') || 
+        currentUrl.includes('dentry-helpcenter') ||  
         currentUrl.includes('departmentinteraction') || 
-        currentUrl.includes('patientinteraction')) {
+        currentUrl.includes('patientinteraction'))
+         {
       return 'dataEntry';
     }
     
     // Check for pharmacy routes
     if (currentUrl.includes('viewrequests') || 
+       currentUrl.includes('pharmacy-helpcenter') || 
         currentUrl.includes('managerequests')) {
       return 'pharmacy';
     }

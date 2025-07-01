@@ -28,11 +28,12 @@ export class FooterComponent {
       url.includes('addpatient') ||
       url.includes('dentryprofile') ||
       url.includes('departmentinteraction') ||
-      url.includes('patientinteraction')
+      url.includes('patientinteraction') ||
+      url.includes('dentry-helpcenter')
     ) {
       return 'dataEntry';
     }
-    if (url.includes('viewrequests') || url.includes('managerequests')) {
+    if (url.includes('viewrequests') || url.includes('managerequests') || url.includes('pharmacy-helpcenter')) {
       return 'pharmacy';
     }
     return 'patient';
