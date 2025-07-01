@@ -28,7 +28,7 @@ export class DentryprofileComponent implements OnInit {
     this.profileForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: [{ value: '', disabled: true } ],
+      email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^\+?[\d\s\-\(\)]+$/)]]
     });
   }

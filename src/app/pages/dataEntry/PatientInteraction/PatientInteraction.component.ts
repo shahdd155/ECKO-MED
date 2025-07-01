@@ -175,6 +175,7 @@ export class PatientInteractionComponent implements OnInit {
   ];
 
   selectedPatient: any = null;
+  userName: string | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -186,10 +187,13 @@ export class PatientInteractionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('PatientInteractionComponent ngOnInit', this.route.queryParams);
     this.route.queryParams.subscribe(params => {
-      const userId = params['userId'];
-      if (userId) {
-        this.userSearchForm.get('userId')?.setValue(userId);
+      // Accept both 'patientID' and 'patientId'
+      this.userName = params['patientID'] || params['patientId'];
+      this.patientId = params['patientID'] || params['patientId'];
+      if (this.userName) {
+        this.userSearchForm.get('userId')?.setValue(this.userName);
         this.fetchPatientData();
       }
     });
@@ -200,7 +204,7 @@ export class PatientInteractionComponent implements OnInit {
     this.labTestForm = this.formBuilder.group({
       testName: ['', [Validators.required]],
       testType: ['', [Validators.required]],
-      notes: ['']
+      notes: ['', [Validators.required]]
     });
     this.prescriptionForm = this.formBuilder.group({
       medicineName: ['', [Validators.required]],
@@ -223,8 +227,8 @@ export class PatientInteractionComponent implements OnInit {
   }
 
   fetchPatientData(): void {
-    const userId = this.userSearchForm.get('userId')?.value;
-    if (!userId || !userId.trim()) {
+    this.patientId = this.userSearchForm.get('userId')?.value;
+    if (!this.patientId || !this.patientId.trim()) {
       this.errorMessage = 'Please enter a User ID first';
       return;
     }
@@ -232,7 +236,7 @@ export class PatientInteractionComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    const patientId = userId.trim();
+    const patientId = this.patientId.trim();
     this.patientId = patientId;
 
     this.dataEntryService.fetchPatientData(patientId).subscribe({
@@ -532,7 +536,7 @@ export class PatientInteractionComponent implements OnInit {
   startPatientInteraction(): void {
     if (this.selectedPatient && this.selectedPatient.id) {
       this.router.navigate(['/data-entry/patient-interaction'], {
-        queryParams: { userId: this.selectedPatient.id }
+        queryParams: { userName: this.selectedPatient.userName }
       });
     }
   }
