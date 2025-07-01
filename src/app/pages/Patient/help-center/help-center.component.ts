@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SupportTicket } from '../../models/ticket';
-import { HelpCenterService, TicketSubmissionResponse } from '../../core/services/help-center/help-center.service';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { SupportTicket } from '../../../models/ticket';
+import { HelpCenterService, TicketSubmissionResponse } from '../../../core/services/help-center/help-center.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-help-center',
-  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './help-center.component.html',
   styleUrl: './help-center.component.scss'
