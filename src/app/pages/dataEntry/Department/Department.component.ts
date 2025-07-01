@@ -69,13 +69,6 @@ export class DepartmentComponent implements OnInit {
   }
 
   startPatientInteraction(): void {
-    if (this.selectedPatient) {
-      // Here you can add logic to edit the selected patient if needed before checkout
-      this.checkoutPatient();
-    }
-  }
-
-  checkoutPatient(): void {
     if (this.selectedPatient && this.selectedPatient.name) {
       this.router.navigate(['/patientinteraction'], {
         queryParams: { username: this.selectedPatient.name }
