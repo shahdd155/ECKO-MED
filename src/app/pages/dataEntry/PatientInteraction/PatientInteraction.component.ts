@@ -189,8 +189,9 @@ export class PatientInteractionComponent implements OnInit {
   ngOnInit(): void {
     console.log('PatientInteractionComponent ngOnInit', this.route.queryParams);
     this.route.queryParams.subscribe(params => {
-      //this.userName = params['userName'];
-      this.userName = params['patientID'];
+      // Accept both 'patientID' and 'patientId'
+      this.userName = params['patientID'] || params['patientId'];
+      this.patientId = params['patientID'] || params['patientId'];
       if (this.userName) {
         this.userSearchForm.get('userId')?.setValue(this.userName);
         this.fetchPatientData();
@@ -226,6 +227,7 @@ export class PatientInteractionComponent implements OnInit {
   }
 
   fetchPatientData(): void {
+    this.patientId = this.userSearchForm.get('userId')?.value;
     if (!this.patientId || !this.patientId.trim()) {
       this.errorMessage = 'Please enter a User ID first';
       return;
