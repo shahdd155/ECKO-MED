@@ -27,7 +27,7 @@
                 <select formControlName="medicineId" class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" required>
                   <option value="">Choose medicine</option>
                   @for (med of medicines; track med.id) {
-                    <option [value]="med.id">{{ med.name }} ({{ med.strength }})</option>
+                    <option [ngValue]="med.id">{{ med.name }} ({{ med.strength }})</option>
                   }
                 </select>
               </div>

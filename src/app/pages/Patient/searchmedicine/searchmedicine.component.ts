@@ -63,6 +63,7 @@ export class SearchmedicineComponent implements OnInit {
   }
 
   performSearch(): void {
+    
     this.loading = true;
     this.searchDone = false;
     const { medicineId } = this.searchForm.value;
@@ -76,15 +77,18 @@ export class SearchmedicineComponent implements OnInit {
     if (this.userLocation) {
       request.latitude = this.userLocation.latitude;
       request.longitude = this.userLocation.longitude;
-    }
+    }console.log(this.searchForm.value);
     request.distance = 9999; // or any default max distance
-    this.medicineService.searchPharmacies(request).subscribe(res => {
-      this.pharmacies = res;
-      this.loading = false;
-      this.searchDone = true;
-    }, () => {
-      this.loading = false;
-      this.searchDone = true;
+    this.medicineService.searchPharmacies(request).subscribe({
+      next: (res) => {
+        this.pharmacies = res;
+        this.loading = false;
+        this.searchDone = true;
+      },
+      error: () => {
+        this.loading = false;
+        this.searchDone = true;
+      }
     });
   }
 
@@ -103,14 +107,14 @@ export class SearchmedicineComponent implements OnInit {
       medicineName: selectedMedicine.name,
       quantity,
     }).subscribe({
-      next: (res) => {
+      next: () => {
         this.requestStatus[pharmacy.pharmacyId] = 'success';
         setTimeout(() => {
           this.pharmacies = this.pharmacies.filter(p => p.pharmacyId !== pharmacy.pharmacyId);
           delete this.requestStatus[pharmacy.pharmacyId];
         }, 1000);
       },
-      error: (err) => {
+      error: () => {
         this.requestStatus[pharmacy.pharmacyId] = 'error';
       }
     });
