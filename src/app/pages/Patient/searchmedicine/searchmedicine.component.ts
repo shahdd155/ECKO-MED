@@ -65,14 +65,21 @@ export class SearchmedicineComponent implements OnInit {
   performSearch(): void {
     this.loading = true;
     this.searchDone = false;
-    const { medicineId, quantity } = this.searchForm.value;
-    const request: any = { medicineId, quantity };
+    const { medicineId } = this.searchForm.value;
+    const selectedMedicine = this.medicines.find(m => m.id === medicineId);
+    if (!selectedMedicine) {
+      this.loading = false;
+      this.searchDone = true;
+      return;
+    }
+    const request: any = { medicineName: selectedMedicine.name };
     if (this.userLocation) {
       request.latitude = this.userLocation.latitude;
       request.longitude = this.userLocation.longitude;
     }
+    request.distance = 9999; // or any default max distance
     this.medicineService.searchPharmacies(request).subscribe(res => {
-      this.pharmacies = res.data;
+      this.pharmacies = res;
       this.loading = false;
       this.searchDone = true;
     }, () => {
@@ -92,13 +99,11 @@ export class SearchmedicineComponent implements OnInit {
     this.requestStatus[pharmacy.pharmacyId] = 'loading';
 
     this.medicineService.sendPharmacyRequest({
-      pharmacyId: pharmacy.pharmacy.id.toString(), // pharmacyId is a number in the mock, but string in backend
+      pharmacyId: pharmacy.pharmacyId.toString(),
       medicineName: selectedMedicine.name,
       quantity,
     }).subscribe({
       next: (res) => {
-        // Assuming the backend returns a success property or similar.
-        // Based on UserController, it just returns Ok("Request sent successfully.")
         this.requestStatus[pharmacy.pharmacyId] = 'success';
         setTimeout(() => {
           this.pharmacies = this.pharmacies.filter(p => p.pharmacyId !== pharmacy.pharmacyId);
