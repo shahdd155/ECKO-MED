@@ -45,6 +45,7 @@ export class ViewRequestsComponent implements OnInit {
       next: (response: any) => {
         // Backend returns { totalRequests, closedTodayRequests, pendingRequests, pendingItems }
         this.allRequests = response.pendingItems || [];
+        console.log(this.allRequests);
         this.isLoading = false;
         console.log('Pending requests loaded successfully:', this.allRequests.length, 'requests');
       },

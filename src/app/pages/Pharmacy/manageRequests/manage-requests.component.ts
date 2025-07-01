@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PharmacyRequest, PharmacyRequestStatus } from '../../../models/PharmacyRequest';
+import { PharmacyRequest } from '../../../models/PharmacyRequest';
 import { PharmacyService, RequestStatusUpdateResponse, PharmacyStats } from '../../../core/services/Pharmacy/Pharmacy.service';
+
+export enum PharmacyRequestStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+}
 
 // Component that manages processed (non-pending) pharmacy requests
 @Component({
@@ -78,12 +84,12 @@ export class ManageRequestsComponent implements OnInit {
 
   // Returns only non-pending (processed) requests
   get processedRequests(): PharmacyRequest[] {
-    return this.allRequests.filter(request => request.status !== PharmacyRequestStatus.PENDING);
+    return this.allRequests.filter(request => request.state !== PharmacyRequestStatus.PENDING);
   }
 
   // Returns processed requests filtered by a specific status
   getRequestsByStatus(status: PharmacyRequestStatus): PharmacyRequest[] {
-    return this.processedRequests.filter(request => request.status === status);
+    return this.processedRequests.filter(request => request.state === status);
   }
 
   // Returns CSS classes for status badges based on status
@@ -247,7 +253,7 @@ export class ManageRequestsComponent implements OnInit {
 
     this.pharmacyService.searchRequests(query.trim()).subscribe({
       next: (requests: PharmacyRequest[]) => {
-        this.allRequests = requests.filter(request => request.status !== PharmacyRequestStatus.PENDING);
+        this.allRequests = requests.filter(request => request.state !== PharmacyRequestStatus.PENDING);
         this.isLoading = false;
         console.log('Search results loaded:', this.allRequests.length, 'requests');
       },
