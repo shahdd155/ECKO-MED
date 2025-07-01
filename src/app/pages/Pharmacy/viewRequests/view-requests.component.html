@@ -1,48 +1,50 @@
 <div class="min-h-screen bg-gray-50 p-4 lg:p-6">
 
 
-  <div 
-    *ngIf="showSuccessMessage"
-    class="fixed top-4 right-4 z-40 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg transition-all transform"
-    [class.translate-x-0]="showSuccessMessage"
-    [class.translate-x-full]="!showSuccessMessage"
-  >
-    <div class="flex items-center">
-      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-      </svg>
-      <span class="font-medium">{{ successMessage }}</span>
-      <button 
-        (click)="showSuccessMessage = false"
-        class="ml-3 text-green-500 hover:text-green-700"
-      >
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+  @if (showSuccessMessage) {
+    <div
+      class="fixed top-4 right-4 z-40 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg transition-all transform"
+      [class.translate-x-0]="showSuccessMessage"
+      [class.translate-x-full]="!showSuccessMessage"
+    >
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
         </svg>
-      </button>
+        <span class="font-medium">{{ successMessage }}</span>
+        <button 
+          (click)="showSuccessMessage = false"
+          class="ml-3 text-green-500 hover:text-green-700"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Error Notification -->
-  <div 
-    *ngIf="showErrorMessage"
-    class="fixed top-4 right-4 z-40 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg transition-all transform"
-  >
-    <div class="flex items-center">
-      <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-      </svg>
-      <span class="font-medium">{{ errorMessage }}</span>
-      <button 
-        (click)="showErrorMessage = false"
-        class="ml-3 text-red-500 hover:text-red-700"
-      >
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+  @if (showErrorMessage) {
+    <div
+      class="fixed top-4 right-4 z-40 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg transition-all transform"
+    >
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
         </svg>
-      </button>
+        <span class="font-medium">{{ errorMessage }}</span>
+        <button 
+          (click)="showErrorMessage = false"
+          class="ml-3 text-red-500 hover:text-red-700"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Page Header -->
   <div class="mb-8">
@@ -138,33 +140,38 @@
         <div class="flex items-center gap-4">
           <div class="text-sm text-gray-600">
             <span class="font-medium">{{ pendingRequests.length }}</span> 
-            <span *ngIf="pendingRequests.length === 1; else multipleResults">request found</span>
-            <ng-template #multipleResults>requests found</ng-template>
+            @if (pendingRequests.length === 1) {
+              <span>request found</span>
+            } @else {
+              <span>requests found</span>
+            }
           </div>
           
           <!-- Bulk Actions -->
-          <div *ngIf="hasSelectedRequests" class="flex items-center gap-2">
-            <span class="text-sm text-gray-600">{{ selectedRequests.size }} selected</span>
-            <button 
-              (click)="bulkApprove()"
-              class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors"
-            >
-              Approve All
-            </button>
-            <button 
-              (click)="bulkReject()"
-              class="px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors"
-            >
-              Reject All
-            </button>
-          </div>
+          @if (hasSelectedRequests) {
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-600">{{ selectedRequests.size }} selected</span>
+              <button 
+                (click)="bulkApprove()"
+                class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors"
+              >
+                Approve All
+              </button>
+              <button 
+                (click)="bulkReject()"
+                class="px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors"
+              >
+                Reject All
+              </button>
+            </div>
+          }
         </div>
       </div>
     </div>
 
     <!-- Table Section -->
     <div class="overflow-x-auto">
-      <div *ngIf="pendingRequests.length > 0; else emptyState">
+      @if (pendingRequests.length > 0) {
         <table class="min-w-full divide-y divide-gray-200">
           <!-- Table Header -->
           <thead class="bg-gray-50">
@@ -219,90 +226,89 @@
 
           <!-- Table Body -->
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr 
-              *ngFor="let request of pendingRequests" 
-              class="hover:bg-gray-50 transition-colors"
-              [ngClass]="getUrgencyClass(request.dateTime)">
-              <!-- Selection Checkbox -->
-              <td class="px-6 py-4 whitespace-nowrap">
-                <input 
-                  type="checkbox"
-                  [checked]="isSelected(request.id)"
-                  (change)="toggleSelectRequest(request.id)"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                >
-              </td>
-              <!-- Request ID and Date -->
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900">#{{ request.id }}</div>
-                <div class="text-sm text-gray-500" *ngIf="request.dateTime">{{ formatDate(request.dateTime) }}</div>
-              </td>
-              <!-- Patient/User Information -->
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-10 w-10">
-                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span class="text-sm font-medium text-blue-600">
-                        {{ getPatientInitials(request.userName) }}
-                      </span>
+            @for (request of pendingRequests; track request.id) {
+              <tr 
+                class="hover:bg-gray-50 transition-colors"
+                [ngClass]="getUrgencyClass(request.dateTime)">
+                <!-- Selection Checkbox -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <input 
+                    type="checkbox"
+                    [checked]="isSelected(request.id)"
+                    (change)="toggleSelectRequest(request.id)"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  >
+                </td>
+                <!-- Request ID and Date -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">#{{ request.id }}</div>
+                  <div class="text-sm text-gray-500" *ngIf="request.dateTime">{{ formatDate(request.dateTime) }}</div>
+                </td>
+                <!-- Patient/User Information -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 h-10 w-10">
+                      <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span class="text-sm font-medium text-blue-600">
+                          {{ getPatientInitials(request.userName) }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900" *ngIf="request.userName; else noName">{{ request.userName }}</div>
+                      <ng-template #noName><span class="text-gray-400 italic">N/A</span></ng-template>
+                      <div class="text-sm text-gray-500" *ngIf="request.email">{{ request.email }}</div>
+                      <div class="text-xs text-gray-400" *ngIf="request.phoneNum">{{ request.phoneNum }}</div>
                     </div>
                   </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900" *ngIf="request.userName">{{ request.userName }}</div>
-                    <div class="text-sm text-gray-500" *ngIf="request.email">{{ request.email }}</div>
-                    <div class="text-xs text-gray-400" *ngIf="request.phoneNum">{{ request.phoneNum }}</div>
+                </td>
+                <!-- Medicine Details -->
+                <td class="px-6 py-4">
+                  <div class="text-sm font-medium text-gray-900" *ngIf="request.medicineName">{{ request.medicineName }}</div>
+                  <div class="text-sm text-gray-500" *ngIf="request.qty">Qty: {{ request.qty }}</div>
+                </td>
+                <!-- Actions -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <div class="flex items-center space-x-2">
+                    <button 
+                      (click)="viewDetails(request.id)"
+                      class="text-blue-600 hover:text-blue-900 px-2 py-1 rounded text-xs border border-blue-200 hover:bg-blue-50 transition-colors"
+                      title="View details"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                      </svg>
+                    </button>
+                    
+                    <button 
+                      (click)="approveRequest(request.id)"
+                      class="text-white bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center space-x-1"
+                      title="Approve request"
+                    >
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span>Approve</span>
+                    </button>
+                    
+                    <button 
+                      (click)="rejectRequest(request.id)"
+                      class="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center space-x-1"
+                      title="Reject request"
+                    >
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span>Reject</span>
+                    </button>
                   </div>
-                </div>
-              </td>
-              <!-- Medicine Details -->
-              <td class="px-6 py-4">
-                <div class="text-sm font-medium text-gray-900" *ngIf="request.medicineName">{{ request.medicineName }}</div>
-                <div class="text-sm text-gray-500" *ngIf="request.qty">Qty: {{ request.qty }}</div>
-              </td>
-              <!-- Actions -->
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <div class="flex items-center space-x-2">
-                  <button 
-                    (click)="viewDetails(request.id)"
-                    class="text-blue-600 hover:text-blue-900 px-2 py-1 rounded text-xs border border-blue-200 hover:bg-blue-50 transition-colors"
-                    title="View details"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    </svg>
-                  </button>
-                  
-                  <button 
-                    (click)="approveRequest(request.id)"
-                    class="text-white bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center space-x-1"
-                    title="Approve request"
-                  >
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span>Approve</span>
-                  </button>
-                  
-                  <button 
-                    (click)="rejectRequest(request.id)"
-                    class="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center space-x-1"
-                    title="Reject request"
-                  >
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span>Reject</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
-      </div>
-
-      <!-- Empty State -->
-      <ng-template #emptyState>
+      } @else {
         <div class="text-center py-16">
           <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full">
@@ -311,27 +317,30 @@
           </div>
           
           <h3 class="text-lg font-medium text-gray-900 mb-2">
-            <span *ngIf="searchQuery; else noPendingRequests">No requests match your search</span>
-            <ng-template #noPendingRequests>All caught up!</ng-template>
+            @if (searchQuery) {
+              <span>No requests match your search</span>
+            } @else {
+              <span>All caught up!</span>
+            }
           </h3>
           
           <p class="text-gray-500 mb-4">
-            <span *ngIf="searchQuery; else allDoneMessage">
+            @if (searchQuery) {
               Try adjusting your search criteria or clearing the search to see more requests.
-            </span>
-            <ng-template #allDoneMessage>
+            } @else {
               There are no pending pharmacy requests that need your attention.
-            </ng-template>
+            }
           </p>
           
           <div class="flex justify-center space-x-3">
-            <button 
-              *ngIf="searchQuery"
-              (click)="clearFilters()"
-              class="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-300 rounded-md hover:bg-blue-50 transition-colors"
-            >
-              Clear Search
-            </button>
+            @if (searchQuery) {
+              <button 
+                (click)="clearFilters()"
+                class="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-300 rounded-md hover:bg-blue-50 transition-colors"
+              >
+                Clear Search
+              </button>
+            }
             <button 
               (click)="loadRequests()"
               class="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
@@ -344,7 +353,7 @@
             Processed requests can be managed in the "Manage Requests" page.
           </p>
         </div>
-      </ng-template>
+      }
     </div>
   </div>
 </div> 

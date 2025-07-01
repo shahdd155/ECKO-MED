@@ -5,7 +5,6 @@ import { PatientLayoutComponent } from './layouts/patient-layout/patient-layout.
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { patientGuard } from './core/guards/patient.guard';
 import { dataEntryGuard } from './core/guards/data-entry.guard';
-import path from 'path';
 import { PharmacyLayoutComponent } from './layouts/pharmacy-layout/pharmacy-layout.component';
 import { pharmacyGuard } from './core/guards/pharmacy.guard';
 

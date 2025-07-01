@@ -61,10 +61,7 @@ export class ViewRequestsComponent implements OnInit {
 
   // Filter and sort pending requests based on current criteria
   get pendingRequests(): PharmacyRequest[] {
-    let filtered = this.allRequests.filter(request => 
-      request.state === 'pending'
-    );
-
+    let filtered = this.allRequests.filter(request => request.state === 'pending');
     // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0;
