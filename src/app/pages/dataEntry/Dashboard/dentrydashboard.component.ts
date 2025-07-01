@@ -39,18 +39,6 @@ export class DentrydashboardComponent implements OnInit {
     domain: ['#374151', '#f59e42']
   };
 
-  // Add these properties for expenses and chart
-  expensesData = [
-    { name: 'Medications', value: 0 },
-    { name: 'Scans and tests', value: 0 }
-  ];
-  expensesColorScheme = {
-    name: 'customPieScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#f59e42', '#374151']
-  };
-
   constructor(private dataEntryService: DataEntryService) {}
 
   ngOnInit(): void {
@@ -124,13 +112,5 @@ export class DentrydashboardComponent implements OnInit {
     if (this.patientOverviewData.length === 0) return 0;
     const currentMonthData = this.patientOverviewData[0]?.series || [];
     return Math.max(0, ...currentMonthData.map(item => item.value));
-  }
-
-  getMedicationValue(): number {
-    return this.expensesData[0].value;
-  }
-
-  getScansValue(): number {
-    return this.expensesData[1].value;
   }
 }

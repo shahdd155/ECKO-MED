@@ -13,6 +13,7 @@ export interface Department {
   description: string;
   capacity: number;
   numOfDoctors: number;
+  estimateWaitingTime: number; // in minutes
 }
 
 export interface AddPatientDto {

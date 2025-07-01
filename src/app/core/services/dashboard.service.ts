@@ -14,11 +14,6 @@ interface ChartData {
   series: ChartSeries[];
 }
 
-interface ExpenseData {
-  name: string;
-  value: number;
-}
-
 interface GenderStats {
   male: number;
   female: number;
@@ -29,7 +24,6 @@ interface DashboardData {
   totalPatients: number;
   totalLabResults: number;
   patientOverviewData: ChartData[];
-  expensesData: ExpenseData[];
   genderStats: GenderStats;
 }
 
@@ -81,10 +75,6 @@ export class DashboardService {
             { name: 'Fri', value: 17000 }
           ]
         }
-      ],
-      expensesData: [
-        { name: 'Medications', value: 60450 },
-        { name: 'Scans and tests', value: 75550 }
       ],
       genderStats: {
         male: 18454,

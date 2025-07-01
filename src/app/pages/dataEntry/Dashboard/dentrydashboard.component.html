@@ -15,37 +15,9 @@
 
   @if (!isLoading) {
     <div class="space-y-4">
-      <div class="flex w-full gap-4 mb-4">
-        <!-- Total Patients -->
-        <div class="flex flex-col ">
-          <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="text-gray-500 text-base font-medium mb-1">Total Patients</div>
-                <div class="text-4xl font-extrabold text-gray-900">{{ totalPatients | number }}</div>
-                <div class="text-sm text-green-600 font-medium mt-1">{{totalPatientsPercent}} from last month</div>
-              </div>
-              <button class="text-gray-400 p-1">
-                <i class="fa-solid fa-ellipsis"></i>
-              </button>
-            </div>
-          </div>
-          <!-- Total Lab Results -->
-          <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="text-gray-500 text-base font-medium mb-1">Total Lab Results</div>
-                <div class="text-4xl font-extrabold text-gray-900">{{ totalLabResults | number }}</div>
-                <div class="text-sm text-red-600 font-medium mt-1">{{labTestsPercent}} from last month</div>
-              </div>
-              <button class="text-gray-400 p-1">
-                <i class="fa-solid fa-ellipsis"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Patient Overview Chart -->
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col min-h-[200px] relative flex-1">
+      <div class="mb-4">
+   
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col min-h-[350px] relative w-full">
           <div class="flex justify-between items-center mb-2">
             <span class="font-semibold text-lg text-gray-900">Patient Overview</span>
             <div class="flex items-center space-x-2">
@@ -75,13 +47,11 @@
                   [animations]="true"
                   class="h-48 w-full">
                 </ngx-charts-line-chart>
-            
                 <div class="absolute left-[52%] top-[18%] text-xs font-bold text-gray-900 bg-white px-2 py-1 rounded shadow border border-gray-200">
                   {{ getPeakValue() | number }}
                 </div>
               }
             </div>
-         
             <div class="flex flex-col justify-center ml-4 min-w-[120px]">
               <div class="font-bold text-base mb-2">Legend</div>
               <div class="flex items-center mb-2">
@@ -97,53 +67,46 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col md:flex-row items-center min-h-[250px] relative">
-          <div class="flex flex-col justify-center mr-6">
-            <div class="flex items-center mb-2">
-              <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#f59e42"></span>
-              <span class="text-base text-gray-900">Medications</span>
-              <span class="ml-2 font-bold text-gray-900">{{ getMedicationValue() | number }} EGP</span>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Total Patients -->
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="text-gray-500 text-base font-medium mb-1">Total Patients</div>
+              <div class="text-4xl font-extrabold text-gray-900">{{ totalPatients | number }}</div>
+              <div class="text-sm text-green-600 font-medium mt-1">{{totalPatientsPercent}} from last month</div>
             </div>
-            <div class="flex items-center">
-              <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#374151"></span>
-              <span class="text-base text-gray-900">Scans and tests</span>
-              <span class="ml-2 font-bold text-gray-900">{{ getScansValue() | number }} EGP</span>
-            </div>
-          </div>
-          <div class="relative flex-1 flex justify-center items-center">
-            @if (expensesData.length > 0) {
-              <ngx-charts-pie-chart
-                [results]="expensesData"
-                [scheme]="expensesColorScheme"
-                [doughnut]="true"
-                [legend]="false"
-                [labels]="false"
-                [explodeSlices]="false"
-                [arcWidth]="0.3"
-                [animations]="true"
-                class="h-44 w-44">
-              </ngx-charts-pie-chart>
-            }
-            <!-- Center label overlay -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span class="text-base font-semibold text-gray-700">Total Expenses</span>
-            </div>
+            <button class="text-gray-400 p-1">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
           </div>
         </div>
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col md:flex-row col-span-2 min-h-[250px]">
-          <div class="flex-1 flex flex-col items-center justify-center border-r border-gray-200">
-            <div class="text-gray-500 text-base font-medium">Total no. of male</div>
-            <div class="text-4xl font-extrabold text-gray-900">{{ maleCount | number }}</div>
-            <i class="fa-solid fa-person text-orange-500 text-8xl"></i>
-            <div class="text-sm text-red-600 font-medium">{{malePatientsPercent}} from last week</div>
+        <!-- Total Lab Results -->
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="text-gray-500 text-base font-medium mb-1">Total Lab Results</div>
+              <div class="text-4xl font-extrabold text-gray-900">{{ totalLabResults | number }}</div>
+              <div class="text-sm text-red-600 font-medium mt-1">{{labTestsPercent}} from last month</div>
+            </div>
+            <button class="text-gray-400 p-1">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
           </div>
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="text-gray-500 text-base font-medium">Total no. of female</div>
-            <div class="text-4xl font-extrabold text-gray-900">{{ femaleCount | number }}</div>
-            <i class="fa-solid fa-person-dress text-8xl"></i>
-            <div class="text-sm text-orange-400 font-medium">{{femalePatientsPercent}} from last week</div>
-          </div>
+        </div>
+        <!-- Total no. of male -->
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
+          <div class="text-gray-500 text-base font-medium">Total no. of male</div>
+          <div class="text-4xl font-extrabold text-gray-900">{{ maleCount | number }}</div>
+          <i class="fa-solid fa-person text-orange-500 text-8xl"></i>
+          <div class="text-sm text-red-600 font-medium">{{malePatientsPercent}} from last week</div>
+        </div>
+        <!-- Total no. of female -->
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
+          <div class="text-gray-500 text-base font-medium">Total no. of female</div>
+          <div class="text-4xl font-extrabold text-gray-900">{{ femaleCount | number }}</div>
+          <i class="fa-solid fa-person-dress text-8xl"></i>
+          <div class="text-sm text-orange-400 font-medium">{{femalePatientsPercent}} from last week</div>
         </div>
       </div>
     </div>

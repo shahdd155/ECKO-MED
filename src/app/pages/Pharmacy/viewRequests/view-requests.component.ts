@@ -68,16 +68,6 @@ export class ViewRequestsComponent implements OnInit {
       request.status === PharmacyRequestStatus.PENDING
     );
 
-    // Apply search filter
-    if (this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(request =>
-        request.patientName.toLowerCase().includes(query) ||
-        request.medication.toLowerCase().includes(query) ||
-        request.id.toString().includes(query)
-      );
-    }
-
     // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0;
@@ -289,41 +279,12 @@ export class ViewRequestsComponent implements OnInit {
 
   // Reset search and filters to default state
   clearFilters(): void {
-    this.searchQuery = '';
     this.selectedRequests.clear();
   }
 
   // Refresh data from backend
   refreshData(): void {
     this.loadRequests();
-  }
-
-  // Search requests by query
-  searchRequests(): void {
-    if (!this.searchQuery || this.searchQuery.trim() === '') {
-      this.loadRequests();
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    this.pharmacyService.searchRequests(this.searchQuery.trim()).subscribe({
-      next: (requests: PharmacyRequest[]) => {
-        this.allRequests = requests.filter(request => request.status === PharmacyRequestStatus.PENDING);
-        this.isLoading = false;
-        console.log('Search results loaded:', this.allRequests.length, 'requests');
-      },
-      error: (error: any) => {
-        this.isLoading = false;
-        this.errorMessage = error.message || 'Failed to search requests';
-        console.error('Error searching requests:', error);
-        
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 5000);
-      }
-    });
   }
 
   // Display success or error messages to user
@@ -346,14 +307,6 @@ export class ViewRequestsComponent implements OnInit {
     if (daysDiff >= 3) return 'border-l-4 border-red-500 bg-red-50';
     if (daysDiff >= 1) return 'border-l-4 border-yellow-500 bg-yellow-50';
     return '';
-  }
-
-  // Format price with currency symbol
-  formatCurrency(amount: number, currency: string): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency || 'USD'
-    }).format(amount);
   }
 
   // Format date for user-friendly display
