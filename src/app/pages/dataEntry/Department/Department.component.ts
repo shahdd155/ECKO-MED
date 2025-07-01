@@ -70,11 +70,16 @@ export class DepartmentComponent implements OnInit {
 
   startPatientInteraction(): void {
     if (this.selectedPatient) {
-      // The backend needs to provide the patient's ID to navigate.
-      console.error('Cannot start interaction: Patient ID is missing from the backend response.');
-      // this.router.navigate(['/data-entry/patient-interaction'], {
-      //   queryParams: { patientId: this.selectedPatient.id } // .id does not exist
-      // });
+      // Here you can add logic to edit the selected patient if needed before checkout
+      this.checkoutPatient();
+    }
+  }
+
+  checkoutPatient(): void {
+    if (this.selectedPatient && this.selectedPatient.name) {
+      this.router.navigate(['/patientinteraction'], {
+        queryParams: { username: this.selectedPatient.name }
+      });
     }
   }
 }

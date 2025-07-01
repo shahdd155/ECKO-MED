@@ -473,9 +473,7 @@ export class PatientInteractionComponent implements OnInit {
       next: () => {
         this.isCheckingOut = false;
         this.successMessage = 'Patient checkout completed successfully!';
-        setTimeout(() => {
-          this.clearPatientData();
-        }, 3000);
+        this.clearPatientData();
       },
       error: (error) => {
         this.isCheckingOut = false;

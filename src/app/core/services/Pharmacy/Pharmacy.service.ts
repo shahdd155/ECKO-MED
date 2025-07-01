@@ -64,33 +64,19 @@ export class PharmacyService {
   /**
    * Fetch processed (non-pending) pharmacy requests
    */
-  getProcessedRequests(): Observable<PharmacyRequest[]> {
+  getProcessedRequests(): Observable<any> {
     const url = `${this.baseUrl}/Closed-requests`;
-    
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
-      map(response => {
-        if (!response.data) {
-          throw new Error('No processed requests data received');
-        }
-        return response.data;
-      }),
+    return this.http.get<any>(url, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
 
   /**
-   * Fetch requests by status
+   * Fetch pending pharmacy requests (matches backend: GET /Pharmacy/Pending-requests)
    */
-  getRequestsByStatus(): Observable<PharmacyRequest[]> {
-    const url = `${this.baseUrl}/pending-requests`;
-    
-    return this.http.get<ApiResponse<PharmacyRequest[]>>(url, { withCredentials: true }).pipe(
-      map(response => {
-        if (!response.data) {
-          throw new Error('No requests data received');
-        }
-        return response.data;
-      }),
+  getRequestsByStatus(): Observable<any> {
+    const url = `${this.baseUrl}/Pending-requests`;
+    return this.http.get<any>(url, { withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
@@ -147,31 +133,43 @@ export class PharmacyService {
   }
 
   /**
-   * Approve a pharmacy request
+   * Approve a single pharmacy request (matches backend: POST /Pharmacy/Approve-request)
    */
-  approveRequest(requestId: number, approvedBy: number, notes?: string): Observable<RequestStatusUpdateResponse> {
-    const updateData: UpdateRequestStatusDto = {
-      requestId,
-      newStatus: PharmacyRequestStatus.APPROVED,
-      approvedBy,
-      reason: notes
-    };
-    
-    return this.updateRequestStatus(updateData);
+  approveRequest(requestId: number): Observable<any> {
+    const url = `${this.baseUrl}/Approve-request`;
+    return this.http.post<any>(url, requestId, { withCredentials: true }).pipe(
+      catchError(this.handleError)
+    );
   }
 
   /**
-   * Reject a pharmacy request
+   * Approve multiple pharmacy requests (matches backend: POST /Pharmacy/Approve-requests)
    */
-  rejectRequest(requestId: number, rejectedBy: number, rejectionReason: string): Observable<RequestStatusUpdateResponse> {
-    const updateData: UpdateRequestStatusDto = {
-      requestId,
-      newStatus: PharmacyRequestStatus.REJECTED,
-      rejectedBy,
-      reason: rejectionReason
-    };
-    
-    return this.updateRequestStatus(updateData);
+  approveRequests(requestIds: number[]): Observable<any> {
+    const url = `${this.baseUrl}/Approve-requests`;
+    return this.http.post<any>(url, requestIds, { withCredentials: true }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Reject a single pharmacy request (matches backend: POST /Pharmacy/Reject-request)
+   */
+  rejectRequest(requestId: number): Observable<any> {
+    const url = `${this.baseUrl}/Reject-request`;
+    return this.http.post<any>(url, requestId, { withCredentials: true }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Reject multiple pharmacy requests (matches backend: POST /Pharmacy/Reject-requests)
+   */
+  rejectRequests(requestIds: number[]): Observable<any> {
+    const url = `${this.baseUrl}/Reject-requests`;
+    return this.http.post<any>(url, requestIds, { withCredentials: true }).pipe(
+      catchError(this.handleError)
+    );
   }
 
   /**

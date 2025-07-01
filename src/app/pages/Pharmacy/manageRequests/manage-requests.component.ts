@@ -43,18 +43,16 @@ export class ManageRequestsComponent implements OnInit {
   loadProcessedRequests(): void {
     this.isLoading = true;
     this.errorMessage = '';
-
     this.pharmacyService.getProcessedRequests().subscribe({
-      next: (requests: PharmacyRequest[]) => {
-        this.allRequests = requests;
+      next: (response: any) => {
+        // Backend returns { totalClosed, approvedCount, rejectedCount, closedItems }
+        this.allRequests = response.closedItems || [];
         this.isLoading = false;
-        console.log('Processed requests loaded successfully:', requests.length, 'requests');
+        console.log('Processed requests loaded successfully:', this.allRequests.length, 'requests');
       },
       error: (error: any) => {
         this.isLoading = false;
         this.errorMessage = error.message || 'Failed to load requests';
-        console.error('Error loading processed requests:', error);
-        
         setTimeout(() => {
           this.errorMessage = '';
         }, 5000);
@@ -138,20 +136,17 @@ export class ManageRequestsComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // TODO: Get actual user ID from auth service
-    const currentUserId = 401; // Replace with actual user ID
-
     let updateObservable;
     
     if (newStatus === PharmacyRequestStatus.APPROVED) {
-      updateObservable = this.pharmacyService.approveRequest(requestId, currentUserId, reason);
+      updateObservable = this.pharmacyService.approveRequest(requestId);
     } else if (newStatus === PharmacyRequestStatus.REJECTED) {
       if (!reason || reason.trim() === '') {
         this.errorMessage = 'Rejection reason is required';
         this.isUpdating = false;
         return;
       }
-      updateObservable = this.pharmacyService.rejectRequest(requestId, currentUserId, reason);
+      updateObservable = this.pharmacyService.rejectRequest(requestId);
     } else {
       this.errorMessage = 'Invalid status transition';
       this.isUpdating = false;

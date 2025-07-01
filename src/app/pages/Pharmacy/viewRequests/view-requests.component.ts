@@ -45,16 +45,16 @@ export class ViewRequestsComponent implements OnInit {
     this.errorMessage = '';
 
     this.pharmacyService.getRequestsByStatus().subscribe({
-      next: (requests: PharmacyRequest[]) => {
-        this.allRequests = requests;
+      next: (response: any) => {
+        // Backend returns { totalRequests, closedTodayRequests, pendingRequests, pendingItems }
+        this.allRequests = response.pendingItems || [];
         this.isLoading = false;
-        console.log('Pending requests loaded successfully:', requests.length, 'requests');
+        console.log('Pending requests loaded successfully:', this.allRequests.length, 'requests');
       },
       error: (error: any) => {
         this.isLoading = false;
         this.errorMessage = error.message || 'Failed to load requests';
         console.error('Error loading pending requests:', error);
-        
         setTimeout(() => {
           this.errorMessage = '';
         }, 5000);
@@ -191,24 +191,14 @@ export class ViewRequestsComponent implements OnInit {
 
   // Approve a single request
   approveRequest(requestId: number): void {
-    const request = this.allRequests.find(r => r.id === requestId);
-    
-    if (request && request.status === PharmacyRequestStatus.PENDING) {
+    const request = this.allRequests.find((r: any) => r.Id === requestId);
+    if (request && (request as any).state === 'pending') {
       this.isUpdating = true;
       this.errorMessage = '';
       this.successMessage = '';
-
-      // TODO: Get actual user ID from auth service
-      const currentUserId = 401; // Replace with actual user ID
-
-      this.pharmacyService.approveRequest(requestId, currentUserId).subscribe({
-        next: (response: RequestStatusUpdateResponse) => {
-          // Update the local request with the response data
-          const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
-          if (requestIndex !== -1) {
-            this.allRequests[requestIndex] = response.request;
-          }
-
+      this.pharmacyService.approveRequest(requestId).subscribe({
+        next: (response: any) => {
+          this.loadRequests();
           this.selectedRequests.delete(requestId);
           this.isUpdating = false;
           this.showNotification(response.message || `Request #${requestId} approved successfully`, 'success');
@@ -216,8 +206,6 @@ export class ViewRequestsComponent implements OnInit {
         error: (error: any) => {
           this.isUpdating = false;
           this.errorMessage = error.message || 'Failed to approve request';
-          console.error('Error approving request:', error);
-          
           setTimeout(() => {
             this.errorMessage = '';
           }, 5000);
@@ -226,160 +214,77 @@ export class ViewRequestsComponent implements OnInit {
     }
   }
 
-  // Reject a single request with optional reason
+  // Reject a single request
   rejectRequest(requestId: number): void {
-    const reason = prompt('Please provide a reason for rejection (optional):');
-    
-    if (reason !== null) { // User didn't cancel
-      const request = this.allRequests.find(r => r.id === requestId);
-      
-      if (request && request.status === PharmacyRequestStatus.PENDING) {
-        this.isUpdating = true;
-        this.errorMessage = '';
-        this.successMessage = '';
-
-        // TODO: Get actual user ID from auth service
-        const currentUserId = 401; // Replace with actual user ID
-
-        this.pharmacyService.rejectRequest(requestId, currentUserId, reason.trim() || 'No reason provided').subscribe({
-          next: (response: RequestStatusUpdateResponse) => {
-            // Update the local request with the response data
-            const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
-            if (requestIndex !== -1) {
-              this.allRequests[requestIndex] = response.request;
-            }
-
-            this.selectedRequests.delete(requestId);
-            this.isUpdating = false;
-            this.showNotification(response.message || `Request #${requestId} rejected successfully`, 'success');
-          },
-          error: (error: any) => {
-            this.isUpdating = false;
-            this.errorMessage = error.message || 'Failed to reject request';
-            console.error('Error rejecting request:', error);
-            
-            setTimeout(() => {
-              this.errorMessage = '';
-            }, 5000);
-          }
-        });
-      }
+    const request = this.allRequests.find((r: any) => r.Id === requestId);
+    if (request && (request as any).state === 'pending') {
+      this.isUpdating = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+      this.pharmacyService.rejectRequest(requestId).subscribe({
+        next: (response: any) => {
+          this.loadRequests();
+          this.selectedRequests.delete(requestId);
+          this.isUpdating = false;
+          this.showNotification(response.message || `Request #${requestId} rejected successfully`, 'success');
+        },
+        error: (error: any) => {
+          this.isUpdating = false;
+          this.errorMessage = error.message || 'Failed to reject request';
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
     }
   }
 
   // Approve all selected requests at once
   bulkApprove(): void {
     if (!this.hasSelectedRequests) return;
-    
     const selectedIds = Array.from(this.selectedRequests);
-    const count = selectedIds.length;
-    
-    if (confirm(`Are you sure you want to approve ${count} selected request(s)?`)) {
-      this.isUpdating = true;
-      this.errorMessage = '';
-      this.successMessage = '';
-
-      // TODO: Get actual user ID from auth service
-      const currentUserId = 401; // Replace with actual user ID
-
-      // Process each request sequentially
-      let processedCount = 0;
-      let errorCount = 0;
-
-      const processNext = (index: number) => {
-        if (index >= selectedIds.length) {
-          // All requests processed
-          this.isUpdating = false;
-          this.selectedRequests.clear();
-          
-          if (errorCount === 0) {
-            this.showNotification(`${processedCount} request(s) approved successfully`, 'success');
-          } else {
-            this.showNotification(`${processedCount} approved, ${errorCount} failed`, 'error');
-          }
-          return;
-        }
-
-        const requestId = selectedIds[index];
-        this.pharmacyService.approveRequest(requestId, currentUserId).subscribe({
-          next: (response: RequestStatusUpdateResponse) => {
-            // Update the local request with the response data
-            const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
-            if (requestIndex !== -1) {
-              this.allRequests[requestIndex] = response.request;
-            }
-            processedCount++;
-            processNext(index + 1);
-          },
-          error: (error: any) => {
-            console.error(`Error approving request ${requestId}:`, error);
-            errorCount++;
-            processNext(index + 1);
-          }
-        });
-      };
-
-      processNext(0);
-    }
+    this.isUpdating = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.pharmacyService.approveRequests(selectedIds).subscribe({
+      next: (response: any) => {
+        this.loadRequests();
+        this.selectedRequests.clear();
+        this.isUpdating = false;
+        this.showNotification('Bulk approve completed', 'success');
+      },
+      error: (error: any) => {
+        this.isUpdating = false;
+        this.errorMessage = error.message || 'Failed to bulk approve requests';
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
-  // Reject all selected requests with optional reason
+  // Reject all selected requests at once
   bulkReject(): void {
     if (!this.hasSelectedRequests) return;
-    
     const selectedIds = Array.from(this.selectedRequests);
-    const count = selectedIds.length;
-    const reason = prompt('Please provide a reason for bulk rejection (optional):');
-    
-    if (reason !== null && confirm(`Are you sure you want to reject ${count} selected request(s)?`)) {
-      this.isUpdating = true;
-      this.errorMessage = '';
-      this.successMessage = '';
-
-      // TODO: Get actual user ID from auth service
-      const currentUserId = 401; // Replace with actual user ID
-
-      const rejectionReason = reason.trim() || 'No reason provided';
-
-      // Process each request sequentially
-      let processedCount = 0;
-      let errorCount = 0;
-
-      const processNext = (index: number) => {
-        if (index >= selectedIds.length) {
-          // All requests processed
-          this.isUpdating = false;
-          this.selectedRequests.clear();
-          
-          if (errorCount === 0) {
-            this.showNotification(`${processedCount} request(s) rejected successfully`, 'success');
-          } else {
-            this.showNotification(`${processedCount} rejected, ${errorCount} failed`, 'error');
-          }
-          return;
-        }
-
-        const requestId = selectedIds[index];
-        this.pharmacyService.rejectRequest(requestId, currentUserId, rejectionReason).subscribe({
-          next: (response: RequestStatusUpdateResponse) => {
-            // Update the local request with the response data
-            const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
-            if (requestIndex !== -1) {
-              this.allRequests[requestIndex] = response.request;
-            }
-            processedCount++;
-            processNext(index + 1);
-          },
-          error: (error: any) => {
-            console.error(`Error rejecting request ${requestId}:`, error);
-            errorCount++;
-            processNext(index + 1);
-          }
-        });
-      };
-
-      processNext(0);
-    }
+    this.isUpdating = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.pharmacyService.rejectRequests(selectedIds).subscribe({
+      next: (response: any) => {
+        this.loadRequests();
+        this.selectedRequests.clear();
+        this.isUpdating = false;
+        this.showNotification('Bulk reject completed', 'success');
+      },
+      error: (error: any) => {
+        this.isUpdating = false;
+        this.errorMessage = error.message || 'Failed to bulk reject requests';
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    });
   }
 
   // Reset search and filters to default state
