@@ -24,6 +24,16 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
             },
             {
+                path: 'phlogin',
+                title: 'Pharmacy Login',
+                loadComponent: () => import('./pages/Pharmacy/login/login.component').then(m => m.LoginComponent)
+            },
+            {
+                path: 'dentrylogin',
+                title: 'Data Entry Login',
+                loadComponent: () => import('./pages/dataEntry/login/login.component').then(m => m.LoginComponent)
+            },
+            {
                 path: 'register',
                 title: 'Register',
                 loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent)
@@ -88,8 +98,6 @@ export const routes: Routes = [
                     .then(m => m.MyvisitsComponent),
                 title: 'My Visits',
             },
-
-
             {
                 path: 'scans',
                 loadComponent: () => import('./pages/Patient/scans/scans.component')
@@ -102,7 +110,6 @@ export const routes: Routes = [
                     .then(m => m.PrescriptionsComponent),
                 title: 'Prescriptions'
             },
-
            {
                 path: 'p-helpCenter',
                 loadComponent: () => import('./pages/Patient/help-center/help-center.component')
@@ -175,7 +182,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/Pharmacy/manageRequests/manage-requests.component')
             .then(m => m.ManageRequestsComponent),
         title: 'Manage Pharmacy Requests'
-         },
+         }
         ]
     },
     {

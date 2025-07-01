@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { UserLogin } from '../../models/loginModels';
+import { UserLogin } from '../../../models/loginModels';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +24,7 @@ export class LoginComponent {
   submitLogin(): void {
     if (this.loginForm.valid) {
       const credentials: UserLogin = this.loginForm.value;
-      this.authService.loginuser(credentials).subscribe({
+      this.authService.loginDataEntry(credentials).subscribe({
         next: (response) => {
           console.log('Login successful', response);
           this.router.navigate(['/patient/dashboard']);

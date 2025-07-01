@@ -3,8 +3,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environment/environment';
-import { PharmacyRequest, PharmacyRequestStatus } from '../../../models/PharmacyRequest';
-
+import { PharmacyRequest } from '../../../models/PharmacyRequest';
+export enum PharmacyRequestStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+}
 // API Response interface
 interface ApiResponse<T> {
   success: boolean;

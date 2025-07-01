@@ -56,14 +56,41 @@ export class AuthService {
   }
 
   // LOGIN
-  login(credentials: UserLogin): Observable<AuthResponse> {
-    // Backend expects 'User' role, not 'patient'
-    const loginPayload = { ...credentials, role: 'User' };
-    
+  loginuser(credentials: UserLogin): Observable<AuthResponse> {
+    const loginPayload = { ...credentials};
     return this.httpClient.post<AuthResponse>(`${this.baseUrl}/userlogin`, loginPayload, { withCredentials: true }).pipe(
       switchMap(response => {
         return this.fetchUserProfile().pipe(
-          map(() => response) // Pass original login response
+          map(() => {
+            this.router.navigate(['/patientdashboard']); // Redirect to patient dashboard
+            return response;
+          })
+        );
+      })
+    );
+  }
+  loginPharmacy(credentials: UserLogin): Observable<AuthResponse> {
+    const loginPayload = { ...credentials };
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/pharmacylogin`, loginPayload, { withCredentials: true }).pipe(
+      switchMap(response => {
+        return this.fetchUserProfile().pipe(
+          map(() => {
+            this.router.navigate(['/viewrequests']); // Redirect to pharmacy dashboard
+            return response;
+          })
+        );
+      })
+    );
+  }
+  loginDataEntry(credentials: UserLogin): Observable<AuthResponse> {
+    const loginPayload = { ...credentials};
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/dataentrylogin`, loginPayload, { withCredentials: true }).pipe(
+      switchMap(response => {
+        return this.fetchUserProfile().pipe(
+          map(() => {
+            this.router.navigate(['/dEntrydashboard']); // Redirect to data entry dashboard
+            return response;
+          })
         );
       })
     );

@@ -25,7 +25,10 @@ describe('AuthService', () => {
   });
 
   it('should register a new user', () => {
-    const userData = { username: 'testuser', email: 'test@example.com', password: 'testpassword' };
+    const userData = new FormData();
+    userData.append('username', 'testuser');
+    userData.append('email', 'test@example.com');
+    userData.append('password', 'testpassword');
     const expectedResponse = { message: 'User registered successfully' };
 
     service.register(userData).subscribe(response => {
@@ -41,8 +44,10 @@ describe('AuthService', () => {
   it('should log in a user', () => {
     const credentials = { email: 'test@example.com', password: 'testpassword' };
     const expectedResponse = { message: 'Login successful', token: 'abc123' };
+    // Add missing properties to credentials to match UserLogin type
+    const fullCredentials = { email: 'test@example.com', password: 'testpassword', role: 'user', rememberMe: false };
 
-    service.login(credentials).subscribe(response => {
+    service.login(fullCredentials).subscribe(response => {
       expect(response).toEqual(expectedResponse);
     });
 
