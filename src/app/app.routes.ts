@@ -49,14 +49,14 @@ export const routes: Routes = [
                 path: 'dentry-helpcenter',
                 loadComponent: () => import('./pages/dataEntry/dentry-helpcenter/dentry-helpcenter.component')
                     .then(m => m.DentryHelpcenterComponent),
-                title: 'dentry-helpcenter'
+                title: 'helpcenter'
             },
            
             {
                 path: 'dEntrydashboard',
                 loadComponent: () => import('./pages/dataEntry/Dashboard/dentrydashboard.component')
                     .then(m => m.DentrydashboardComponent),
-                title: 'DataEntryDashboard'
+                title: 'DataEntry Dashboard'
             },
             {
                 path: 'dentryprofile',
@@ -108,7 +108,7 @@ export const routes: Routes = [
                 path: 'p-helpCenter',
                 loadComponent: () => import('./pages/Patient/help-center/help-center.component')
                     .then(m => m.HelpCenterComponent),
-                title: 'p-helpCenter'
+                title: 'helpCenter'
             },
             {
                 path: 'patientprofile',
@@ -146,7 +146,7 @@ export const routes: Routes = [
                 path: 'searchmedicine',
                 loadComponent: () => import('./pages/Patient/searchmedicine/searchmedicine.component')
                     .then(m => m.SearchmedicineComponent),
-                title: 'searchmedicine'
+                title: 'search medicine'
             },
             {
                 path: 'verifyemail',
@@ -169,7 +169,7 @@ export const routes: Routes = [
         path: 'pharmacy-helpcenter',
         loadComponent: () => import('./pages/Pharmacy/pharmacy-helpcenter/pharmacy-helpcenter.component')
             .then(m => m.PharmacyHelpcenterComponent),
-        title: 'pharmacy-helpcenter'
+        title: 'helpcenter'
           },
       {
         path: 'managerequests',
