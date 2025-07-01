@@ -187,10 +187,12 @@ export class PatientInteractionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('PatientInteractionComponent ngOnInit', this.route.queryParams);
     this.route.queryParams.subscribe(params => {
-      this.userName = params['userName'];
+      //this.userName = params['userName'];
+      this.userName = params['patientID'];
       if (this.userName) {
-        this.userSearchForm.get('userName')?.setValue(this.userName);
+        this.userSearchForm.get('userId')?.setValue(this.userName);
         this.fetchPatientData();
       }
     });
@@ -201,7 +203,7 @@ export class PatientInteractionComponent implements OnInit {
     this.labTestForm = this.formBuilder.group({
       testName: ['', [Validators.required]],
       testType: ['', [Validators.required]],
-      notes: ['']
+      notes: ['', [Validators.required]]
     });
     this.prescriptionForm = this.formBuilder.group({
       medicineName: ['', [Validators.required]],
@@ -224,7 +226,7 @@ export class PatientInteractionComponent implements OnInit {
   }
 
   fetchPatientData(): void {
-    if (!this.userName || !this.userName.trim()) {
+    if (!this.patientId || !this.patientId.trim()) {
       this.errorMessage = 'Please enter a User ID first';
       return;
     }
@@ -232,7 +234,7 @@ export class PatientInteractionComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    const patientId = this.userName.trim();
+    const patientId = this.patientId.trim();
     this.patientId = patientId;
 
     this.dataEntryService.fetchPatientData(patientId).subscribe({
