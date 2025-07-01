@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
-import { PatientData, LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
+import { LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
 import { DataEntryProfile } from '../../../models/user.model';
 
 
@@ -55,6 +54,7 @@ export interface AddTestDto {
 }
 
 export interface PatientInDepartment {
+    userName: string;
     name: string;
     gender: string;
     age: number;

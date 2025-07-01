@@ -69,9 +69,9 @@ export class DepartmentComponent implements OnInit {
   }
 
   startPatientInteraction(): void {
-    if (this.selectedPatient && this.selectedPatient.name) {
+    if (this.selectedPatient && this.selectedPatient.userName) {
       this.router.navigate(['/patientinteraction'], {
-        queryParams: { username: this.selectedPatient.name }
+        queryParams: { patientID: this.selectedPatient.userName }
       });
     }
   }
