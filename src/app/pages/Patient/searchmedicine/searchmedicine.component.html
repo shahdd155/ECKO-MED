@@ -27,7 +27,7 @@
                 <select formControlName="medicineId" class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" required>
                   <option value="">Choose medicine</option>
                   @for (med of medicines; track med.id) {
-                    <option [value]="med.id">{{ med.name }} ({{ med.strength }})</option>
+                    <option [ngValue]="med.id">{{ med.name }} ({{ med.strength }})</option>
                   }
                 </select>
               </div>
@@ -56,30 +56,37 @@
             @if (pharmacies.length === 0) {
               <div class="text-gray-500 text-center">No pharmacies found with the selected medicine.</div>
             }
-            @for (pharmacy of pharmacies; track pharmacy.pharmacyId) {
+            @for (pharmacy of pharmacies; track pharmacy.pharmacyID) {
               <div class="bg-[#7b8794] rounded-2xl p-6 mb-8 shadow flex flex-col gap-4">
-                <div class="text-xl font-bold text-white mb-4">{{ pharmacy.pharmacy.name }}</div>
+                <div class="text-xl font-bold text-white mb-4">{{ pharmacy.name }}</div>
                 <div class="flex flex-wrap gap-4">
-                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[120px] flex-1 text-black text-lg">Distance: {{ pharmacy.pharmacy.distance }} km</div>
+                  <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[120px] flex-1 text-black text-lg">Distance: {{ pharmacy.distance }} km</div>
                   <div class="bg-[#cfd8dc] rounded-lg p-4 min-w-[220px] flex-1 text-black text-lg flex items-center gap-2">
                     <i class="fa-solid fa-phone"></i>
-                    <span class="whitespace-nowrap">{{ pharmacy.pharmacy.phone }}</span>
+                    <span class="whitespace-nowrap">{{ pharmacy.phoneNumber }}</span>
                   </div>
                 </div>
                 <div class="flex flex-col gap-2 mt-4">
-                  <button (click)="sendRequest(pharmacy)" [disabled]="requestStatus[pharmacy.pharmacyId] === 'loading' || requestStatus[pharmacy.pharmacyId] === 'success'" class="bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 w-full md:w-1/4">
-                    @if (!requestStatus[pharmacy.pharmacyId]) {
+                  <button (click)="sendRequest(pharmacy)" [disabled]="requestStatus[pharmacy.pharmacyID] === 'loading' || requestStatus[pharmacy.pharmacyID] === 'success'" class="bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 w-full md:w-1/4">
+                    @if (!requestStatus[pharmacy.pharmacyID]) {
                       <span>Send Request</span>
                     }
-                    @if (requestStatus[pharmacy.pharmacyId] === 'loading') {
+                    @if (requestStatus[pharmacy.pharmacyID] === 'loading') {
                       <span>Sending...</span>
                     }
-                    @if (requestStatus[pharmacy.pharmacyId] === 'success') {
+                    @if (requestStatus[pharmacy.pharmacyID] === 'success') {
                       <span>Request Sent <i class="fa-solid fa-check"></i></span>
                     }
-                    @if (requestStatus[pharmacy.pharmacyId] === 'error') {
+                    @if (requestStatus[pharmacy.pharmacyID] === 'error') {
                       <span>Error! Retry</span>
                     }
+                  </button>
+                  <button 
+                    (click)="openInMaps(pharmacy)" 
+                    class="bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition w-full md:w-1/4 mt-2"
+                  >
+                    <i class="fa-solid fa-map-location-dot mr-2"></i>
+                    View on Map
                   </button>
                 </div>
               </div>

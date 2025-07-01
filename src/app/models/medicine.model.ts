@@ -39,19 +39,12 @@ export interface Medicine {
   }
   
   export interface PharmacyInventory {
-    id: number;
-    pharmacyId: number;
-    pharmacy: Pharmacy;
-    medicineId: number;
-    medicine: Medicine;
-    quantity: number;
-    unit: string;
-    price: number;
-    currency: string;
-    discount?: number;
-    expiryDate?: string;
-    isAvailable: boolean;
-    lastUpdated: string;
+    name: string;
+    pharmacyID: number;
+    distance: number;
+    latitude: number;
+    longitude: number;
+    phoneNumber: string;
   }
   
   export interface MedicineSearchRequest {

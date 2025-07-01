@@ -63,6 +63,7 @@ export class SearchmedicineComponent implements OnInit {
   }
 
   performSearch(): void {
+    
     this.loading = true;
     this.searchDone = false;
     const { medicineId } = this.searchForm.value;
@@ -76,15 +77,18 @@ export class SearchmedicineComponent implements OnInit {
     if (this.userLocation) {
       request.latitude = this.userLocation.latitude;
       request.longitude = this.userLocation.longitude;
-    }
+    }console.log(this.searchForm.value);
     request.distance = 9999; // or any default max distance
-    this.medicineService.searchPharmacies(request).subscribe(res => {
-      this.pharmacies = res;
-      this.loading = false;
-      this.searchDone = true;
-    }, () => {
-      this.loading = false;
-      this.searchDone = true;
+    this.medicineService.searchPharmacies(request).subscribe({
+      next: (res) => {
+        this.pharmacies = res;
+        this.loading = false;
+        this.searchDone = true;
+      },
+      error: () => {
+        this.loading = false;
+        this.searchDone = true;
+      }
     });
   }
 
@@ -96,23 +100,35 @@ export class SearchmedicineComponent implements OnInit {
     }
 
     const { quantity } = this.searchForm.value;
-    this.requestStatus[pharmacy.pharmacyId] = 'loading';
+    this.requestStatus[pharmacy.pharmacyID] = 'loading';
 
     this.medicineService.sendPharmacyRequest({
-      pharmacyId: pharmacy.pharmacyId.toString(),
+      pharmacyId: pharmacy.pharmacyID.toString(),
       medicineName: selectedMedicine.name,
       quantity,
     }).subscribe({
-      next: (res) => {
-        this.requestStatus[pharmacy.pharmacyId] = 'success';
+      next: () => {
+        this.requestStatus[pharmacy.pharmacyID] = 'success';
         setTimeout(() => {
-          this.pharmacies = this.pharmacies.filter(p => p.pharmacyId !== pharmacy.pharmacyId);
-          delete this.requestStatus[pharmacy.pharmacyId];
+          this.pharmacies = this.pharmacies.filter(p => p.pharmacyID !== pharmacy.pharmacyID);
+          delete this.requestStatus[pharmacy.pharmacyID];
         }, 1000);
       },
-      error: (err) => {
-        this.requestStatus[pharmacy.pharmacyId] = 'error';
+      error: () => {
+        this.requestStatus[pharmacy.pharmacyID] = 'error';
       }
     });
+  }
+
+  openInMaps(pharmacy: PharmacyInventory): void {
+    // Assumes pharmacy has latitude and longitude properties from backend
+    const lat = pharmacy.latitude;
+    const lng = pharmacy.longitude;
+    if (lat && lng) {
+      const url = `https://www.google.com/maps?q=${lat},${lng}&z=15&t=m`;
+      window.open(url, '_blank');
+    } else {
+      alert('Location not available for this pharmacy.');
+    }
   }
 }
