@@ -23,7 +23,7 @@ export class MedicineService {
   getMedicines(): Observable<Medicine[]> {
     // TODO: Replace with actual API call when backend is ready
     // This endpoint does not exist in UserController.cs
-    // return this.http.get<Medicine[]>(`${this.baseUrl}/api/medicines`);
+    // return this.http.get<Medicine[]>(`${this.baseUrl}/api/medicines`, { withCredentials: true });
 
     // Mock data for now
     return of([
@@ -70,7 +70,7 @@ export class MedicineService {
     if (request.distance !== undefined) {
       params += `&Distance=${request.distance}`;
     }
-    return this.http.get<any>(`${this.apiUrl}/pharmacysearch${params}`);
+    return this.http.get<any>(`${this.apiUrl}/pharmacysearch${params}`, { withCredentials: true });
   }
 
   // Send a medicine request to a pharmacy
@@ -80,7 +80,7 @@ export class MedicineService {
       MedicineName: request.medicineName,
       qty: request.quantity
     };
-    return this.http.post<any>(`${this.apiUrl}/medicine-request`, payload);
+    return this.http.post<any>(`${this.apiUrl}/medicine-request`, payload, { withCredentials: true });
   }
 
   getCurrentLocation(): Promise<{latitude: number, longitude: number}> {
