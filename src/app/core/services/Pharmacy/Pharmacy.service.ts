@@ -56,8 +56,7 @@ export class PharmacyService {
           throw new Error('No requests data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -66,9 +65,7 @@ export class PharmacyService {
    */
   getProcessedRequests(): Observable<any> {
     const url = `${this.baseUrl}/Closed-requests`;
-    return this.http.get<any>(url, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any>(url, { withCredentials: true });
   }
 
   /**
@@ -76,9 +73,7 @@ export class PharmacyService {
    */
   getRequestsByStatus(): Observable<any> {
     const url = `${this.baseUrl}/Pending-requests`;
-    return this.http.get<any>(url, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any>(url, { withCredentials: true });
   }
 
   /**
@@ -93,8 +88,7 @@ export class PharmacyService {
           throw new Error('No statistics data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -110,8 +104,7 @@ export class PharmacyService {
           throw new Error('No request data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -127,8 +120,7 @@ export class PharmacyService {
           throw new Error('No update response received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -137,9 +129,7 @@ export class PharmacyService {
    */
   approveRequest(requestId: number): Observable<any> {
     const url = `${this.baseUrl}/Approve-request`;
-    return this.http.post<any>(url, requestId, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(url, requestId, { withCredentials: true });
   }
 
   /**
@@ -147,9 +137,7 @@ export class PharmacyService {
    */
   approveRequests(requestIds: number[]): Observable<any> {
     const url = `${this.baseUrl}/Approve-requests`;
-    return this.http.post<any>(url, requestIds, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(url, requestIds, { withCredentials: true });
   }
 
   /**
@@ -157,9 +145,7 @@ export class PharmacyService {
    */
   rejectRequest(requestId: number): Observable<any> {
     const url = `${this.baseUrl}/Reject-request`;
-    return this.http.post<any>(url, requestId, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(url, requestId, { withCredentials: true });
   }
 
   /**
@@ -167,9 +153,7 @@ export class PharmacyService {
    */
   rejectRequests(requestIds: number[]): Observable<any> {
     const url = `${this.baseUrl}/Reject-requests`;
-    return this.http.post<any>(url, requestIds, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(url, requestIds, { withCredentials: true });
   }
 
   /**
@@ -184,8 +168,7 @@ export class PharmacyService {
           throw new Error('No status transitions data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -201,8 +184,7 @@ export class PharmacyService {
           throw new Error('No search results received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -218,50 +200,7 @@ export class PharmacyService {
           throw new Error('No requests data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
-  }
-
-  /**
-   * Handle HTTP errors
-   */
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Server-side error
-      switch (error.status) {
-        case 400:
-          errorMessage = 'Invalid request data';
-          break;
-        case 401:
-          errorMessage = 'Unauthorized access';
-          break;
-        case 403:
-          errorMessage = 'Access forbidden';
-          break;
-        case 404:
-          errorMessage = 'Request not found';
-          break;
-        case 409:
-          errorMessage = 'Request conflict - status may have already been updated';
-          break;
-        case 422:
-          errorMessage = 'Validation error';
-          break;
-        case 500:
-          errorMessage = 'Internal server error';
-          break;
-        default:
-          errorMessage = `Server error: ${error.status}`;
-      }
-    }
-    
-    console.error('Pharmacy service error:', error);
-    return throwError(() => new Error(errorMessage));
   }
 }

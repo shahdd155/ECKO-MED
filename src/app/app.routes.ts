@@ -37,7 +37,7 @@ export const routes: Routes = [
         ]
     },
     {
-        path: '',component: DataEntryLayoutComponent, canActivate:[patientGuard],
+        path: '',component: DataEntryLayoutComponent, canActivate:[dataEntryGuard],
         children: [
             {
                 path: 'addpatient',
@@ -73,7 +73,7 @@ export const routes: Routes = [
         ]
     },
     {
-        path: '',component: PatientLayoutComponent, canActivate:[dataEntryGuard],
+        path: '',component: PatientLayoutComponent, canActivate:[patientGuard],
         children: [
             {
                 path: 'myvisits',
@@ -122,12 +122,7 @@ export const routes: Routes = [
                     .then(m => m.AllnotificationsComponent),
                 title: 'All Notifications'
             },
-            {
-                path: 'helpCenter',
-                loadComponent: () => import('./pages/help-center/help-center.component')
-                    .then(m => m.HelpCenterComponent),
-                title: 'helpCenter'
-            },
+         
             {
                 path: 'search',
                 loadComponent: () => import('./pages/Patient/search/search.component')

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environment/environment';
 import { SupportTicket } from '../../../models/ticket';
 
@@ -61,8 +61,7 @@ export class HelpCenterService {
           throw new Error('No submission response received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -78,8 +77,7 @@ export class HelpCenterService {
           throw new Error('No ticket history received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -95,8 +93,7 @@ export class HelpCenterService {
           throw new Error('No ticket data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -112,8 +109,7 @@ export class HelpCenterService {
           throw new Error('No status update response received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -135,8 +131,7 @@ export class HelpCenterService {
           throw new Error('No comment response received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -152,8 +147,7 @@ export class HelpCenterService {
           throw new Error('No comments data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -172,8 +166,7 @@ export class HelpCenterService {
           throw new Error('No search results received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -189,8 +182,7 @@ export class HelpCenterService {
           throw new Error('No statistics data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -206,8 +198,7 @@ export class HelpCenterService {
           throw new Error('No FAQ categories received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -223,8 +214,7 @@ export class HelpCenterService {
           throw new Error('No FAQ data received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -240,8 +230,7 @@ export class HelpCenterService {
           throw new Error('No FAQ search results received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -257,8 +246,7 @@ export class HelpCenterService {
           throw new Error('No rating response received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -274,8 +262,7 @@ export class HelpCenterService {
           throw new Error('No contact information received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -297,53 +284,7 @@ export class HelpCenterService {
           throw new Error('No contact form response received');
         }
         return response.data;
-      }),
-      catchError(this.handleError)
+      })
     );
-  }
-
-  /**
-   * Handle HTTP errors
-   */
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Server-side error
-      switch (error.status) {
-        case 400:
-          errorMessage = 'Invalid request data';
-          break;
-        case 401:
-          errorMessage = 'Unauthorized access';
-          break;
-        case 403:
-          errorMessage = 'Access forbidden';
-          break;
-        case 404:
-          errorMessage = 'Resource not found';
-          break;
-        case 409:
-          errorMessage = 'Ticket already exists';
-          break;
-        case 422:
-          errorMessage = 'Validation error';
-          break;
-        case 429:
-          errorMessage = 'Too many requests. Please try again later.';
-          break;
-        case 500:
-          errorMessage = 'Internal server error';
-          break;
-        default:
-          errorMessage = `Server error: ${error.status}`;
-      }
-    }
-    
-    console.error('Help center service error:', error);
-    return throwError(() => new Error(errorMessage));
   }
 } 

@@ -27,11 +27,15 @@
       </li>
       <li routerLinkActive="active-link" routerLink="/departmentinteraction" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
         <i class="fa-solid fa-building-user"></i>
-        <a class="cursor-pointer">departments</a>
+        <a class="cursor-pointer">Departments</a>
       </li>
-      <li class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+      <li routerLinkActive="active-link" routerLink="/patientinteraction" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
         <i class="fa-solid fa-users-viewfinder"></i>
-        <a class="cursor-pointer">interactions</a>
+        <a class="cursor-pointer">Interactions</a>
+      </li>
+      <li routerLinkActive="active-link" routerLink="/addpatient" class="flex items-center w-full px-4 py-3 space-x-3 rounded-xl bg-gray-200 text-gray-600 font-medium focus:outline-none">
+        <i class="fa-solid fa-hospital-user"></i>
+        <a class="cursor-pointer">Add new patient</a>
       </li>
     </ul>
   } @else if (getUserType() === 'pharmacy') {

@@ -317,7 +317,11 @@ export class PatientInteractionComponent implements OnInit {
           this.selectedLabTestFile = null;
           this.fetchPatientData();
         },
-        error: (error: any) => this.handleSaveError(error, 'lab test')
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save lab test';
+          setTimeout(() => this.errorMessage = '', 5000);
+        }
       });
     }
   }
@@ -346,7 +350,11 @@ export class PatientInteractionComponent implements OnInit {
           this.prescriptionForm.reset();
           this.fetchPatientData();
         },
-        error: (error: any) => this.handleSaveError(error, 'prescription')
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save prescription';
+          setTimeout(() => this.errorMessage = '', 5000);
+        }
       });
     }
   }
@@ -374,7 +382,11 @@ export class PatientInteractionComponent implements OnInit {
           this.selectedScanFile = null;
           this.fetchPatientData();
         },
-        error: (error: any) => this.handleSaveError(error, 'scan')
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save scan';
+          setTimeout(() => this.errorMessage = '', 5000);
+        }
       });
     }
   }
@@ -399,15 +411,13 @@ export class PatientInteractionComponent implements OnInit {
           this.noteForm.reset({ noteType: 'general' });
           this.fetchPatientData();
         },
-        error: (error: any) => this.handleSaveError(error, 'note')
+        error: (error: any) => {
+          this.isSaving = false;
+          this.errorMessage = error.message || 'Failed to save note';
+          setTimeout(() => this.errorMessage = '', 5000);
+        }
       });
     }
-  }
-
-  private handleSaveError(error: any, itemType: string): void {
-    this.isSaving = false;
-    this.errorMessage = error.message || `Failed to save ${itemType}`;
-    setTimeout(() => this.errorMessage = '', 5000);
   }
 
   setActiveTab(tab: string): void {

@@ -77,9 +77,9 @@ export class AddpatientComponent implements OnInit {
         
         // Fallback to default departments if API fails
         this.availableDepartments = [
-          { name: 'Emergency', description: '', capacity: 0, numOfDoctors: 0 },
-          { name: 'Cardiology', description: '', capacity: 0, numOfDoctors: 0 },
-          { name: 'Neurology', description: '', capacity: 0, numOfDoctors: 0 }
+          { name: 'Emergency', description: '', capacity: 0, numOfDoctors: 0, estimateWaitingTime: 0 },
+          { name: 'Cardiology', description: '', capacity: 0, numOfDoctors: 0, estimateWaitingTime: 0 },
+          { name: 'Neurology', description: '', capacity: 0, numOfDoctors: 0, estimateWaitingTime: 0 }
         ];
       }
     });

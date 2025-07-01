@@ -42,10 +42,6 @@ export class AuthService {
           return this.fetchUserProfile().pipe(map(() => true));
         }
         return of(false);
-      }),
-      catchError(() => {
-        this.currentUserSubject.next(null);
-        return of(false);
       })
     );
   }
@@ -69,8 +65,7 @@ export class AuthService {
         return this.fetchUserProfile().pipe(
           map(() => response) // Pass original login response
         );
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -89,22 +84,16 @@ export class AuthService {
 
   // REGISTER
   register(userData: FormData): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/user-register`, userData, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/user-register`, userData, { withCredentials: true });
   }
 
   // PASSWORD RECOVERY
   forgotPassword(email: string): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/forgot-password`, { email }, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/forgot-password`, { email }, { withCredentials: true });
   }
 
   resetPassword(data: ResetPasswordViewModel): Observable<AuthResponse> {
-    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/reset-password`, data, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.httpClient.post<AuthResponse>(`${this.baseUrl}/reset-password`, data, { withCredentials: true });
   }
 
   // EMAIL CONFIRMATION (called from a component handling the link)
@@ -123,45 +112,5 @@ export class AuthService {
 
   isLoggedIn(): Observable<boolean> {
      return this.currentUser$.pipe(map(user => !!user));
-  }
-
-  // ERROR HANDLER
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred';
-    
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
-    } else {
-      if (typeof error.error === 'string' && error.error.length < 200) {
-        errorMessage = error.error;
-      } else if (error.error?.message) {
-        errorMessage = error.error.message;
-      } else if (error.error?.title) { // For validation errors
-        errorMessage = error.error.title;
-      } else {
-        switch (error.status) {
-          case 400:
-            errorMessage = 'Invalid request. Please check your input.';
-            break;
-          case 401:
-            errorMessage = 'Invalid credentials or access denied.';
-            break;
-          case 403:
-            errorMessage = 'You do not have permission to perform this action.';
-            break;
-          case 404:
-            errorMessage = 'The requested resource was not found.';
-            break;
-          case 500:
-            errorMessage = 'An unexpected server error occurred.';
-            break;
-          default:
-            errorMessage = `An unexpected error occurred. Status: ${error.status}`;
-        }
-      }
-    }
-    
-    console.error('Auth service error:', error);
-    return throwError(() => new Error(errorMessage));
   }
 }

@@ -1,9 +1,10 @@
-import { Component, inject, input, signal, computed, HostListener } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, HostListener } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../models/notification.model';
+import { signal, computed } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -14,22 +15,27 @@ import { Notification } from '../../models/notification.model';
 export class FooterComponent {
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
-  
-  isLogin = input<boolean>(true);
-  isPatient = input<boolean>(true);
-  isdataEntry = input<boolean>(false);
+  private readonly router = inject(Router);
 
   notifications = this.notificationService.getNotificationsSignal();
   showDropdown = signal<boolean>(false);
   unreadCount = computed(() => this.notifications().filter(n => !n.read).length);
 
-  getUserType(): 'patient' | 'dataEntry' {
-    if (this.isPatient()) {
-      return 'patient';
-    } else if(this.isdataEntry()) {
+  getUserType(): 'patient' | 'dataEntry' | 'pharmacy' {
+    const url = this.router.url;
+    if (
+      url.includes('dEntrydashboard') ||
+      url.includes('addpatient') ||
+      url.includes('dentryprofile') ||
+      url.includes('departmentinteraction') ||
+      url.includes('patientinteraction')
+    ) {
       return 'dataEntry';
     }
-    return 'patient'; 
+    if (url.includes('viewrequests') || url.includes('managerequests')) {
+      return 'pharmacy';
+    }
+    return 'patient';
   }
 
   toggleDropdown(): void {

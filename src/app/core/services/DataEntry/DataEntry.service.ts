@@ -6,7 +6,6 @@ import { environment } from '../../environment/environment';
 import { PatientData, LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
 import { DataEntryProfile } from '../../../models/user.model';
 
-// ### NEW INTERFACES TO MATCH BACKEND ###
 
 export interface Department {
   name: string;
@@ -128,21 +127,15 @@ export class DataEntryService {
 
   fetchUserData(userId: string): Observable<UserData> {
     const params = new HttpParams().set('Id', userId);
-    return this.http.get<UserData>(`${this.baseUrl}/FetchData`, { params, withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<UserData>(`${this.baseUrl}/FetchData`, { params, withCredentials: true });
   }
 
   createPatient(patientData: AddPatientDto): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/AddPatient`, patientData, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(`${this.baseUrl}/AddPatient`, patientData, { withCredentials: true });
   }
 
   getAvailableDepartments(): Observable<Department[]> {
-    return this.http.get<Department[]>(`${this.baseUrl}/Departments`, { withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Department[]>(`${this.baseUrl}/Departments`, { withCredentials: true });
   }
 
   // =================================================================
@@ -151,37 +144,27 @@ export class DataEntryService {
 
   fetchPatientData(userId: string): Observable<PatientDataResponse> {
     const params = new HttpParams().set('Id', userId);
-    return this.http.get<PatientDataResponse>(`${this.baseUrl}/PatientData`, { params, withCredentials: true }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<PatientDataResponse>(`${this.baseUrl}/PatientData`, { params, withCredentials: true });
   }
 
   fetchLabTests(patientId: string): Observable<LabTest[]> {
     const params = new HttpParams().set('Id', patientId);
-    return this.http.get<LabTest[]>(`${this.baseUrl}/LabTests`, { params, withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.get<LabTest[]>(`${this.baseUrl}/LabTests`, { params, withCredentials: true });
   }
 
   fetchPrescriptions(patientId: string): Observable<Prescription[]> {
       const params = new HttpParams().set('Id', patientId);
-      return this.http.get<Prescription[]>(`${this.baseUrl}/Medicines`, { params, withCredentials: true }).pipe(
-          catchError(this.handleError)
-      );
+      return this.http.get<Prescription[]>(`${this.baseUrl}/Medicines`, { params, withCredentials: true });
   }
 
   fetchScans(patientId: string): Observable<MedicalScan[]> {
       const params = new HttpParams().set('Id', patientId);
-      return this.http.get<MedicalScan[]>(`${this.baseUrl}/Scans`, { params, withCredentials: true }).pipe(
-          catchError(this.handleError)
-      );
+      return this.http.get<MedicalScan[]>(`${this.baseUrl}/Scans`, { params, withCredentials: true });
   }
 
   fetchNotes(patientId: string): Observable<MedicalNote[]> {
       const params = new HttpParams().set('Id', patientId);
-      return this.http.get<MedicalNote[]>(`${this.baseUrl}/Notes`, { params, withCredentials: true }).pipe(
-          catchError(this.handleError)
-      );
+      return this.http.get<MedicalNote[]>(`${this.baseUrl}/Notes`, { params, withCredentials: true });
   }
 
   addLabTest(testData: AddTestDto): Observable<any> {
@@ -193,15 +176,11 @@ export class DataEntryService {
     if (testData.image) {
       formData.append('Image', testData.image, testData.image.name);
     }
-    return this.http.post(`${this.baseUrl}/Add-Test`, formData, { withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.post(`${this.baseUrl}/Add-Test`, formData, { withCredentials: true });
   }
 
   addPrescription(prescriptionData: AddMedicineDto): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Add-medicine`, prescriptionData, { withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.post(`${this.baseUrl}/Add-medicine`, prescriptionData, { withCredentials: true });
   }
 
   addScan(scanData: AddScanDto): Observable<any> {
@@ -213,23 +192,17 @@ export class DataEntryService {
     if (scanData.image) {
         formData.append('Image', scanData.image, scanData.image.name);
     }
-    return this.http.post(`${this.baseUrl}/Add-Scan`, formData, { withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.post(`${this.baseUrl}/Add-Scan`, formData, { withCredentials: true });
   }
 
   addNote(noteData: AddNoteDto): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Add-Note`, noteData, { withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.post(`${this.baseUrl}/Add-Note`, noteData, { withCredentials: true });
   }
 
   checkoutPatient(patientId: string): Observable<any> {
     const formData = new FormData();
     formData.append('Id', patientId);
-    return this.http.post(`${this.baseUrl}/CheckOut`, formData, { withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.post(`${this.baseUrl}/CheckOut`, formData, { withCredentials: true });
   }
   
   // =================================================================
@@ -238,9 +211,7 @@ export class DataEntryService {
 
   getDepartmentPatients(departmentName: string): Observable<PatientInDepartment[]> {
     const params = new HttpParams().set('Department', departmentName);
-    return this.http.get<PatientInDepartment[]>(`${this.baseUrl}/DepartmentPatients`, { params, withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.get<PatientInDepartment[]>(`${this.baseUrl}/DepartmentPatients`, { params, withCredentials: true });
   }
 
   // =================================================================
@@ -248,15 +219,11 @@ export class DataEntryService {
   // =================================================================
   
   getWeeklyDashboard(): Observable<DashboardData> {
-      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardWeakly`, { withCredentials: true }).pipe(
-          catchError(this.handleError)
-      );
+      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardWeakly`, { withCredentials: true });
   }
 
   getMonthlyDashboard(): Observable<DashboardData> {
-      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardMonthly`, { withCredentials: true }).pipe(
-          catchError(this.handleError)
-      );
+      return this.http.get<DashboardData>(`${this.baseUrl}/DashboardMonthly`, { withCredentials: true });
   }
 
   // =================================================================
@@ -264,60 +231,10 @@ export class DataEntryService {
   // =================================================================
   
   fetchDataEntryProfile(): Observable<DataEntryProfile> {
-    return this.http.get<DataEntryProfile>(`${this.baseUrl}/DataEntryprofile`, { withCredentials: true }).pipe(
-        catchError(this.handleError)
-    );
+    return this.http.get<DataEntryProfile>(`${this.baseUrl}/DataEntryprofile`, { withCredentials: true });
   }
   
   updateDataEntryProfile(profileData: UpdateDataEntryProfileDto): Observable<any> {
-      return this.http.post<any>(`${this.baseUrl}/UpdateDataEntryProfile`, profileData, { withCredentials: true }).pipe(
-          catchError(this.handleError)
-      );
-  }
-
-
-  // =================================================================
-  // === ERROR HANDLER
-  // =================================================================
-
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      if (typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else {
-        switch (error.status) {
-          case 400:
-            errorMessage = 'Bad request. Please check your input.';
-            if(error.error.errors) {
-                // Handle validation errors
-                errorMessage += `\n${JSON.stringify(error.error.errors)}`;
-            }
-            break;
-          case 401:
-            errorMessage = 'Unauthorized. Please log in again.';
-            break;
-          case 403:
-            errorMessage = 'Forbidden. You do not have permission to perform this action.';
-            break;
-          case 404:
-            errorMessage = 'Resource not found.';
-            break;
-          case 500:
-            errorMessage = 'Server error. Please try again later.';
-            break;
-          default:
-            errorMessage = `Server error: ${error.status} - ${error.message}`;
-        }
-      }
-    }
-    
-    console.error('DataEntryService error:', error);
-    return throwError(() => new Error(errorMessage));
+      return this.http.post<any>(`${this.baseUrl}/UpdateDataEntryProfile`, profileData, { withCredentials: true });
   }
 }
