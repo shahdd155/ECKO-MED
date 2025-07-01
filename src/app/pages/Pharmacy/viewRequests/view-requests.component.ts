@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PharmacyRequest, PharmacyRequestStatus } from '../../../models/PharmacyRequest';
-import { PharmacyService, RequestStatusUpdateResponse } from '../../../core/services/Pharmacy/Pharmacy.service';
+import { PharmacyRequest } from '../../../models/PharmacyRequest';
+import { PharmacyService } from '../../../core/services/Pharmacy/Pharmacy.service';
 
 @Component({
   selector: 'app-view-requests',
@@ -12,9 +12,6 @@ import { PharmacyService, RequestStatusUpdateResponse } from '../../../core/serv
 })
 export class ViewRequestsComponent implements OnInit {
   
-  // Make enum available in template
-  PharmacyRequestStatus = PharmacyRequestStatus;
-
   // UI state variables
   isLoading = false;
   isUpdating = false;
@@ -65,37 +62,34 @@ export class ViewRequestsComponent implements OnInit {
   // Filter and sort pending requests based on current criteria
   get pendingRequests(): PharmacyRequest[] {
     let filtered = this.allRequests.filter(request => 
-      request.status === PharmacyRequestStatus.PENDING
+      request.state === 'pending'
     );
 
     // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0;
-      
       switch (this.sortBy) {
         case 'date':
-          comparison = new Date(a.requestDate).getTime() - new Date(b.requestDate).getTime();
+          comparison = new Date(a.dateTime || 0).getTime() - new Date(b.dateTime || 0).getTime();
           break;
         case 'patient':
-          comparison = a.patientName.localeCompare(b.patientName);
+          comparison = (a.userName || '').localeCompare(b.userName || '');
           break;
         case 'medication':
-          comparison = a.medication.localeCompare(b.medication);
+          comparison = (a.medicineName || '').localeCompare(b.medicineName || '');
           break;
       }
-
       return this.sortOrder === 'asc' ? comparison : -comparison;
     });
-
     return filtered;
   }
 
   // Return CSS classes for status badges
-  getStatusClass(status: PharmacyRequestStatus): string {
+  getStatusClass(status: 'pending' | 'approved' | 'rejected'): string {
     const classes = {
-      [PharmacyRequestStatus.PENDING]: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      [PharmacyRequestStatus.APPROVED]: 'bg-green-100 text-green-800 border-green-200',
-      [PharmacyRequestStatus.REJECTED]: 'bg-red-100 text-red-800 border-red-200'
+      pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      approved: 'bg-green-100 text-green-800 border-green-200',
+      rejected: 'bg-red-100 text-red-800 border-red-200'
     };
     return `inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${classes[status] || 'bg-gray-100 text-gray-800 border-gray-200'}`;
   }
@@ -109,8 +103,8 @@ export class ViewRequestsComponent implements OnInit {
   getProcessedTodayCount(): number {
     const today = new Date().toDateString();
     return this.allRequests.filter(request => 
-      (request.status === PharmacyRequestStatus.APPROVED || request.status === PharmacyRequestStatus.REJECTED) &&
-      (new Date(request.updatedAt).toDateString() === today)
+      (request.state === 'approved' || request.state === 'rejected') &&
+      (request.dateTime && new Date(request.dateTime).toDateString() === today)
     ).length;
   }
 
@@ -173,7 +167,6 @@ export class ViewRequestsComponent implements OnInit {
   viewDetails(requestId: number): void {
     const request = this.allRequests.find(r => r.id === requestId);
     if (request) {
-      // In a real app, this would open a modal or navigate to detail page
       console.log('Viewing details for request:', request);
       this.showNotification(`Viewing details for request #${requestId}`, 'info');
     }
@@ -181,8 +174,8 @@ export class ViewRequestsComponent implements OnInit {
 
   // Approve a single request
   approveRequest(requestId: number): void {
-    const request = this.allRequests.find((r: any) => r.Id === requestId);
-    if (request && (request as any).state === 'pending') {
+    const request = this.allRequests.find((r: any) => r.id === requestId);
+    if (request && request.state === 'pending') {
       this.isUpdating = true;
       this.errorMessage = '';
       this.successMessage = '';
@@ -206,8 +199,8 @@ export class ViewRequestsComponent implements OnInit {
 
   // Reject a single request
   rejectRequest(requestId: number): void {
-    const request = this.allRequests.find((r: any) => r.Id === requestId);
-    if (request && (request as any).state === 'pending') {
+    const request = this.allRequests.find((r: any) => r.id === requestId);
+    if (request && request.state === 'pending') {
       this.isUpdating = true;
       this.errorMessage = '';
       this.successMessage = '';
@@ -301,16 +294,17 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   // Apply urgency styling based on request age
-  getUrgencyClass(requestDate: string | Date): string {
-    const daysDiff = Math.floor((new Date().getTime() - new Date(requestDate).getTime()) / (1000 * 60 * 60 * 24));
-    
+  getUrgencyClass(dateTime: string | Date | null): string {
+    if (!dateTime) return '';
+    const daysDiff = Math.floor((new Date().getTime() - new Date(dateTime).getTime()) / (1000 * 60 * 60 * 24));
     if (daysDiff >= 3) return 'border-l-4 border-red-500 bg-red-50';
     if (daysDiff >= 1) return 'border-l-4 border-yellow-500 bg-yellow-50';
     return '';
   }
 
   // Format date for user-friendly display
-  formatDate(date: string | Date): string {
+  formatDate(date: string | Date | null): string {
+    if (!date) return '';
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -319,7 +313,8 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   // Generate initials from patient name for avatar
-  getPatientInitials(name: string): string {
+  getPatientInitials(name: string | null): string {
+    if (!name) return '';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 }

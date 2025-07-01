@@ -2,56 +2,16 @@
  * Main interface for pharmacy requests (patient direct requests)
  */
 export interface PharmacyRequest {
-  // Request identification
   id: number;
-  
-  // Patient information
-  patientId: number;
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
-  
-  // Medication details
-  medicationId: number;
-  medication: string;
-  dosage: string;
-  quantity: number;
-  unit: string;
-  
-  // Request status and workflow
-  status: PharmacyRequestStatus;
-  requestDate: string;
-  
-  // Approval workflow
-  approvedDate?: string;
-  approvedBy?: number;
-  approvedByName?: string;
-  
-  // Rejection workflow
-  rejectedDate?: string;
-  rejectedBy?: number;
-  rejectedByName?: string;
-  rejectionReason?: string;
-  
-  // Additional information
-  notes?: string;
-  
-  // Financial information
-  cost?: number;
-  currency?: string;
-  insuranceCovered?: boolean;
-  
-  // Audit trail
-  createdAt: string;
-  updatedAt: string;
+  medicineName: string;
+  qty: number;
+  state: 'pending' | 'approved' | 'rejected';
+  userName: string | null;
+  email: string | null;
+  phoneNum: string | null;
+  dateTime: string | null;
+  // Remove or comment out any other fields not present in the backend response
 }
-
-export enum PharmacyRequestStatus {
-  PENDING = 'Pending',
-  APPROVED = 'Approved',
-  REJECTED = 'Rejected'
-}
-
 
 // Response interface for API calls
 export interface PharmacyRequestResponse {
@@ -65,7 +25,7 @@ export interface PharmacyRequestResponse {
 
 // Filter interface for searching/filtering requests
 export interface PharmacyRequestFilter {
-  status?: PharmacyRequestStatus[];
+  status?: string;
   patientName?: string;
   medication?: string;
   dateFrom?: string | Date;

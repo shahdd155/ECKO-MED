@@ -222,8 +222,7 @@
             <tr 
               *ngFor="let request of pendingRequests" 
               class="hover:bg-gray-50 transition-colors"
-              [ngClass]="getUrgencyClass(request.requestDate)"
-            >
+              [ngClass]="getUrgencyClass(request.dateTime)">
               <!-- Selection Checkbox -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <input 
@@ -233,45 +232,33 @@
                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 >
               </td>
-
-              <!-- Request Date -->
+              <!-- Request ID and Date -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900">#{{ request.id }}</div>
-                <div class="text-sm text-gray-500">{{ formatDate(request.requestDate) }}</div>
+                <div class="text-sm text-gray-500" *ngIf="request.dateTime">{{ formatDate(request.dateTime) }}</div>
               </td>
-
-              <!-- Patient Information -->
+              <!-- Patient/User Information -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
                     <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
                       <span class="text-sm font-medium text-blue-600">
-                        {{ getPatientInitials(request.patientName) }}
+                        {{ getPatientInitials(request.userName) }}
                       </span>
                     </div>
                   </div>
                   <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900">{{ request.patientName }}</div>
-                    <div class="text-sm text-gray-500">{{ request.patientEmail }}</div>
-                    <div class="text-xs text-gray-400">{{ request.patientPhone }}</div>
+                    <div class="text-sm font-medium text-gray-900" *ngIf="request.userName">{{ request.userName }}</div>
+                    <div class="text-sm text-gray-500" *ngIf="request.email">{{ request.email }}</div>
+                    <div class="text-xs text-gray-400" *ngIf="request.phoneNum">{{ request.phoneNum }}</div>
                   </div>
                 </div>
               </td>
-
-              <!-- Medication Details -->
+              <!-- Medicine Details -->
               <td class="px-6 py-4">
-                <div class="text-sm font-medium text-gray-900">{{ request.medication }}</div>
-                <div class="text-sm text-gray-500">
-                  Qty: {{ request.quantity }} {{ request.unit }}
-                  <span 
-                    *ngIf="request.insuranceCovered" 
-                    class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
-                  >
-                    Insured
-                  </span>
-                </div>
+                <div class="text-sm font-medium text-gray-900" *ngIf="request.medicineName">{{ request.medicineName }}</div>
+                <div class="text-sm text-gray-500" *ngIf="request.qty">Qty: {{ request.qty }}</div>
               </td>
-
               <!-- Actions -->
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <div class="flex items-center space-x-2">

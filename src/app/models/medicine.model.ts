@@ -44,7 +44,7 @@ export interface Medicine {
     distance: number;
     latitude: number;
     longitude: number;
-    phoneNumber: string;
+    phonenumber: string;
   }
   
   export interface MedicineSearchRequest {
