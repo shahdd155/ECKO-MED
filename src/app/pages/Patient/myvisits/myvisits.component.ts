@@ -2,15 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PatientsService } from '../../../core/services/patient/patients.service';
 import { CommonModule } from '@angular/common';
-
-// Add this interface at the top or import from a shared model file
-export interface Visit {
-  Id: number;
-  DoctorName: string;
-  HospitalName: string;
-  visitDate: string;
-  Department: string;
-}
+import { Visit } from '../../../models/patient-record.model';
 
 @Component({
   selector: 'app-myvisits',

@@ -1,9 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Scan } from '../../../models/scan'; // Import the Scan interface
 import { PatientsService } from '../../../core/services/patient/patients.service';
 import { CommonModule } from '@angular/common';
-
+import { Scan } from '../../../models/patient-record.model';
 @Component({
   selector: 'app-scans',
   standalone: true,

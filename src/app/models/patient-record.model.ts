@@ -1,23 +1,26 @@
 export interface Visit {
-  Id: number;
-  DoctorName: string;
-  HospitalName: string;
+  id: number;
+  doctorName: string;
+  hospitalName: string;
   visitDate: string;
-  Department: string;
+  department: string;
 }
 
 export interface Prescription {
-  Id: number;
-  Dosage: string;
+  id: number;
+  dosage: string;
   frequency: string;
-  Duration: string;
-  DoctorNotes: string;
-  MedDate: string;
+  duration: string;
+  doctorNotes: string;
+  medDate: string;
+  timing : string;
 }
 
 export interface Scan {
-  Type: string;
-  Date: string;
-  Description: string;
+  id: number;
+  type: string;
+  bodypart: string;
+  date: string;
+  description: string;
   ImageBase64: string;
 }

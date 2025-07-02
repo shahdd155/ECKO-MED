@@ -6,14 +6,14 @@
           @for (prescription of prescriptions; track prescription) {
             <div class="bg-gray-200 bg-opacity-60 rounded-xl p-6 shadow-sm flex flex-col gap-4 text-black">
               <div class="flex justify-between items-center">
-                <div class="text-lg font-semibold">{{ prescription.Dosage }}</div>
-                <div class="text-xs">{{ prescription.MedDate | date }}</div>
+                <div class="text-lg font-semibold">{{ prescription.dosage }}</div>
+                <div class="text-xs">{{ prescription.medDate | date }}</div>
               </div>
               <div class="text-sm text-black">
-                <p><strong>Dosage:</strong> {{ prescription.Dosage }}</p>
+                <p><strong>Dosage:</strong> {{ prescription.dosage }}</p>
                 <p><strong>Frequency:</strong> {{ prescription.frequency }}</p>
-                <p><strong>Duration:</strong> {{ prescription.Duration }}</p>
-                <p><strong>Doctor Notes:</strong> {{ prescription.DoctorNotes }}</p>
+                <p><strong>Duration:</strong> {{ prescription.duration }}</p>
+                <p><strong>Doctor Notes:</strong> {{ prescription.doctorNotes }}</p>
               </div>
             </div>
           }

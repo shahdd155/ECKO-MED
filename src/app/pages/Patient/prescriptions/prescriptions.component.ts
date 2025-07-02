@@ -2,15 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PatientsService } from '../../../core/services/patient/patients.service';
 import { CommonModule } from '@angular/common';
-
-export interface Prescription {
-  Id: number;
-  Dosage: string;
-  frequency: string;
-  Duration: string;
-  DoctorNotes: string;
-  MedDate: string;
-}
+import { Prescription } from '../../../models/patient-record.model';
 
 @Component({
   selector: 'app-prescriptions',
