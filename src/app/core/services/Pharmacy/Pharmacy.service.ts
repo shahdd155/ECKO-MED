@@ -81,22 +81,6 @@ export class PharmacyService {
   }
 
   /**
-   * Get pharmacy statistics
-   */
-  getPharmacyStats(): Observable<PharmacyStats> {
-    const url = `${this.baseUrl}/stats`;
-    
-    return this.http.get<ApiResponse<PharmacyStats>>(url, { withCredentials: true }).pipe(
-      map(response => {
-        if (!response.data) {
-          throw new Error('No statistics data received');
-        }
-        return response.data;
-      })
-    );
-  }
-
-  /**
    * Get request details by ID
    */
   getRequestById(requestId: number): Observable<PharmacyRequest> {
