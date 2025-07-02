@@ -89,7 +89,8 @@ export class SearchComponent implements OnInit {
   }
 
   openInMaps(hospital: any) {
-    const { lat, lng } = hospital.coordinates;
+    const lat = hospital.latitude;
+    const lng = hospital.longitude;
     const hospitalName = encodeURIComponent(hospital.hospitalName);
     const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15&t=m`;
     window.open(googleMapsUrl, '_blank');
