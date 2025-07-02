@@ -40,6 +40,7 @@ export class LoginComponent {
       const credentials: UserLogin = this.loginForm.value;
       this.authService.loginuser(credentials).subscribe({
         next: (response) => {
+          localStorage.setItem('role', 'patient');
           console.log('Login successful', response);
           this.router.navigate(['/patient/dashboard']);
         },
