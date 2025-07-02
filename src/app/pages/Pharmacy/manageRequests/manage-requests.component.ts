@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PharmacyRequest } from '../../../models/PharmacyRequest';
 import { PharmacyService } from '../../../core/services/Pharmacy/Pharmacy.service';
+import { FormsModule } from '@angular/forms';
 
 export enum PharmacyRequestStatus {
   PENDING = 'pending',
@@ -13,7 +14,7 @@ export enum PharmacyRequestStatus {
 @Component({
   selector: 'app-manage-requests',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './manage-requests.component.html'
 })
 export class ManageRequestsComponent implements OnInit {
@@ -32,6 +33,8 @@ export class ManageRequestsComponent implements OnInit {
   isUpdating: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
+
+  noteInput: { [id: number]: string } = {};
 
   constructor(private pharmacyService: PharmacyService) {}
 
@@ -114,16 +117,17 @@ export class ManageRequestsComponent implements OnInit {
 
   // Executes the action to toggle a request's response
   toggleRequestResponse(requestId: number): void {
+    const note = this.noteInput[requestId] || '';
     this.isUpdating = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.pharmacyService.toggleResponse(requestId).subscribe({
+    this.pharmacyService.toggleResponse(requestId, note).subscribe({
       next: (response: any) => {
-        // Refresh the list after toggling
         this.loadProcessedRequests();
         this.isUpdating = false;
         this.successMessage = response.message || 'Request response toggled successfully';
         this.activeActionRequestId = null;
+        this.noteInput[requestId] = '';
         setTimeout(() => {
           this.successMessage = '';
         }, 3000);

@@ -6,6 +6,7 @@ export interface PharmacyRequest {
   medicineName: string;
   qty: number;
   state: 'pending' | 'approved' | 'rejected';
+  note?: string;
   Response: 'approved' | 'rejected' | null; // Backend uses Response for status
   userName: string | null;
   email: string | null;

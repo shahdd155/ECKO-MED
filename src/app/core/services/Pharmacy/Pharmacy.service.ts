@@ -195,8 +195,11 @@ export class PharmacyService {
   /**
    * Toggle response for a closed request (POST /Pharmacy/Toggle-response)
    */
-  toggleResponse(requestId: number): Observable<any> {
-    const url = `${this.baseUrl}/Toggle-response`;
-    return this.http.post<any>(url, requestId, { withCredentials: true });
+  toggleResponse(requestId: number, note: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}/Toggle-response`,
+      { id: requestId, note },
+      { withCredentials: true }
+    );
   }
 }
