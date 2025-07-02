@@ -21,6 +21,20 @@ export class LoginComponent {
     rememberMe: new FormControl(false),
   });
 
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    if (token && role) {
+      if (role === 'patient') {
+        this.router.navigate(['/patientdashboard']);
+      } else if (role === 'data-entry') {
+        this.router.navigate(['/dEntrydashboard']);
+      } else if (role === 'pharmacy') {
+        this.router.navigate(['/managerequests']);
+      }
+    }
+  }
+
   submitLogin(): void {
     if (this.loginForm.valid) {
       const credentials: UserLogin = this.loginForm.value;
