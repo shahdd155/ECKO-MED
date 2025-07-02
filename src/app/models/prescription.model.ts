@@ -1,10 +1,10 @@
 export interface Prescription {
-  id?: string;
-  medicineName: string;
+  id: number;
+  name: string;
   dosage: string;
   frequency: string;
-  duration: string;
   timing: string;
-  instructions?: string;
-  prescribedDate: Date;
+  medDate: string;
+  duration: string;
+  doctorNotes: string;
 } 

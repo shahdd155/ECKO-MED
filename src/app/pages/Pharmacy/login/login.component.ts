@@ -24,7 +24,7 @@ export class LoginComponent {
   submitLogin(): void {
     if (this.loginForm.valid) {
       const credentials: UserLogin = this.loginForm.value;
-      this.authService.loginDataEntry(credentials).subscribe({
+      this.authService.loginPharmacy(credentials).subscribe({
         next: (response) => {
           console.log('Login successful', response);
           this.router.navigate(['/patient/dashboard']);

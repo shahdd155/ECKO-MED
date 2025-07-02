@@ -1,7 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PatientsService } from '../../../core/services/patient/patients.service';
 import { CommonModule } from '@angular/common';
+
+export interface Prescription {
+  Id: number;
+  Dosage: string;
+  frequency: string;
+  Duration: string;
+  DoctorNotes: string;
+  MedDate: string;
+}
 
 @Component({
   selector: 'app-prescriptions',
@@ -10,17 +19,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './prescriptions.component.scss'
 })
 export class PrescriptionsComponent implements OnInit {
-  prescriptions: any[] = [];
+  prescriptions: Prescription[] = [];
   
   private patientsService = inject(PatientsService);
   private route = inject(ActivatedRoute);
 
-  constructor(private router: Router) {}
 
   ngOnInit(): void {
     const visitId = this.route.snapshot.paramMap.get('id');
     if (visitId) {
-      this.patientsService.getPrescriptions(+visitId).subscribe(data => {
+      this.patientsService.getPrescriptions(+visitId).subscribe((data: Prescription[]) => {
         this.prescriptions = data;
       });
     }

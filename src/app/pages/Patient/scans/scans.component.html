@@ -6,12 +6,12 @@
           @for (scan of scans; track scan) {
             <div class="bg-slate-400 bg-opacity-70 rounded-xl p-6 shadow-sm flex flex-col gap-4">
               <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-                <div class="text-lg font-semibold text-black">Scan Type: {{ scan.type }}</div>
-                <div class="text-xs text-black">{{ scan.date }}</div>
+                <div class="text-lg font-semibold text-black">Scan Type: {{ scan.Type }}</div>
+                <div class="text-xs text-black">{{ scan.Date | date }}</div>
               </div>
               <div class="flex flex-col md:flex-row gap-4">
-                <img [src]="scan.imageBase64" alt="{{ scan.type }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
-                <p class="text-sm text-black md:flex-1">{{ scan.description }}</p>
+                <img [src]="scan.ImageBase64" alt="{{ scan.Type }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
+                <p class="text-sm text-black md:flex-1">{{ scan.Description }}</p>
               </div>
             </div>
           }

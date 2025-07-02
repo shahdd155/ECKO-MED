@@ -5,11 +5,13 @@ export interface PharmacyRequest {
   id: number;
   medicineName: string;
   qty: number;
-  state: 'pending' | 'approved' | 'rejected';
+  state: 'closed' | null; // Only 'closed' for processed requests
+  Response: 'approved' | 'rejected' | null; // Backend uses Response for status
   userName: string | null;
   email: string | null;
   phoneNum: string | null;
-  dateTime: string | null;
+  dateTime: string | null; // Keep for compatibility
+  ClosedAt?: string | null; // For closed date if present
   // Remove or comment out any other fields not present in the backend response
 }
 

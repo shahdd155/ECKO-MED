@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PharmacyRequest } from '../../../models/PharmacyRequest';
-import { PharmacyService, RequestStatusUpdateResponse, PharmacyStats } from '../../../core/services/Pharmacy/Pharmacy.service';
+import { PharmacyService, PharmacyStats } from '../../../core/services/Pharmacy/Pharmacy.service';
 
 export enum PharmacyRequestStatus {
   PENDING = 'pending',
@@ -82,24 +82,22 @@ export class ManageRequestsComponent implements OnInit {
     });
   }
 
-  // Returns only non-pending (processed) requests
+  // Returns only processed (closed) requests
   get processedRequests(): PharmacyRequest[] {
-    return this.allRequests.filter(request => request.state !== PharmacyRequestStatus.PENDING);
+    return this.allRequests.filter(request => request.state === 'closed');
   }
 
-  // Returns processed requests filtered by a specific status
-  getRequestsByStatus(status: PharmacyRequestStatus): PharmacyRequest[] {
-    return this.processedRequests.filter(request => request.state === status);
+  // Returns processed requests filtered by a specific response (approved/rejected)
+  getRequestsByResponse(response: 'approved' | 'rejected'): PharmacyRequest[] {
+    return this.processedRequests.filter(request => request.Response === response);
   }
 
-  // Returns CSS classes for status badges based on status
-  getStatusClass(status: PharmacyRequestStatus): string {
-    switch (status) {
-      case PharmacyRequestStatus.PENDING:
-        return 'bg-yellow-100 text-yellow-800';
-      case PharmacyRequestStatus.APPROVED:
+  // Returns CSS classes for status badges based on Response
+  getStatusClass(response: string | null): string {
+    switch (response) {
+      case 'approved':
         return 'bg-green-100 text-green-800';
-      case PharmacyRequestStatus.REJECTED:
+      case 'rejected':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -108,12 +106,12 @@ export class ManageRequestsComponent implements OnInit {
 
   // Returns the count of approved requests
   getApprovedCount(): number {
-    return this.getRequestsByStatus(PharmacyRequestStatus.APPROVED).length;
+    return this.getRequestsByResponse('approved').length;
   }
 
   // Returns the count of rejected requests
   getRejectedCount(): number {
-    return this.getRequestsByStatus(PharmacyRequestStatus.REJECTED).length;
+    return this.getRequestsByResponse('rejected').length;
   }
 
   // Logs request details for viewing (to be implemented)
@@ -134,86 +132,30 @@ export class ManageRequestsComponent implements OnInit {
     this.activeActionRequestId = null;
   }
 
-  // Executes the action to update a request's status
-  executeAction(requestId: number, newStatus: PharmacyRequestStatus, reason?: string): void {
-    console.log('Executing action:', { requestId, newStatus, reason });
-    
+  // Executes the action to toggle a request's response
+  toggleRequestResponse(requestId: number): void {
     this.isUpdating = true;
     this.errorMessage = '';
     this.successMessage = '';
-
-    let updateObservable;
-    
-    if (newStatus === PharmacyRequestStatus.APPROVED) {
-      updateObservable = this.pharmacyService.approveRequest(requestId);
-    } else if (newStatus === PharmacyRequestStatus.REJECTED) {
-      if (!reason || reason.trim() === '') {
-        this.errorMessage = 'Rejection reason is required';
+    this.pharmacyService.toggleResponse(requestId).subscribe({
+      next: (response: any) => {
+        // Refresh the list after toggling
+        this.loadProcessedRequests();
         this.isUpdating = false;
-        return;
-      }
-      updateObservable = this.pharmacyService.rejectRequest(requestId);
-    } else {
-      this.errorMessage = 'Invalid status transition';
-      this.isUpdating = false;
-      return;
-    }
-
-    updateObservable.subscribe({
-      next: (response: RequestStatusUpdateResponse) => {
-        // Update the local request with the response data
-        const requestIndex = this.allRequests.findIndex(r => r.id === requestId);
-        if (requestIndex !== -1) {
-          this.allRequests[requestIndex] = response.request;
-        }
-
-        this.isUpdating = false;
-        this.successMessage = response.message || `Request ${newStatus.toLowerCase()} successfully`;
+        this.successMessage = response.message || 'Request response toggled successfully';
         this.activeActionRequestId = null;
-
-        // Refresh stats after status update
-        this.loadPharmacyStats();
-
         setTimeout(() => {
           this.successMessage = '';
         }, 3000);
-
-        console.log(`✅ Request #${requestId} status changed to ${newStatus}`);
       },
       error: (error: any) => {
         this.isUpdating = false;
-        this.errorMessage = error.message || 'Failed to update request status';
-        console.error('Error updating request status:', error);
-        
+        this.errorMessage = error.message || 'Failed to toggle request response';
         setTimeout(() => {
           this.errorMessage = '';
         }, 5000);
       }
     });
-  }
-
-  // Returns available status transitions for a request
-  getAvailableStatusOptions(currentStatus: PharmacyRequestStatus): PharmacyRequestStatus[] {
-    const options: PharmacyRequestStatus[] = [];
-    switch (currentStatus) {
-      case PharmacyRequestStatus.APPROVED:
-        options.push(PharmacyRequestStatus.REJECTED);
-        break;
-      case PharmacyRequestStatus.REJECTED:
-        options.push(PharmacyRequestStatus.APPROVED);
-        break;
-    }
-    return options;
-  }
-
-  // Returns label text for a given status
-  getStatusLabel(status: PharmacyRequestStatus): string {
-    const labels: Record<PharmacyRequestStatus, string> = {
-      [PharmacyRequestStatus.PENDING]: 'Mark as Pending',
-      [PharmacyRequestStatus.APPROVED]: 'Approve Request',
-      [PharmacyRequestStatus.REJECTED]: 'Reject Request'
-    };
-    return labels[status] || status;
   }
 
   // Checks if a request is currently active for action
@@ -253,7 +195,7 @@ export class ManageRequestsComponent implements OnInit {
 
     this.pharmacyService.searchRequests(query.trim()).subscribe({
       next: (requests: PharmacyRequest[]) => {
-        this.allRequests = requests.filter(request => request.state !== PharmacyRequestStatus.PENDING);
+        this.allRequests = requests.filter(request => request.state === 'closed');
         this.isLoading = false;
         console.log('Search results loaded:', this.allRequests.length, 'requests');
       },

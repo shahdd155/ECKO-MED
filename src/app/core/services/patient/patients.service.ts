@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environment/environment';
 import { Observable } from 'rxjs';
+import { Visit, Prescription, Scan } from '../../../models/patient-record.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,6 @@ export class PatientsService {
   private apiUrl = `${environment.apiUrl}/User`;
 
   constructor(private httpClient:HttpClient) { }
-  private readonly router= inject(Router);
-
   getProfileData(): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/Profile`, { withCredentials: true });
   }
@@ -31,16 +30,16 @@ export class PatientsService {
     return this.httpClient.get(`${this.apiUrl}/dashboardData`, { withCredentials: true });
   }
 
-  getVisits(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/get-records`, { withCredentials: true });
+  getVisits(): Observable<Visit[]> {
+    return this.httpClient.get<Visit[]>(`${this.apiUrl}/get-records`, { withCredentials: true });
   }
 
-  getPrescriptions(visitId: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/prescription`, { params: { Id: visitId.toString() }, withCredentials: true });
+  getPrescriptions(visitId: number): Observable<Prescription[]> {
+    return this.httpClient.get<Prescription[]>(`${this.apiUrl}/prescription`, { params: { Id: visitId.toString() }, withCredentials: true });
   }
 
-  getScans(visitId: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/scans`, { params: { Id: visitId.toString() }, withCredentials: true });
+  getScans(visitId: number): Observable<Scan[]> {
+    return this.httpClient.get<Scan[]>(`${this.apiUrl}/scans`, { params: { Id: visitId.toString() }, withCredentials: true });
   }
 
   searchHospitals(searchParams: any): Observable<any> {

@@ -1,7 +1,6 @@
 export interface Scan {
-    type: string;
-    date: string;
-    description: string;
-    imageBase64: string;
+    Type: string;
+    Date: string;
+    Description: string;
+    ImageBase64: string;
   }
-  

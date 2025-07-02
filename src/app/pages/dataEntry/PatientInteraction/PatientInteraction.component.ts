@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 
 // Import model interfaces
-import { LabTest, Prescription, MedicalScan, MedicalNote } from '../../../models';
+import { LabTest } from '../../../models/lab-test.model';
+import { Prescription } from '../../../models/prescription.model';
+import { MedicalScan } from '../../../models/medical-scan.model';
+import { MedicalNote } from '../../../models/medical-note.model';
 import { 
   DataEntryService, 
   PatientDataResponse, 
@@ -181,7 +184,8 @@ export class PatientInteractionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataEntryService: DataEntryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     this.initializeForms();
   }
@@ -277,6 +281,7 @@ export class PatientInteractionComponent implements OnInit {
         this.scans = interactions.scans || [];
         this.notes = interactions.notes || [];
         this.isLoading = false; // Stop loading after all interactions are fetched
+        this.cdr.detectChanges(); 
       },
       error: (error: any) => {
         console.error('Error loading patient interactions:', error);
@@ -319,7 +324,6 @@ export class PatientInteractionComponent implements OnInit {
           this.loadPatientInteractions(this.patientId);
           this.labTestForm.reset();
           this.selectedLabTestFile = null;
-          this.fetchPatientData();
         },
         error: (error: any) => {
           this.isSaving = false;
@@ -469,20 +473,9 @@ export class PatientInteractionComponent implements OnInit {
       this.errorMessage = 'No patient data to checkout';
       return;
     }
-
-    const pendingLabTests = this.labTests.filter(test => test.status === 'pending').length;
-    const scheduledScans = this.scans.filter(scan => scan.status === 'scheduled').length;
-
-    if (pendingLabTests > 0 || scheduledScans > 0) {
-      if (!confirm(`This patient has pending items. Are you sure you want to checkout?`)) {
-        return;
-      }
-    }
-
     this.isCheckingOut = true;
     this.errorMessage = '';
     this.successMessage = '';
-
     this.dataEntryService.checkoutPatient(this.patientId).subscribe({
       next: () => {
         this.isCheckingOut = false;
@@ -495,27 +488,6 @@ export class PatientInteractionComponent implements OnInit {
         setTimeout(() => this.errorMessage = '', 5000);
       }
     });
-  }
-
-  /**
-   * Get pending lab tests count
-   */
-  getPendingLabTestsCount(): number {
-    return this.labTests.filter(test => test.status === 'pending').length;
-  }
-
-  /**
-   * Get scheduled scans count
-   */
-  getScheduledScansCount(): number {
-    return this.scans.filter(scan => scan.status === 'scheduled').length;
-  }
-
-  /**
-   * Check if there are pending items
-   */
-  hasPendingItems(): boolean {
-    return this.getPendingLabTestsCount() > 0 || this.getScheduledScansCount() > 0;
   }
 
   /**

@@ -17,18 +17,11 @@ export class ScansComponent implements OnInit {
   private patientsService = inject(PatientsService);
   private route = inject(ActivatedRoute);
 
-  constructor(private router: Router) {}
-
   ngOnInit(): void {
     const visitId = this.route.snapshot.paramMap.get('id');
     if (visitId) {
-      this.patientsService.getScans(+visitId).subscribe((data: any[]) => {
-        this.scans = data.map(item => ({
-          type: item.type,
-          date: item.date,
-          description: item.description,
-          imageBase64: 'data:image/png;base64,' + item.imageBase64
-        }));
+      this.patientsService.getScans(+visitId).subscribe((data: Scan[]) => {
+        this.scans = data;
       });
     }
   }

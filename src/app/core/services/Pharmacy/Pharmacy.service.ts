@@ -129,7 +129,7 @@ export class PharmacyService {
   }
 
   /**
-   * Approve a single pharmacy request (matches backend: POST /Pharmacy/Approve-request)
+   * Approve a single pharmacy request (POST /Pharmacy/Approve-request)
    */
   approveRequest(requestId: number): Observable<any> {
     const url = `${this.baseUrl}/Approve-request`;
@@ -145,7 +145,7 @@ export class PharmacyService {
   }
 
   /**
-   * Reject a single pharmacy request (matches backend: POST /Pharmacy/Reject-request)
+   * Reject a single pharmacy request (POST /Pharmacy/Reject-request)
    */
   rejectRequest(requestId: number): Observable<any> {
     const url = `${this.baseUrl}/Reject-request`;
@@ -206,5 +206,13 @@ export class PharmacyService {
         return response.data;
       })
     );
+  }
+
+  /**
+   * Toggle response for a closed request (POST /Pharmacy/Toggle-response)
+   */
+  toggleResponse(requestId: number): Observable<any> {
+    const url = `${this.baseUrl}/Toggle-response`;
+    return this.http.post<any>(url, requestId, { withCredentials: true });
   }
 }

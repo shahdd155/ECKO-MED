@@ -279,45 +279,23 @@
                     <p>No lab tests found</p>
                   </div>
                 }
-
                 <div class="space-y-4">
-                  @for (test of labTests; track test) {
+                  @for (test of labTests; track test.id) {
                     <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                        <h4 class="text-lg font-semibold text-gray-900">{{ test.testName }}</h4>
-                        <span [class]="getStatusBadgeClass(test.status)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize mt-2 sm:mt-0">
-                          {{ test.status }}
-                        </span>
+                        <h4 class="text-lg font-semibold text-gray-900">{{ test.name }}</h4>
                       </div>
-                      
                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
                         <div>
-                          <span class="font-medium">Type:</span> {{ test.testType }}
+                          <span class="font-medium">Type:</span> {{ test.type }}
                         </div>
                         <div>
-                          <span class="font-medium">Ordered:</span> {{ test.orderedDate | date:'short' }}
+                          <span class="font-medium">Date:</span> {{ test.date | date:'short' }}
                         </div>
-                        @if (test.resultDate) {
-                          <div>
-                            <span class="font-medium">Result Date:</span> {{ test.resultDate | date:'short' }}
-                          </div>
-                        }
                       </div>
-                      
                       @if (test.notes) {
                         <div class="mt-3 text-sm text-gray-700">
                           <span class="font-medium">Notes:</span> {{ test.notes }}
-                        </div>
-                      }
-                      
-                      @if (test.fileName) {
-                        <div class="mt-3 flex items-center text-sm text-blue-600">
-                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                          </svg>
-                          <a [href]="test.fileUrl" [download]="test.fileName" class="hover:underline">
-                            {{ test.fileName }}
-                          </a>
                         </div>
                       }
                     </div>
@@ -492,11 +470,9 @@
                   @for (prescription of prescriptions; track prescription) {
                     <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                        <h4 class="text-lg font-semibold text-gray-900">{{ prescription.medicineName }}</h4>
-                        <span class="text-sm text-gray-500 mt-2 sm:mt-0">{{ prescription.prescribedDate | date:'short' }}</span>
+                        <h4 class="text-lg font-semibold text-gray-900">{{ prescription.name }}</h4>
+                        <span class="text-sm text-gray-500 mt-2 sm:mt-0">{{ prescription.medDate | date:'short' }}</span>
                       </div>
-                      
-                      <!-- Medicine Details -->
                       <div class="bg-slate-50 rounded-lg p-3 mb-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
                           <div>
@@ -517,11 +493,10 @@
                           </div>
                         </div>
                       </div>
-                      
-                      @if (prescription.instructions) {
+                      @if (prescription.doctorNotes) {
                         <div class="text-sm text-gray-700">
-                          <span class="font-medium text-gray-900">Special Instructions:</span>
-                          <p class="mt-1 whitespace-pre-wrap">{{ prescription.instructions }}</p>
+                          <span class="font-medium text-gray-900">Doctor Notes:</span>
+                          <p class="mt-1 whitespace-pre-wrap">{{ prescription.doctorNotes }}</p>
                         </div>
                       }
                     </div>
@@ -656,39 +631,16 @@
                   @for (scan of scans; track scan) {
                     <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                        <h4 class="text-lg font-semibold text-gray-900">{{ scan.scanType }} - {{ scan.bodyPart }}</h4>
-                        <span [class]="getStatusBadgeClass(scan.status)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize mt-2 sm:mt-0">
-                          {{ scan.status }}
-                        </span>
+                        <h4 class="text-lg font-semibold text-gray-900">{{ scan.type }} - {{ scan.bodypart }}</h4>
                       </div>
-                      
                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
                         <div>
-                          <span class="font-medium">Scheduled:</span> {{ scan.scheduledDate | date:'short' }}
+                          <span class="font-medium">Description:</span> {{ scan.description }}
                         </div>
-                        @if (scan.completedDate) {
-                          <div>
-                            <span class="font-medium">Completed:</span> {{ scan.completedDate | date:'short' }}
-                          </div>
-                        }
+                        <div>
+                          <span class="font-medium">Date:</span> {{ scan.date | date:'short' }}
+                        </div>
                       </div>
-                      
-                      @if (scan.notes) {
-                        <div class="mt-3 text-sm text-gray-700">
-                          <span class="font-medium">Notes:</span> {{ scan.notes }}
-                        </div>
-                      }
-                      
-                      @if (scan.fileName) {
-                        <div class="mt-3 flex items-center text-sm text-blue-600">
-                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                          </svg>
-                          <a [href]="scan.fileUrl" [download]="scan.fileName" class="hover:underline">
-                            {{ scan.fileName }}
-                          </a>
-                        </div>
-                      }
                     </div>
                   }
                 </div>
@@ -779,9 +731,7 @@
                         </span>
                         <span class="text-sm text-gray-500 mt-2 sm:mt-0">{{ note.dateTime | date:'short' }}</span>
                       </div>
-                      
-                      <div class="text-gray-900 mb-3 whitespace-pre-wrap">{{ note.Text }}</div>
-                      
+                      <div class="text-gray-900 mb-3 whitespace-pre-wrap">{{ note.text }}</div>
                     </div>
                   }
                 </div>
