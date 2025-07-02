@@ -3,6 +3,6 @@ export interface LabTest {
   name: string;
   type: string;
   notes: string;
-  date: string;
+  date: string; // ISO string format
   imagePath: string;
 } 

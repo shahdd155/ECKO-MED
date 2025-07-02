@@ -1,0 +1,33 @@
+<div class="w-full h-full bg-gray-200 rounded-3xl p-4">
+  <div class="w-full h-full flex flex-col">
+    <div class="bg-gray-200 rounded-2xl shadow-xl border border-gray-300 border-t-4 border-t-gray-400 p-0 w-full">
+      <h2 class="text-xl font-semibold px-8 pt-6 pb-2">Lab Tests from Your Visit</h2>
+      <div class="bg-gray-200 rounded-xl mx-6 mb-6 p-4 flex flex-col gap-6">
+        @if (labTests.length) {
+          @for (test of labTests; track test) {
+            <div class="bg-slate-400 bg-opacity-70 rounded-xl p-6 shadow-sm flex flex-col gap-4">
+              <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                <div class="text-lg font-semibold text-black">Test Name: {{ test.name }}</div>
+                <div class="text-xs text-black">{{ test.date | date }}</div>
+              </div>
+              <div class="flex flex-col md:flex-row gap-4">
+                <img *ngIf="test.imagePath" [src]="test.imagePath" alt="{{ test.name }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
+                <div class="flex-1">
+                  <div class="text-sm text-black"><span class="font-semibold">Type:</span> {{ test.type }}</div>
+                  <div class="text-sm text-black"><span class="font-semibold">Notes:</span> {{ test.notes }}</div>
+                </div>
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="text-center text-gray-500 py-8">No lab tests found for this visit.</div>
+        }
+      </div>
+      <div class="flex justify-center pb-4">
+        <button routerLink="/myvisits" class="bg-slate-600 text-white px-8 py-2 rounded shadow hover:bg-slate-700">
+          Back to Visits
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
