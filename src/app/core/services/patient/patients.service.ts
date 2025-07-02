@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment/environment';
 import { Observable } from 'rxjs';
 import { Visit, Prescription, Scan } from '../../../models/patient-record.model';
+import { LabTest } from '../../../models/lab-test.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,10 @@ export class PatientsService {
 
   getScans(visitId: number): Observable<Scan[]> {
     return this.httpClient.get<Scan[]>(`${this.apiUrl}/scans`, { params: { Id: visitId.toString() }, withCredentials: true });
+  }
+
+  getLabTests(visitId: number): Observable<LabTest[]> {
+    return this.httpClient.get<LabTest[]>(`${this.apiUrl}/labtests`, { params: { Id: visitId.toString() }, withCredentials: true });
   }
 
   searchHospitals(searchParams: any): Observable<any> {

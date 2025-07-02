@@ -7,6 +7,7 @@ import { patientGuard } from './core/guards/patient.guard';
 import { dataEntryGuard } from './core/guards/data-entry.guard';
 import { PharmacyLayoutComponent } from './layouts/pharmacy-layout/pharmacy-layout.component';
 import { pharmacyGuard } from './core/guards/pharmacy.guard';
+import { LabtestsComponent } from './pages/Patient/labtests/labtests.component';
 
 export const routes: Routes = [
     {
@@ -103,6 +104,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/Patient/scans/scans.component')
                     .then(m => m.ScansComponent),
                 title: 'Scans'
+            },
+               {
+                path: 'labtests',
+                loadComponent: () => import('./pages/Patient/labtests/labtests.component')
+                    .then(m =>LabtestsComponent),
+                title: 'labtests'
             },
             {
                 path: 'prescriptions',
