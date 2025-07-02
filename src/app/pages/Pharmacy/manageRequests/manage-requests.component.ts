@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PharmacyRequest } from '../../../models/PharmacyRequest';
-import { PharmacyService, PharmacyStats } from '../../../core/services/Pharmacy/Pharmacy.service';
+import { PharmacyService } from '../../../core/services/Pharmacy/Pharmacy.service';
 
 export enum PharmacyRequestStatus {
   PENDING = 'pending',
@@ -27,9 +27,6 @@ export class ManageRequestsComponent implements OnInit {
   // All pharmacy requests loaded from backend
   allRequests: PharmacyRequest[] = [];
 
-  // Pharmacy statistics
-  pharmacyStats: PharmacyStats | null = null;
-
   // Loading and error states
   isLoading: boolean = false;
   isUpdating: boolean = false;
@@ -40,7 +37,6 @@ export class ManageRequestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProcessedRequests();
-    this.loadPharmacyStats();
   }
 
   /**
@@ -54,7 +50,7 @@ export class ManageRequestsComponent implements OnInit {
         // Backend returns { totalClosed, approvedCount, rejectedCount, closedItems }
         this.allRequests = response.closedItems || [];
         this.isLoading = false;
-        console.log('Processed requests loaded successfully:', this.allRequests.length, 'requests');
+        console.log('Processed requests loaded successfully:', this.allRequests, 'requests');
       },
       error: (error: any) => {
         this.isLoading = false;
@@ -66,25 +62,9 @@ export class ManageRequestsComponent implements OnInit {
     });
   }
 
-  /**
-   * Load pharmacy statistics from backend
-   */
-  loadPharmacyStats(): void {
-    this.pharmacyService.getPharmacyStats().subscribe({
-      next: (stats: PharmacyStats) => {
-        this.pharmacyStats = stats;
-        console.log('Pharmacy stats loaded successfully:', stats);
-      },
-      error: (error: any) => {
-        console.error('Error loading pharmacy stats:', error);
-        // Stats are optional, so we don't show error to user
-      }
-    });
-  }
-
   // Returns only processed (closed) requests
   get processedRequests(): PharmacyRequest[] {
-    return this.allRequests.filter(request => request.state === 'closed');
+    return this.allRequests.filter(request => request.state === 'approved' || request.state === 'rejected');
   }
 
   // Returns processed requests filtered by a specific response (approved/rejected)
@@ -106,12 +86,12 @@ export class ManageRequestsComponent implements OnInit {
 
   // Returns the count of approved requests
   getApprovedCount(): number {
-    return this.getRequestsByResponse('approved').length;
+    return this.allRequests.filter(request => request.state === 'approved').length;
   }
 
   // Returns the count of rejected requests
   getRejectedCount(): number {
-    return this.getRequestsByResponse('rejected').length;
+    return this.allRequests.filter(request => request.state === 'rejected').length;
   }
 
   // Logs request details for viewing (to be implemented)
@@ -178,7 +158,6 @@ export class ManageRequestsComponent implements OnInit {
    */
   refreshData(): void {
     this.loadProcessedRequests();
-    this.loadPharmacyStats();
   }
 
   /**
@@ -195,7 +174,12 @@ export class ManageRequestsComponent implements OnInit {
 
     this.pharmacyService.searchRequests(query.trim()).subscribe({
       next: (requests: PharmacyRequest[]) => {
-        this.allRequests = requests.filter(request => request.state === 'closed');
+        // Only include requests with valid states (pending, approved, rejected)
+        this.allRequests = requests.filter(request => 
+          request.state === 'pending' || 
+          request.state === 'approved' || 
+          request.state === 'rejected'
+        );
         this.isLoading = false;
         console.log('Search results loaded:', this.allRequests.length, 'requests');
       },

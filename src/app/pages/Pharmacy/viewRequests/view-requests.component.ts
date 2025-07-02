@@ -62,7 +62,7 @@ export class ViewRequestsComponent implements OnInit {
 
   // Filter and sort pending requests based on current criteria
   get pendingRequests(): PharmacyRequest[] {
-    let filtered = this.allRequests.filter(request => request.state !== 'closed');
+    let filtered = this.allRequests.filter(request => request.state === 'pending');
     // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0;
@@ -101,8 +101,7 @@ export class ViewRequestsComponent implements OnInit {
   getProcessedTodayCount(): number {
     const today = new Date().toDateString();
     return this.allRequests.filter(request => 
-      (request.state === 'closed' && request.Response === 'approved') ||
-      (request.state === 'closed' && request.Response === 'rejected') &&
+      (request.state === 'approved' || request.state === 'rejected') &&
       (request.dateTime && new Date(request.dateTime).toDateString() === today)
     ).length;
   }
@@ -174,7 +173,7 @@ export class ViewRequestsComponent implements OnInit {
   // Approve a single request
   approveRequest(requestId: number): void {
     const request = this.allRequests.find((r: any) => r.id === requestId);
-    if (request && request.state !== 'closed') {
+    if (request && request.state === 'pending') {
       this.isUpdating = true;
       this.errorMessage = '';
       this.successMessage = '';
@@ -199,7 +198,7 @@ export class ViewRequestsComponent implements OnInit {
   // Reject a single request
   rejectRequest(requestId: number): void {
     const request = this.allRequests.find((r: any) => r.id === requestId);
-    if (request && request.state !== 'closed') {
+    if (request && request.state === 'pending') {
       this.isUpdating = true;
       this.errorMessage = '';
       this.successMessage = '';
