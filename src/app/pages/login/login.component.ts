@@ -22,9 +22,8 @@ export class LoginComponent {
   });
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
-    if (token && role) {
+    if (role) {
       if (role === 'patient') {
         this.router.navigate(['/patientdashboard']);
       } else if (role === 'data-entry') {

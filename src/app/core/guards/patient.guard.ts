@@ -6,14 +6,9 @@ export const patientGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
   if (isPlatformBrowser(platformId)) {
-    const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
-    if (!token) {
-      router.navigate(['/login']);
-      return false;
-    }
     if (role !== 'patient') {
-      router.navigate(['/notfound']);
+      router.navigate(['/login']);
       return false;
     }
     return true;

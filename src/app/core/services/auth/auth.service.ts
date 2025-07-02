@@ -50,7 +50,8 @@ export class AuthService {
   private fetchUserProfile(): Observable<User> {
     // This assumes a general profile endpoint exists that returns the logged-in user's data.
     // This needs to be created in the backend.
-    return this.httpClient.get<User>(`${environment.apiUrl}/user/profile`).pipe(
+    return this.httpClient.get<User>(`${environment.apiUrl}/user/profile`, { withCredentials: true }).pipe(
+      
       tap(user => this.currentUserSubject.next(user))
     );
   }
@@ -99,8 +100,14 @@ export class AuthService {
   // LOGOUT
   logout(): void {
     this.httpClient.post(`${this.baseUrl}/logout`, {}, { withCredentials: true }).subscribe({
-      next: () => this.clearLocalUserData(),
-      error: () => this.clearLocalUserData()
+      next: () => {
+        localStorage.clear();
+        this.clearLocalUserData();
+      },
+      error: () => {
+        localStorage.clear();
+        this.clearLocalUserData();
+      }
     });
   }
 
