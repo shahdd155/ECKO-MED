@@ -22,35 +22,39 @@ export interface AddPatientDto {
 }
 
 export interface AddMedicineDto {
-  patientID: string;
-  medicineName: string;
-  dosage: string;
-  frequency: string;
-  duration: string;
-  timing: string;
-  medicineNotes: string;
+  PatientID: string;
+  NoteType: string;
+  NoteContent: string;
+  MedicineName: string;
+  MedicineNotes: string;
+  Dosage: string;
+  Frequency: string;
+  Timing: string;
+  Duration: string;
 }
 
 export interface AddNoteDto {
-  patientID: string;
-  noteType: string;
-  noteContent: string;
+  PatientID: string;
+  NoteType: string;
+  NoteContent: string;
 }
 
 export interface AddScanDto {
-  patientID: string;
-  scanType: string;
-  scanPart: string;
-  note: string;
-  image?: File;
+  PatientID: string;
+  ScanType: string;
+  ScanPart: string;
+  Note: string;
+  Date: string;
+  Image?: File;
 }
 
 export interface AddTestDto {
-  patientID: string;
-  testName: string;
-  testType: string;
-  note: string;
-  image?: File;
+  PatientID: string;
+  TestName: string;
+  TestType: string;
+  Note: string;
+  Date: string;
+  Image?: File;
 }
 
 export interface PatientInDepartment {
@@ -169,12 +173,12 @@ export class DataEntryService {
 
   addLabTest(testData: AddTestDto): Observable<any> {
     const formData = new FormData();
-    formData.append('PatientID', testData.patientID);
-    formData.append('TestName', testData.testName);
-    formData.append('TestType', testData.testType);
-    formData.append('Note', testData.note);
-    if (testData.image) {
-      formData.append('Image', testData.image, testData.image.name);
+    formData.append('PatientID', testData.PatientID);
+    formData.append('TestName', testData.TestName);
+    formData.append('TestType', testData.TestType);
+    formData.append('Note', testData.Note);
+    if (testData.Image) {
+      formData.append('Image', testData.Image, testData.Image.name);
     }
     return this.http.post(`${this.baseUrl}/Add-Test`, formData, { withCredentials: true });
   }
@@ -185,12 +189,12 @@ export class DataEntryService {
 
   addScan(scanData: AddScanDto): Observable<any> {
     const formData = new FormData();
-    formData.append('PatientID', scanData.patientID);
-    formData.append('ScanType', scanData.scanType);
-    formData.append('ScanPart', scanData.scanPart);
-    formData.append('Note', scanData.note);
-    if (scanData.image) {
-        formData.append('Image', scanData.image, scanData.image.name);
+    formData.append('PatientID', scanData.PatientID);
+    formData.append('ScanType', scanData.ScanType);
+    formData.append('ScanPart', scanData.ScanPart);
+    formData.append('Note', scanData.Note);
+    if (scanData.Image) {
+        formData.append('Image', scanData.Image, scanData.Image.name);
     }
     return this.http.post(`${this.baseUrl}/Add-Scan`, formData, { withCredentials: true });
   }

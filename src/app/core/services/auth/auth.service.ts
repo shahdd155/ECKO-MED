@@ -48,10 +48,19 @@ export class AuthService {
 
   // Fetch the user profile from a dedicated endpoint
   private fetchUserProfile(): Observable<User> {
-    // This assumes a general profile endpoint exists that returns the logged-in user's data.
-    // This needs to be created in the backend.
-    return this.httpClient.get<User>(`${environment.apiUrl}/user/profile`, { withCredentials: true }).pipe(
-      
+    const role = localStorage.getItem('role');
+    let profileUrl: string;
+
+    if (role === 'patient') {
+      profileUrl = `${ environment.apiUrl}/user/profile`;
+    } else if (role === 'data-entry') {
+      profileUrl = `${environment.apiUrl}/DataEntryprofile`;
+    } else {
+      // default entrypoint
+      profileUrl = `${environment.apiUrl}/user/profile`;
+    }
+
+    return this.httpClient.get<User>(profileUrl, { withCredentials: true }).pipe(
       tap(user => this.currentUserSubject.next(user))
     );
   }

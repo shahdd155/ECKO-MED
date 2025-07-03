@@ -18,10 +18,10 @@ export class LabtestsComponent implements OnInit {
 
   ngOnInit(): void {
     const visitId = this.route.snapshot.paramMap.get('id');
-    if (visitId) {
-      this.patientsService.getLabTests(+visitId).subscribe((data: LabTest[]) => {
-        this.labTests = data;
-      });
-    }
+      if (visitId) {
+        this.patientsService.getLabTests(+visitId).subscribe((data: LabTest[]) => {
+          this.labTests = data;
+        });
+      }
   }
 }

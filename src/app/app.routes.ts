@@ -100,22 +100,22 @@ export const routes: Routes = [
                 title: 'My Visits',
             },
             {
-                path: 'scans',
+                path: 'scans/:id',
                 loadComponent: () => import('./pages/Patient/scans/scans.component')
                     .then(m => m.ScansComponent),
                 title: 'Scans'
             },
                {
-                path: 'labtests',
+                path: 'labtests/:id',
                 loadComponent: () => import('./pages/Patient/labtests/labtests.component')
-                    .then(m =>LabtestsComponent),
+                    .then(m =>m.LabtestsComponent),
                 title: 'labtests'
             },
             {
-                path: 'prescriptions',
+                path: 'prescription/id:',
                 loadComponent: () => import('./pages/Patient/prescriptions/prescriptions.component')
                     .then(m => m.PrescriptionsComponent),
-                title: 'Prescriptions'
+                title: 'Prescription'
             },
            {
                 path: 'p-helpCenter',
