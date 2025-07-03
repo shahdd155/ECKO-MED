@@ -11,6 +11,6 @@ export class AdsService {
   constructor(private http: HttpClient) {}
 
   getAds(): Observable<Ad[]> {
-    return this.http.get<Ad[]>(`${this.apiUrl}/Get-Ads`, { withCredentials: true });
+    return this.http.get<Ad[]>(`${this.apiUrl}/user/Get-Ads`, { withCredentials: true });
   }
 }

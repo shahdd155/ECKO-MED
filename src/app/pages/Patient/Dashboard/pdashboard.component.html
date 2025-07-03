@@ -1,58 +1,63 @@
-<div class="p-6 md:p-10 w-full">
-  <!--  user name from backend -->
-  <div class="text-2xl font-semibold mb-2">Hi : {{userName}}</div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <!-- My visits list from backend) -->
-     <a routerLink="/myvisits">
-      <div class="bg-gray-100  rounded-xl shadow p-6 flex flex-col">
-        <div class="text-xl font-semibold mb-2">My Visits</div>
-        <div class="text-gray-500 text-md mb-4">Visits you've Done through the App</div>
-        <div class="flex items-center">
-          <!-- htt3'yr filter visits -->
-          <input type="text" placeholder="Go" class="border border-gray-300 rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
-          <button class=" px-4 py-2 flex items-center">
-              <i class="fa-solid fa-arrow-right"></i>
+<div class="p-4 sm:p-6 md:p-10 w-full space-y-8">
+  <!-- Greeting -->
+  <div class="text-2xl font-semibold text-gray-800">Hi, {{ userName }}</div>
+
+  <!-- Cards Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- My Visits Card -->
+    <a routerLink="/myvisits" class="bg-white rounded-2xl shadow hover:shadow-md transition p-6 flex flex-col justify-between">
+      <div>
+        <div class="text-xl font-bold text-gray-800 mb-1">My Visits</div>
+        <p class="text-gray-500 mb-4 text-sm">Visits you've done through the app</p>
+        <div class="flex">
+          <input type="text" placeholder="Go"
+                 class="flex-1 border border-gray-300 rounded-l-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <button class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition">
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </div>
-     </a>
-    <!-- Search  clinic search from backend -->
-    <div routerLink="/search" class="bg-gray-100  rounded-xl shadow p-6 flex flex-col">
-      <div class="text-xl font-semibold mb-2">Search</div>
-      <div class="text-gray-500 text-md mb-4">Find Clinic</div>
-      <div class="flex items-center">
-        <!-- search clinics -->
-        <input type="text" placeholder="Go" class="border border-gray-300 rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
-        <button class="px-4 py-2 rounded-r flex items-center">
+    </a>
+
+    <!-- Clinic Search Card -->
+    <div routerLink="/search" class="bg-white rounded-2xl shadow hover:shadow-md transition p-6 flex flex-col justify-between">
+      <div>
+        <div class="text-xl font-bold text-gray-800 mb-1">Search</div>
+        <p class="text-gray-500 mb-4 text-sm">Find a clinic near you</p>
+        <div class="flex">
+          <input type="text" placeholder="Go"
+                 class="flex-1 border border-gray-300 rounded-l-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <button class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition">
             <i class="fa-solid fa-arrow-right"></i>
-        </button>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-    <!-- src/app/pages/Patient/Dashboard/pdashboard.component.html -->
-  <div *ngIf="ads.length > 0" class="ads-section">
-    <div *ngFor="let ad of ads" class="ad-card">
-      <img [src]="'data:image/png;base64,' + ad.image" alt="Ad Image" />
-      <h3>{{ ad.title }}</h3>
-      <p>{{ ad.description }}</p>
+  <!-- Ads Section -->
+  <div *ngIf="ads.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let ad of ads" class="bg-white rounded-xl shadow p-4 hover:shadow-md transition">
+      <img [src]="ad.image" alt="Ad Image" class="w-full h-40 object-cover rounded-md mb-3" />
+      <h3 class="text-lg font-semibold text-gray-800">{{ ad.title }}</h3>
+      <p class="text-gray-500 text-sm">{{ ad.description }}</p>
     </div>
   </div>
 
-  <div class="bg-gray-100 rounded-xl shadow flex flex-col md:flex-row items-center p-6">
-    <div class="flex-1 flex flex-col justify-center">
-      <div class="text-xl font-semibold mb-2">Profile</div>
-      <div class="text-gray-500 text-md mb-4">Access your Data</div>
-      <!-- profile access button -->
-       <a routerLink="/patientprofile">
-        <button class="bg-slate-600 text-white px-6 py-2 rounded shadow hover:bg-gray-700 w-auto">Go To Profile</button>
-       </a>
-
+  <!-- Profile Card -->
+  <div class="bg-white rounded-2xl shadow p-6 flex flex-col md:flex-row items-center gap-6">
+    <div class="flex-1 space-y-2">
+      <h2 class="text-xl font-bold text-gray-800">Profile</h2>
+      <p class="text-gray-500 text-sm">Access your personal data and settings</p>
+      <a routerLink="/patientprofile">
+        <button class="mt-2 bg-slate-700 text-white px-6 py-2 rounded-md hover:bg-slate-800 transition">
+          Go To Profile
+        </button>
+      </a>
     </div>
-    <div class="flex-1 flex justify-end">
-      <!-- user image from backend -->
-      <img src="" alt="user image" />
+    <div class="flex-1 flex justify-center md:justify-end">
+      <img *ngIf="userImage" [src]="userImage" alt="User Image"
+           class="w-32 h-32 object-cover rounded-full border-4 border-gray-200 shadow" />
     </div>
   </div>
-
 </div>

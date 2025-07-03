@@ -48,7 +48,8 @@ app.use('/**', (req, res, next) => {
     )
     .catch(next);
 });
-
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 /**
  * Start the server if this module is the main entry point.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
