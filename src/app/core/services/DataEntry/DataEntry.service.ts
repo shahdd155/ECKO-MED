@@ -22,21 +22,19 @@ export interface AddPatientDto {
 }
 
 export interface AddMedicineDto {
-  PatientID: string;
-  NoteType: string;
-  NoteContent: string;
-  MedicineName: string;
-  MedicineNotes: string;
-  Dosage: string;
-  Frequency: string;
-  Timing: string;
-  Duration: string;
+  patientID: string;
+  medicineName: string;
+  dosage: string;
+  frequency: string;
+  duration: string;
+  timing: string;
+  medicineNotes: string;
 }
 
 export interface AddNoteDto {
-  PatientID: string;
-  NoteType: string;
-  NoteContent: string;
+  patientID: string;
+  noteType: string;
+  noteContent: string;
 }
 
 export interface AddScanDto {
