@@ -208,8 +208,7 @@ export class PatientInteractionComponent implements OnInit {
     this.labTestForm = this.formBuilder.group({
       testName: ['', [Validators.required]],
       testType: ['', [Validators.required]],
-      notes: ['', [Validators.required]],
-      scheduledDate: ['', [Validators.required]]
+      notes: ['', [Validators.required]]
     });
     this.prescriptionForm = this.formBuilder.group({
       medicineName: ['', [Validators.required]],
@@ -310,13 +309,12 @@ export class PatientInteractionComponent implements OnInit {
       this.isSaving = true;
       const formValues = this.labTestForm.value;
 
-      const newLabTest = {
-        PatientID: patientId,
-        TestName: formValues.testName,
-        TestType: formValues.testType,
-        Note: formValues.notes,
-        Date: formValues.scheduledDate,
-        Image: this.selectedLabTestFile || undefined
+      const newLabTest: AddTestDto = {
+        patientID: patientId,
+        testName: formValues.testName,
+        testType: formValues.testType,
+        note: formValues.notes,
+        image: this.selectedLabTestFile || undefined
       };
 
       this.dataEntryService.addLabTest(newLabTest).subscribe({
@@ -342,16 +340,14 @@ export class PatientInteractionComponent implements OnInit {
       this.isSaving = true;
       const formValues = this.prescriptionForm.value;
 
-      const newPrescription = {
-        PatientID: patientId,
-        NoteType: formValues.noteType,
-        NoteContent: formValues.content,
-        MedicineName: formValues.medicineName,
-        MedicineNotes: formValues.instructions,
-        Dosage: formValues.dosage,
-        Frequency: formValues.frequency,
-        Timing: formValues.timing,
-        Duration: formValues.duration
+      const newPrescription: AddMedicineDto = {
+        patientID: patientId,
+        medicineName: formValues.medicineName,
+        dosage: formValues.dosage,
+        frequency: formValues.frequency,
+        duration: formValues.duration,
+        timing: formValues.timing,
+        medicineNotes: formValues.instructions
       };
 
       this.dataEntryService.addPrescription(newPrescription).subscribe({
@@ -377,13 +373,12 @@ export class PatientInteractionComponent implements OnInit {
       this.isSaving = true;
       const formValues = this.scanForm.value;
 
-      const newScan = {
-        PatientID: patientId,
-        ScanType: formValues.scanType,
-        ScanPart: formValues.bodyPart,
-        Note: formValues.notes,
-        Date: formValues.scheduledDate,
-        Image: this.selectedScanFile || undefined
+      const newScan: AddScanDto = {
+        patientID: patientId,
+        scanType: formValues.scanType,
+        scanPart: formValues.bodyPart,
+        note: formValues.notes,
+        image: this.selectedScanFile || undefined
       };
 
       this.dataEntryService.addScan(newScan).subscribe({
@@ -410,10 +405,10 @@ export class PatientInteractionComponent implements OnInit {
       this.isSaving = true;
       const formValues = this.noteForm.value;
 
-      const newNote = {
-        PatientID: patientId,
-        NoteType: formValues.noteType,
-        NoteContent: formValues.content
+      const newNote: AddNoteDto = {
+        patientID: patientId,
+        noteType: formValues.noteType,
+        noteContent: formValues.content
       };
 
       this.dataEntryService.addNote(newNote).subscribe({

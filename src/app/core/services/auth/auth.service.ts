@@ -54,10 +54,10 @@ export class AuthService {
     if (role === 'patient') {
       profileUrl = `${ environment.apiUrl}/user/profile`;
     } else if (role === 'data-entry') {
-      profileUrl = `${environment.apiUrl}/DataEntryprofile`;
+      profileUrl = `${environment.apiUrl}/dataentry/DataEntryprofile`;
     } else {
       // default entrypoint
-      profileUrl = `${environment.apiUrl}/user/profile`;
+      profileUrl = `${environment.apiUrl}/account/is-authentication`;
     }
 
     return this.httpClient.get<User>(profileUrl, { withCredentials: true }).pipe(

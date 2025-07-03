@@ -40,21 +40,19 @@ export interface AddNoteDto {
 }
 
 export interface AddScanDto {
-  PatientID: string;
-  ScanType: string;
-  ScanPart: string;
-  Note: string;
-  Date: string;
-  Image?: File;
+  patientID: string;
+  scanType: string;
+  scanPart: string;
+  note: string;
+  image?: File;
 }
 
 export interface AddTestDto {
-  PatientID: string;
-  TestName: string;
-  TestType: string;
-  Note: string;
-  Date: string;
-  Image?: File;
+  patientID: string;
+  testName: string;
+  testType: string;
+  note: string;
+  image?: File;
 }
 
 export interface PatientInDepartment {
@@ -173,12 +171,12 @@ export class DataEntryService {
 
   addLabTest(testData: AddTestDto): Observable<any> {
     const formData = new FormData();
-    formData.append('PatientID', testData.PatientID);
-    formData.append('TestName', testData.TestName);
-    formData.append('TestType', testData.TestType);
-    formData.append('Note', testData.Note);
-    if (testData.Image) {
-      formData.append('Image', testData.Image, testData.Image.name);
+    formData.append('PatientID', testData.patientID);
+    formData.append('TestName', testData.testName);
+    formData.append('TestType', testData.testType);
+    formData.append('Note', testData.note);
+    if (testData.image) {
+      formData.append('Image', testData.image, testData.image.name);
     }
     return this.http.post(`${this.baseUrl}/Add-Test`, formData, { withCredentials: true });
   }
@@ -189,12 +187,12 @@ export class DataEntryService {
 
   addScan(scanData: AddScanDto): Observable<any> {
     const formData = new FormData();
-    formData.append('PatientID', scanData.PatientID);
-    formData.append('ScanType', scanData.ScanType);
-    formData.append('ScanPart', scanData.ScanPart);
-    formData.append('Note', scanData.Note);
-    if (scanData.Image) {
-        formData.append('Image', scanData.Image, scanData.Image.name);
+    formData.append('PatientID', scanData.patientID);
+    formData.append('ScanType', scanData.scanType);
+    formData.append('ScanPart', scanData.scanPart);
+    formData.append('Note', scanData.note);
+    if (scanData.image) {
+        formData.append('Image', scanData.image, scanData.image.name);
     }
     return this.http.post(`${this.baseUrl}/Add-Scan`, formData, { withCredentials: true });
   }
