@@ -28,6 +28,8 @@ export class ViewRequestsComponent implements OnInit {
 
   // All pharmacy requests loaded from backend
   allRequests: PharmacyRequest[] = [];
+  closedTodayRequests: number = 0;
+  totalRequests: number = 0;
 
   constructor(private pharmacyService: PharmacyService) {}
 
@@ -43,8 +45,9 @@ export class ViewRequestsComponent implements OnInit {
 
     this.pharmacyService.getRequestsByStatus().subscribe({
       next: (response: any) => {
-        // Backend returns { totalRequests, closedTodayRequests, pendingRequests, pendingItems }
         this.allRequests = response.pendingItems || [];
+        this.closedTodayRequests = response.closedTodayRequests || 0;
+        this.totalRequests = response.totalRequests || 0;
         console.log(this.allRequests);
         this.isLoading = false;
         console.log('Pending requests loaded successfully:', this.allRequests.length, 'requests');
@@ -99,16 +102,12 @@ export class ViewRequestsComponent implements OnInit {
 
   // Count requests processed today
   getProcessedTodayCount(): number {
-    const today = new Date().toDateString();
-    return this.allRequests.filter(request => 
-      (request.state === 'approved' || request.state === 'rejected') &&
-      (request.dateTime && new Date(request.dateTime).toDateString() === today)
-    ).length;
+    return this.closedTodayRequests;
   }
 
   // Get total number of all requests
   getTotalRequestsCount(): number {
-    return this.allRequests.length;
+    return this.totalRequests;
   }
 
   // Toggle selection of all visible requests

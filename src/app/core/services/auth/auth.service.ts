@@ -57,7 +57,7 @@ export class AuthService {
       profileUrl = `${environment.apiUrl}/dataentry/DataEntryprofile`;
     } else {
       // default entrypoint
-      profileUrl = `${environment.apiUrl}/account/is-authentication`;
+      profileUrl = `${environment.apiUrl}/account/is-authenticated`;
     }
 
     return this.httpClient.get<User>(profileUrl, { withCredentials: true }).pipe(
