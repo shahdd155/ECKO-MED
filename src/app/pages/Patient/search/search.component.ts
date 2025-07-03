@@ -19,15 +19,14 @@ export class SearchComponent implements OnInit {
   maxPrice = 10000;
   
   selectedArea = '';
-  areas = ['Nasr City', 'Maadi', 'Zamalek'];
   insuranceName = '';
 
   selectedDistance = '';
   distanceRanges = [
-    { label: '0 - 5 km', value: '5' },
-    { label: '5 - 10 km', value: '10' },
-    { label: '10 - 20 km', value: '20' },
-    { label: '20+ km', value: '9999' }
+    { label: '5 km', value: '5' },
+    { label: '10 km', value: '10' },
+    { label: '20 km', value: '20' },
+    { label: 'km', value: '9999' }
   ];
 
   departments: any[] = ['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Oncology', 'Dermatology', 'Radiology'];
@@ -40,21 +39,24 @@ export class SearchComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.getCurrentLocationAndSearch();
   }
 
   getCurrentLocationAndSearch(): void {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.userLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        this.search();
-      }, () => {
-        this.search();
-      });
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+        },
+        () => {
+          this.userLocation = null;
+        }
+      );
     } else {
-      this.search();
+      this.userLocation = null;
     }
   }
 

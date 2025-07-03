@@ -1,9 +1,27 @@
 <div class="min-h-screen flex flex-col bg-gray-50">
     <app-footer></app-footer>
-  <div class="flex flex-1">
-    <app-navbar class="w-64 flex-shrink-0"></app-navbar>
-    <main class="flex-1 p-0 md:p-4">
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+    <button (click)="toggleNavbar()" class="md:hidden fixed top-9 right-2  z-50 bg-[#E4ECEE] rounded-full p-2 focus:outline-none">
+      <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+
+    @if (showNavbar) {
+      <div class="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden" (click)="closeNavbar()"></div>
+    }
+    <div class="flex flex-1">
+    
+      <div class="hidden md:block w-64 flex-shrink-0 bg-gray-100 md:relative md:top-auto md:left-auto md:h-auto md:bg-transparent">
+        <app-navbar></app-navbar>
+      </div>
+      @if (showNavbar) {
+        <div class="fixed z-50 top-0 right-0 h-full w-64 bg-gray-100 shadow-md transition-transform duration-300 md:hidden">
+          <button (click)="closeNavbar()" class="absolute top-0 left-0 bg-transparent rounded-full  p-2 focus:outline-none">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <app-navbar></app-navbar>
+        </div>
+      }
+      <main class="flex-1 p-0 md:p-4">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
 </div>

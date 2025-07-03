@@ -31,7 +31,6 @@ export class AuthService {
     private httpClient: HttpClient,
     private router: Router
   ) {
-    this.checkAuthenticationStatus().subscribe();
   }
 
   // Check authentication status on startup

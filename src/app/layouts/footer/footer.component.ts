@@ -12,7 +12,6 @@ import { Notification } from '../../models/notification.model';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-  private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
 
