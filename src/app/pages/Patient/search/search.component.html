@@ -1,108 +1,134 @@
-<section>
-  <h2 class="text-3xl font-bold mb-6 text-center text-blue-800"> search for Hospitals:</h2>
-  <div class="flex items-center gap-0 mb-4 justify-between bg-white rounded-xl shadow border overflow-hidden max-w-full overflow-x-hidden">
-
-    <div class="flex flex-col items-center px-2 py-2 border-r w-full sm:w-auto min-w-[200px]">
-      <label class="text-xs text-gray-500 mb-1">Select a specialty</label>
-      <div class="flex items-center w-full border border-blue-700 rounded px-2 py-1">
-        <i class="fa-solid fa-stethoscope text-blue-500 mr-2"></i>
-        <select class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full min-w-[120px]" [(ngModel)]="selectedDepartment"> 
-          <option value="">Choose specialty</option>
+<section class="px-4 sm:px-6 lg:px-8 xl:px-12 py-8 bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold mb-8 text-center text-blue-800">Search for Hospitals</h2>
+    
+    <!-- Search Bar -->
+    <div class="flex items-end gap-4 mb-8 bg-white rounded-xl shadow-lg border p-6 w-full">
+      <!-- Specialty -->
+      <div class="flex flex-col min-w-[150px]">
+        <label class="text-xs text-gray-600 mb-2 font-medium">Department</label>
+        <select class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" [(ngModel)]="selectedDepartment">
+          <option value="">All Department</option>
           @for (dept of departments; track dept) {
             <option [value]="dept">{{ dept }}</option>
           }
         </select>
       </div>
-    </div>
-  
-    <div class="flex flex-col items-center px-2 py-2 border-r w-full sm:w-auto min-w-[170px]">
-      <label class="text-xs text-gray-500 mb-1">Insurance name</label>
-      <div class="flex items-center w-full border border-blue-700 rounded px-2 py-1">
-        <i class="fa-solid fa-house-chimney-medical text-blue-500 mr-2"></i>
-        <input type="text" class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" placeholder="Insurance name" [(ngModel)]="insuranceName" />
+      
+      <!-- Insurance -->
+      <div class="flex flex-col min-w-[150px]">
+        <label class="text-xs text-gray-600 mb-2 font-medium">Insurance</label>
+        <input type="text" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Insurance Name" [(ngModel)]="insuranceName" />
       </div>
-    </div>
-  
-    <div class="flex flex-col items-center px-2 py-2 border-r w-full sm:w-auto">
-      <label class="text-xs text-gray-500 mb-1">Price range (Max Budget)</label>
-      <div class="flex items-center w-full border border-blue-700 rounded px-2 py-1">
-        <i class="fa-solid fa-hand-holding-dollar text-blue-500 mr-2"></i>
-        <input type="number" class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" placeholder="Max Budget" [(ngModel)]="maxPrice" />
+      
+      <!-- Search by Name -->
+      <div class="flex flex-col min-w-[150px]">
+        <label class="text-xs text-gray-600 mb-2 font-medium">Search</label>
+        <input type="text" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Hospital Name" [(ngModel)]="searchText" />
       </div>
-    </div>
-  
-  
-    <div class="flex flex-col items-center px-2 py-2 border-r w-full sm:w-auto min-w-[170px]">
-      <label class="text-xs text-gray-500 mb-1">Max Distance</label>
-      <div class="flex items-center w-full border border-blue-700 rounded px-2 py-1">
-        <i class="fa-solid fa-location-dot text-blue-500 mr-2"></i>
-        <select class="outline-none bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full min-w-[100px]" [(ngModel)]="selectedDistance">
-          <option value="">distance</option>
+      
+      <!-- Max Price -->
+      <div class="flex flex-col min-w-[120px]">
+        <label class="text-xs text-gray-600 mb-2 font-medium">Max Budget</label>
+        <input type="number" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="10000" [(ngModel)]="maxPrice" />
+      </div>
+      
+      <!-- Max Distance -->
+      <div class="flex flex-col min-w-[100px]">
+        <label class="text-xs text-gray-600 mb-2 font-medium">Distance</label>
+        <select class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" [(ngModel)]="selectedDistance">
+          <option value="">km</option>
           @for (dist of distanceRanges; track dist) {
             <option [value]="dist.value">{{ dist.label }}</option>
           }
         </select>
       </div>
-    </div>
-  
-    <div class="flex flex-col items-center px-2 py-2 w-full sm:w-auto">
-      <label class="text-xs text-gray-500 mb-1">Or search by name</label>
-      <div class="flex items-center w-full border border-blue-700 rounded px-2 py-1">
-        <i class="fa-solid fa-hospital text-blue-500 mr-2"></i>
-        <input type="text" class="outline-transparent bg-transparent border-transparent focus:border-transparent text-blue-700 font-medium w-full" placeholder="hospital name" [(ngModel)]="searchText" />
+      
+      <!-- Search Button -->
+      <div class="flex flex-col min-w-[100px]">
+        <button (click)="search()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+          Search
+        </button>
       </div>
     </div>
-  
-    <button (click)="search()" class=" rounded-lg bg-gray-500 hover:bg-gray-600 text-white font-bold px-6 py-3 mt-3 me-2 text-md flex items-center gap-2 w-1/4 sm:w-auto">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      Search
-    </button>
-  </div>
-  
-  <div class="w-full min-h-screen bg-gray-200 rounded-3xl p-4 overflow-x-hidden">
-    <div class="w-full min-h-screen flex flex-col">
-      <div class="bg-white rounded-2xl shadow-xl border border-gray-300 p-0 w-full">
-    
-        <div class="bg-gray-100 rounded-xl mx-4 mb-4 p-4 transition-all duration-300 flex flex-col mx-auto gap-4 w-full">
-          @for (hospital of filteredHospitalsList; track hospital) {
-            <div class="bg-slate-500 bg-opacity-90 text-white rounded-xl p-6 flex flex-col gap-3 shadow-md w-full">
-              <div class="text-lg font-semibold">{{ hospital.hospitalName }}</div>
-              <div class="flex flex-wrap gap-4 w-full">
-                <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Distance: {{ hospital.distance | number:'1.0-1' }} km
-                </div>
-                <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Budget: {{ hospital.budget | currency:'EGP'}}
-                </div>
-                <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                    Department: {{ hospital.department}}
-                  </div>
-                <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  Insurance: {{ hospital.insurance ? 'Accepted' : 'Not Accepted' }}
-                </div>
-                <div class="bg-gray-300 flex items-center text-black px-4 py-2 rounded text-center flex-1 min-w-[120px]">
-                  <span class="mr-2">
-                    <span class="inline-block w-5 h-5 rounded-full border border-gray-400" [ngClass]="getAvailabilityColor(hospital.totalPatients)"></span>
-                  </span>
-                  Waiting Patients: {{ hospital.totalPatients }}
-                </div>
-              </div>
-              <div class="flex justify-start mt-2">
-                <button 
-                  (click)="openInMaps(hospital)" 
-                  class=" outline outline-blue-700 bg-white hover:bg-blue-700 text-blue-700 hover:text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-colors duration-200">
-                  <i class="fa-solid fa-map-location-dot"></i>
-                  View on Map
-                </button>
-              </div>
-            </div>
-          }
+
+    <!-- No Results -->
+    <div *ngIf="filteredHospitalsList.length === 0" class="text-center text-gray-500 py-16 lg:py-24">
+      <div class="max-w-md mx-auto">
+        <i class="fa-solid fa-hospital-user text-6xl lg:text-7xl mb-6 text-gray-300"></i>
+        <div class="text-xl lg:text-2xl font-medium mb-4">No hospitals found</div>
+        <p class="text-gray-400">Try adjusting your search criteria to find more results.</p>
+      </div>
+    </div>
+
+    <!-- Results Grid -->
+    <div *ngIf="filteredHospitalsList.length > 0"
+         class="grid gap-6 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+      <div *ngFor="let hospital of filteredHospitalsList"
+           class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 flex flex-col gap-4 border-t-4 transform hover:scale-105 backdrop-blur-sm bg-white/95"
+           [ngClass]="getAvailabilityColor(hospital.totalPatients)">
+        
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-3">
+          <h2 class="text-lg lg:text-xl font-bold text-gray-800 line-clamp-2 group-hover:text-blue-700 transition-colors">
+            {{ hospital.hospitalName }}
+          </h2>
+          <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-100 text-blue-700 whitespace-nowrap">
+            {{ hospital.department }}
+          </span>
         </div>
+        
+        <!-- Info Grid -->
+        <div class="grid grid-cols-1 gap-3 text-sm">
+          <!-- Row 1 -->
+          <div class="flex items-center justify-between">
+            <span class="flex items-center text-gray-600">
+              <i class="fa-solid fa-location-dot mr-2 text-blue-500"></i> 
+              {{ hospital.distance | number:'1.0-1' }} km
+            </span>
+            <span class="flex items-center text-gray-600">
+              <i class="fa-solid fa-users mr-2 text-green-500"></i> 
+              {{ hospital.totalPatients }}
+            </span>
+          </div>
+          
+          <!-- Row 2 -->
+          <div class="flex items-center justify-between">
+            <span class="flex items-center text-gray-600">
+              <i class="fa-solid fa-money-bill-wave mr-2 text-yellow-500"></i> 
+              {{ hospital.budget | currency:'EGP':'symbol':'1.0-0' }}
+            </span>
+            <span class="flex items-center text-gray-600">
+              <i class="fa-solid fa-layer-group mr-2 text-purple-500"></i> 
+              {{ hospital.lowerRange }} - {{ hospital.upperRange }}
+            </span>
+          </div>
+          
+          <!-- Row 3 -->
+          <div class="flex items-center justify-between">
+            <span class="flex items-center text-gray-600">
+              <i class="fa-solid fa-shield-halved mr-2 text-indigo-500"></i> 
+              Insurance:
+            </span>
+            <span [ngClass]="hospital.insurance ? 'text-green-600 font-medium' : 'text-red-600 font-medium'">
+              {{ hospital.insurance ? 'Covered' : 'Not Covered' }}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Coordinates -->
+        <div class="text-xs text-gray-400 border-t border-gray-100 pt-3 flex justify-between">
+          <span><i class="fa-solid fa-globe mr-1"></i> {{ hospital.longitude }}</span>
+          <span><i class="fa-solid fa-globe mr-1"></i> {{ hospital.latitude }}</span>
+        </div>
+        
+        <!-- Action Button -->
+        <button (click)="openInMaps(hospital)"
+                class="mt-4 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:scale-105">
+          <i class="fa-solid fa-map-location-dot"></i> 
+          <span>Open in Google Maps</span>
+        </button>
       </div>
     </div>
   </div>
-    
-
 </section>
-
-
