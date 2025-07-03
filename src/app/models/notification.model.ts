@@ -1,7 +1,13 @@
 export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  timestamp: Date;
-  read: boolean;
+  id: number;
+  text: string;
+  createdAt: string; // or Date if you want to parse it
+  isRead: boolean;
+  type: string;
+}
+
+export interface NotificationsResponse {
+  total: number;
+  unread: number;
+  notifications: Notification[];
 } 

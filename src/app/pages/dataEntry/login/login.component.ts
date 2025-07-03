@@ -42,7 +42,7 @@ export class LoginComponent {
         next: (response) => {
           localStorage.setItem('role', 'data-entry');
           console.log('Login successful', response);
-          this.router.navigate(['/patient/dashboard']);
+          this.router.navigate(['dEntrydashboard']);
         },
         error: (error) => {
           console.error('Login failed', error);

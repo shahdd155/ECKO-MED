@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../models/notification.model';
-import { signal, computed } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -17,9 +16,8 @@ export class FooterComponent {
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
 
-  notifications = this.notificationService.getNotificationsSignal();
-  showDropdown = signal<boolean>(false);
-  unreadCount = computed(() => this.notifications().filter(n => !n.read).length);
+  notifications$ = this.notificationService.getNotifications();
+  showDropdown = false;
 
   getUserType(): 'patient' | 'dataEntry' | 'pharmacy' {
     const url = this.router.url;
@@ -40,20 +38,17 @@ export class FooterComponent {
   }
 
   toggleDropdown(): void {
-    this.showDropdown.update(current => !current);
+    this.showDropdown = !this.showDropdown;
   }
 
   closeDropdown(): void {
-    this.showDropdown.set(false);
+    this.showDropdown = false;
   }
 
-  getRecentNotifications(): Notification[] {
-    return this.notifications().slice(0, 5);
-  }
-
-  formatTimestamp(timestamp: Date): string {
+  formatTimestamp(timestamp: string): string {
+    const date = new Date(timestamp);
     const now = new Date();
-    const diff = now.getTime() - timestamp.getTime();
+    const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -64,12 +59,16 @@ export class FooterComponent {
     return `${days}d ago`;
   }
 
-  markAsRead(notificationId: string): void {
-    this.notificationService.markAsRead(notificationId);
+  markAsRead(notificationId: number): void {
+    this.notificationService.markAsRead(notificationId).subscribe();
   }
 
   markAllAsRead(): void {
     this.notificationService.markAllAsRead();
+  }
+
+  trackById(index: number, notification: Notification): number {
+    return notification.id;
   }
 
   @HostListener('document:click', ['$event'])

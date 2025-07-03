@@ -42,7 +42,7 @@ export class LoginComponent {
         next: (response) => {
           localStorage.setItem('role', 'pharmacy');
           console.log('Login successful', response);
-          this.router.navigate(['/patient/dashboard']);
+          this.router.navigate(['/viewrequests']);
         },
         error: (error) => {
           console.error('Login failed', error);
