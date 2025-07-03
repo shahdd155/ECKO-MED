@@ -112,7 +112,7 @@ export const routes: Routes = [
                 title: 'labtests'
             },
             {
-                path: 'prescription/id:',
+                path: 'prescription/:id',
                 loadComponent: () => import('./pages/Patient/prescriptions/prescriptions.component')
                     .then(m => m.PrescriptionsComponent),
                 title: 'Prescription'

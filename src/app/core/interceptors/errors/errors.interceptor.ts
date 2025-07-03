@@ -31,7 +31,6 @@ export const errorsInterceptor: HttpInterceptorFn = (req, next) => {
       else if(error.status === 422) {
         toastr.error('Validation error. Please check your input data.', '', { timeOut: 1000 });
       }
-  
       else if(error.status === 500) {
         toastr.error('Internal server error. Please try again later.', '', { timeOut: 1000 });
       }

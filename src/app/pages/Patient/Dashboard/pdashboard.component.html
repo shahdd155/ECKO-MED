@@ -30,52 +30,12 @@
     </div>
   </div>
 
-  <!-- new Clinics Carousel from backend) -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <!-- Dynamic: hospital/clinic/news cards -->
-    <div class="relative bg-red-100 rounded-xl shadow overflow-hidden flex flex-col justify-end min-h-[160px]">
-      <img src="" alt="Blood Cells" class="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div class="relative p-4">
-        <!-- hospital name from backend -->
-        <div class="text-lg font-bold">Hospital: {{hospitalName}}</div>
-        <div class="text-md text-gray-700 mb-2">News</div>
-        <div class="text-sm mb-2">Blood Scans are now Available</div>
- <div class="flex">
-    <input type="text" placeholder="Go" class="border bg-transparent border-black rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
-    <button class="px-4 py-2 rounded-r flex items-center">
-        <i class="fa-solid fa-arrow-right"></i>
-    </button>
- </div>
-      </div>
-    </div>
-    <div class="relative bg-blue-100 rounded-xl shadow overflow-hidden flex flex-col justify-end min-h-[160px]">
-      <img src="" alt="Doctor" class="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div class="relative p-4">
-        <div class="text-lg font-bold">Doctor:{{dName}}</div>
-        <div class="text-md text-gray-700 mb-2">News</div>
-        <div class="text-sm mb-2">Doctor Ali-qadi is available from 29-2 to 31-3</div>
-        <div class="flex">
-            <input type="text" placeholder="Go" class="border  bg-transparent border-black rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
-            <button class="px-4 py-2 rounded-r flex items-center">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-         </div>
-      </div>
-    </div>
-    <div class="relative bg-blue-50 rounded-xl shadow overflow-hidden flex flex-col justify-end min-h-[160px]">
-      <img src="" alt="Building" class="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div class="relative p-4">
-        <!-- htt3'yr brdoesm el clinic 7sb backend -->
-        <div class="text-lg font-bold">Clinic: MC</div>
-        <div class="text-md text-gray-700 mb-2">News</div>
-        <div class="text-sm mb-2">New Branch is now launched at New Giza</div>
- <div class="flex">
-    <input type="text" placeholder="Go" class="border  bg-transparent border-black rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 flex-1" />
-    <button class="px-4 py-2 rounded-r flex items-center">
-        <i class="fa-solid fa-arrow-right"></i>
-    </button>
- </div>
-      </div>
+    <!-- src/app/pages/Patient/Dashboard/pdashboard.component.html -->
+  <div *ngIf="ads.length > 0" class="ads-section">
+    <div *ngFor="let ad of ads" class="ad-card">
+      <img [src]="'data:image/png;base64,' + ad.image" alt="Ad Image" />
+      <h3>{{ ad.title }}</h3>
+      <p>{{ ad.description }}</p>
     </div>
   </div>
 
