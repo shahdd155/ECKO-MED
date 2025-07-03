@@ -35,12 +35,20 @@
     </div>
   </div>
 
-  <!-- Ads Section -->
-  <div *ngIf="ads.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div *ngFor="let ad of ads" class="bg-white rounded-xl shadow p-4 hover:shadow-md transition">
-      <img [src]="ad.image" alt="Ad Image" class="w-full h-40 object-cover rounded-md mb-3" />
-      <h3 class="text-lg font-semibold text-gray-800">{{ ad.title }}</h3>
-      <p class="text-gray-500 text-sm">{{ ad.description }}</p>
+  <!-- Ads Section with horizontal scroll -->
+  <div *ngIf="ads.length > 0" class="relative">
+    <div class="flex space-x-4 overflow-x-auto scrollbar-hide px-1">
+      <div
+        *ngFor="let ad of ads"
+        class="min-w-[280px] max-w-xs bg-white rounded-xl shadow p-4 flex-shrink-0 hover:shadow-md transition">
+        
+        <img [src]="ad.image"
+            alt="Ad Image"
+            class="w-full h-48 object-contain rounded-md mb-3 bg-gray-50" />
+        
+        <h3 class="text-lg font-semibold text-gray-800">{{ ad.title }}</h3>
+        <p class="text-gray-500 text-sm line-clamp-3">{{ ad.description }}</p>
+      </div>
     </div>
   </div>
 
