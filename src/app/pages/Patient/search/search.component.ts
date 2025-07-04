@@ -41,6 +41,9 @@ export class SearchComponent implements OnInit {
     'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Oncology', 'General'
   ];
 
+  // Add Math property for template access
+  Math = Math;
+
   constructor() {}
 
   ngOnInit(): void {

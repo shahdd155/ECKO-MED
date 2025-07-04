@@ -1,13 +1,13 @@
-<section class="px-4 sm:px-6 lg:px-8 xl:px-12 py-8 bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen">
+<section class="px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-8 bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen">
   <div class="max-w-7xl mx-auto">
-    <h2 class="text-3xl font-bold mb-8 text-center text-blue-800">Search for Hospitals</h2>
+    <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8 text-center text-blue-500 px-2">Search for Hospitals</h2>
     
     <!-- Search Bar -->
-    <div class="flex items-end gap-4 mb-8 bg-white rounded-xl shadow-lg border p-6 w-full">
+    <div class="flex flex-col lg:flex-row items-stretch lg:items-end gap-3 sm:gap-4 mb-6 sm:mb-8 bg-white rounded-xl shadow-lg border p-4 sm:p-6 w-full">
       <!-- Specialty -->
-      <div class="flex flex-col min-w-[150px]">
+      <div class="flex flex-col flex-1 min-w-0">
         <label class="text-xs text-gray-600 mb-2 font-medium">Department</label>
-        <select class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" [(ngModel)]="selectedDepartment">
+        <select class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm sm:text-base" [(ngModel)]="selectedDepartment">
           <option value="">All Department</option>
           @for (dept of departments; track dept) {
             <option [value]="dept">{{ dept }}</option>
@@ -16,27 +16,27 @@
       </div>
       
       <!-- Insurance -->
-      <div class="flex flex-col min-w-[150px]">
+      <div class="flex flex-col flex-1 min-w-0">
         <label class="text-xs text-gray-600 mb-2 font-medium">Insurance</label>
-        <input type="text" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Insurance Name" [(ngModel)]="insuranceName" />
+        <input type="text" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm sm:text-base" placeholder="Insurance Name" [(ngModel)]="insuranceName" />
       </div>
       
       <!-- Search by Name -->
-      <div class="flex flex-col min-w-[150px]">
+      <div class="flex flex-col flex-1 min-w-0">
         <label class="text-xs text-gray-600 mb-2 font-medium">Search</label>
-        <input type="text" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="Hospital Name" [(ngModel)]="searchText" />
+        <input type="text" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm sm:text-base" placeholder="Hospital Name" [(ngModel)]="searchText" />
       </div>
       
       <!-- Max Price -->
-      <div class="flex flex-col min-w-[120px]">
+      <div class="flex flex-col flex-1 min-w-0">
         <label class="text-xs text-gray-600 mb-2 font-medium">Max Budget</label>
-        <input type="number" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" placeholder="10000" [(ngModel)]="maxPrice" />
+        <input type="number" class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm sm:text-base" placeholder="10000" [(ngModel)]="maxPrice" />
       </div>
       
       <!-- Max Distance -->
-      <div class="flex flex-col min-w-[100px]">
+      <div class="flex flex-col flex-1 min-w-0">
         <label class="text-xs text-gray-600 mb-2 font-medium">Distance</label>
-        <select class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" [(ngModel)]="selectedDistance">
+        <select class="outline-none bg-white text-gray-700 font-medium w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm sm:text-base" [(ngModel)]="selectedDistance">
           <option value="">km</option>
           @for (dist of distanceRanges; track dist) {
             <option [value]="dist.value">{{ dist.label }}</option>
@@ -45,48 +45,47 @@
       </div>
       
       <!-- Search Button -->
-      <div class="flex flex-col min-w-[100px]">
-        <button (click)="search()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+      <div class="flex flex-col w-full lg:w-auto">
+        <button (click)="search()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105 text-sm sm:text-base">
           Search
         </button>
       </div>
     </div>
 
-    <!-- Results Area -->
+ 
     <div>
-      <!-- No Results Message -->
+  
       @if (filteredHospitalsList.length === 0) {
-        <div class="text-center text-gray-500 py-24 animated animate-fade-in">
-          <div class="max-w-md mx-auto">
-            <i class="fa-solid fa-hospital-user text-7xl mb-6 text-gray-300"></i>
-            <h3 class="text-2xl font-medium mb-4">No Hospitals Found</h3>
-            <p class="text-gray-400">Try adjusting your search filters to find available hospitals.</p>
+        <div class="text-center text-gray-500 py-12 sm:py-24 animated animate-fade-in">
+          <div class="max-w-md mx-auto px-4">
+            <i class="fa-solid fa-hospital-user text-5xl sm:text-7xl mb-4 sm:mb-6 text-gray-300"></i>
+            <h3 class="text-xl sm:text-2xl font-medium mb-3 sm:mb-4">No Hospitals Found</h3>
+            <p class="text-gray-400 text-sm sm:text-base">Try adjusting your search filters to find available hospitals.</p>
           </div>
         </div>
       }
-      <!-- Results Grid -->
       @if (filteredHospitalsList.length > 0) {
-        <div class="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <div class="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           @for (hospital of filteredHospitalsList; track hospital; let i = $index) {
-            <div class="group bg-white rounded-2xl shadow-lg hover-lift p-6 flex flex-col gap-5 animated animate-slide-up"
+            <div class="group bg-white rounded-xl sm:rounded-2xl shadow-lg hover-lift p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 animated animate-slide-up"
                  [ngClass]="getAvailabilityColor(hospital.totalPatients)"
                  [style.animationDelay]="(i * 0.1) + 's'">
-              <div class="flex items-start justify-between gap-3">
-                <h3 class="text-xl font-bold text-gray-800 group-hover:text-blue-700 transition-colors">{{ hospital.hospitalName }}</h3>
-                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 whitespace-nowrap">{{ hospital.department }}</span>
+              <div class="flex items-start justify-between gap-2 sm:gap-3">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800 group-hover:text-blue-700 transition-colors line-clamp-2">{{ hospital.hospitalName }}</h3>
+                <span class="text-xs font-semibold px-2 sm:px-3 py-1 rounded-full bg-blue-100 text-blue-800 whitespace-nowrap flex-shrink-0">{{ hospital.department }}</span>
               </div>
-              <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-                <span class="flex items-center text-gray-600"><i class="fa-solid fa-location-dot w-5 text-center text-blue-500"></i> {{ hospital.distance | number:'1.0-1' }} km</span>
-                <span class="flex items-center text-gray-600"><i class="fa-solid fa-users w-5 text-center text-green-500"></i> {{ hospital.totalPatients }} Patients</span>
-                <span class="flex items-center text-gray-600"><i class="fa-solid fa-money-bill-wave w-5 text-center text-yellow-500"></i> {{ hospital.budget | currency:'EGP':'symbol':'1.0-0' }}</span>
-                <span class="flex items-center text-gray-600"><i class="fa-solid fa-layer-group w-5 text-center text-purple-500"></i> {{ hospital.lowerRange }}-{{ hospital.upperRange }}</span>
-                <div class="col-span-2 flex items-center justify-between pt-2 border-t border-gray-100 mt-1">
-                  <span class="flex items-center text-gray-600"><i class="fa-solid fa-shield-halved w-5 text-center text-indigo-500"></i> Insurance</span>
-                  <span [ngClass]="hospital.insurance ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">{{ hospital.insurance ? 'Covered' : 'Not Covered' }}</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-4 gap-y-2 sm:gap-y-3 text-xs sm:text-sm">
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-location-dot w-4 sm:w-5 text-center text-blue-500 mr-2"></i> {{ hospital.distance | number:'1.0-1' }} km</span>
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-users w-4 sm:w-5 text-center text-green-500 mr-2"></i> {{ hospital.totalPatients }} Patients</span>
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-money-bill-wave w-4 sm:w-5 text-center text-yellow-500 mr-2"></i> {{ hospital.budget | currency:'EGP':'symbol':'1.0-0' }}</span>
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-layer-group w-4 sm:w-5 text-center text-purple-500 mr-2"></i> {{ hospital.lowerRange }}-{{ hospital.upperRange }}</span>
+                <div class="col-span-1 sm:col-span-2 flex items-center justify-between pt-2 border-t border-gray-100 mt-1">
+                  <span class="flex items-center text-gray-600"><i class="fa-solid fa-shield-halved w-4 sm:w-5 text-center text-indigo-500 mr-2"></i> Insurance</span>
+                  <span [ngClass]="hospital.insurance ? 'text-green-600 font-bold' : 'text-red-600 font-bold'" class="text-xs sm:text-sm">{{ hospital.insurance ? 'Covered' : 'Not Covered' }}</span>
                 </div>
               </div>
-              <button (click)="openInMaps(hospital)" class="w-full h-14 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold transition-all duration-300 button-blue-glow shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mt-4 text-base">
-                <i class="fa-solid fa-map-location-dot mr-2"></i>
+              <button (click)="openInMaps(hospital)" class="w-full h-12 sm:h-14 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg sm:rounded-xl font-semibold transition-all duration-300 button-blue-glow shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mt-3 sm:mt-4 text-sm sm:text-base">
+                <i class="fa-solid fa-map-location-dot mr-1 sm:mr-2"></i>
                 View on Map
               </button>
             </div>
