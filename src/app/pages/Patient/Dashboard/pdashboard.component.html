@@ -36,13 +36,17 @@
   </div>
 
   <!-- Ads Section -->
-  <div *ngIf="ads.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div *ngFor="let ad of ads" class="bg-white rounded-xl shadow p-4 hover:shadow-md transition">
-      <img [src]="ad.image" alt="Ad Image" class="w-full h-40 object-cover rounded-md mb-3" />
-      <h3 class="text-lg font-semibold text-gray-800">{{ ad.title }}</h3>
-      <p class="text-gray-500 text-sm">{{ ad.description }}</p>
+  @if (ads.length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (ad of ads; track ad) {
+        <div class="bg-white rounded-xl shadow p-4 hover:shadow-md transition">
+          <img [src]="ad.image" alt="Ad Image" class="w-full h-40 object-cover rounded-md mb-3" />
+          <h3 class="text-lg font-semibold text-gray-800">{{ ad.title }}</h3>
+          <p class="text-gray-500 text-sm">{{ ad.description }}</p>
+        </div>
+      }
     </div>
-  </div>
+  }
 
   <!-- Profile Card -->
   <div class="bg-white rounded-2xl shadow p-6 flex flex-col md:flex-row items-center gap-6">
@@ -56,8 +60,10 @@
       </a>
     </div>
     <div class="flex-1 flex justify-center md:justify-end">
-      <img *ngIf="userImage" [src]="userImage" alt="User Image"
+      @if (userImage) {
+        <img [src]="userImage" alt="User Image"
                  class="w-32 h-32 object-cover rounded-full border-4 border-gray-200 shadow" />
+      }
     </div>
   </div>
 </div>

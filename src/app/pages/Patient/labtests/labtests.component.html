@@ -11,7 +11,9 @@
                 <div class="text-xs text-black">{{ test.date | date }}</div>
               </div>
               <div class="flex flex-col md:flex-row gap-4">
-                <img *ngIf="test.imagePath" [src]="test.imagePath" alt="{{ test.name }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
+                @if (test.imagePath) {
+                  <img [src]="test.imagePath" alt="{{ test.name }}" class="rounded-lg max-w-full md:max-w-xs shadow-md border border-gray-300">
+                }
                 <div class="flex-1">
                   <div class="text-sm text-black"><span class="font-semibold">Type:</span> {{ test.type }}</div>
                   <div class="text-sm text-black"><span class="font-semibold">Notes:</span> {{ test.notes }}</div>

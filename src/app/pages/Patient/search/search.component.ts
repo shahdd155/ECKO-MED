@@ -23,10 +23,10 @@ export class SearchComponent implements OnInit {
 
   selectedDistance = '';
   distanceRanges = [
-    { label: '5 km', value: '5' },
-    { label: '10 km', value: '10' },
-    { label: '20 km', value: '20' },
-    { label: 'km', value: '9999' }
+    { label: '< 5 km', value: 5 },
+    { label: '< 10 km', value: 10 },
+    { label: '< 20 km', value: 20 },
+    { label: '< 50 km', value: 50 }
   ];
 
   departments: any[] = ['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Oncology', 'Dermatology', 'Radiology'];
@@ -35,6 +35,11 @@ export class SearchComponent implements OnInit {
 
   private patientsService = inject(PatientsService);
   private userLocation: { lat: number, lng: number } | null = null;
+
+  // Add department and distance labels for the new UI
+  departmentLabels: any[] = [
+    'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Oncology', 'General'
+  ];
 
   constructor() {}
 
@@ -79,13 +84,14 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  // Update getAvailabilityColor for new border classes
   getAvailabilityColor(totalPatients: number): string {
-    if (totalPatients <= 5) {
-      return 'bg-green-500';
-    } else if (totalPatients <= 10) {
-      return 'bg-orange-500';
+    if (totalPatients < 50) {
+      return 'border-t-green-500';
+    } else if (totalPatients < 100) {
+      return 'border-t-yellow-500';
     } else {
-      return 'bg-red-500';
+      return 'border-t-red-500';
     }
   }
 

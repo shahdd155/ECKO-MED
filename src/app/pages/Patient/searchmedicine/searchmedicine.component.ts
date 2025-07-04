@@ -3,6 +3,7 @@ import { MedicineService } from '../../../core/services/medicine/medicine.servic
 import { Medicine, PharmacyInventory } from '../../../models/medicine.model';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule} from '@angular/common';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-searchmedicine',
@@ -22,44 +23,67 @@ export class SearchmedicineComponent implements OnInit {
   userLocation: { latitude: number; longitude: number } | null = null;
   locationDenied = false;
 
+  // Add these properties for template binding
+  selectedMedicine: Medicine | null = null;
+  selectedQuantity: number | null = null;
+
+  sendingAll = false;
+
   constructor(private medicineService: MedicineService, private fb: FormBuilder) {
     this.searchForm = this.fb.group({
       medicineId: [null, Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]]
     });
+
+    // Update selectedMedicine and selectedQuantity when form changes
+    this.searchForm.valueChanges.subscribe(val => {
+      this.selectedMedicine = this.medicines.find(m => m.id === val.medicineId) || null;
+      this.selectedQuantity = val.quantity;
+    });
+
+    // Re-search pharmacies when medicine changes (with debounce)
+    this.searchForm.get('medicineId')?.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        if (this.searchForm.valid) {
+          this.performSearch();
+        }
+      });
   }
 
   ngOnInit(): void {
     this.medicineService.getMedicines().subscribe(meds => {
       this.medicines = meds;
+      // Automatically select the first medicine and quantity if not set
+      if (this.medicines.length > 0 && !this.searchForm.value.medicineId) {
+        this.searchForm.patchValue({ medicineId: this.medicines[0].id });
+      }
+      // Request location only once on load
+      this.requestLocationOnce();
     });
   }
 
-  askForLocationAndSearch(): void {
+  // Request location only once
+  requestLocationOnce(): void {
     this.locationPermissionVisible = true;
     this.locationDenied = false;
     this.locationPermissionMessage = 'This page would like to access your current location to show nearby pharmacies. Please allow location access.';
-    setTimeout(() => {
-      this.medicineService.getCurrentLocation().then(loc => {
-        this.userLocation = loc;
-        this.locationPermissionMessage = 'Location access granted. Searching for nearby pharmacies...';
-        setTimeout(() => {
-          this.locationPermissionVisible = false;
-          this.performSearch();
-        }, 1000);
-      }).catch(() => {
-        this.locationPermissionMessage = 'Location access denied. Results may not be accurate.';
-        this.locationDenied = true;
-        // Keep the message visible and still perform the search without location
-        this.userLocation = null;
+    this.medicineService.getCurrentLocation().then(loc => {
+      this.userLocation = loc;
+      this.locationPermissionMessage = 'Location access granted.';
+      setTimeout(() => {
+        this.locationPermissionVisible = false;
         this.performSearch();
-      });
-    }, 300); // Small delay to ensure message is visible before prompt
-  }
-
-  onSearch(): void {
-    if (this.searchForm.invalid) return;
-    this.askForLocationAndSearch();
+      }, 1000);
+    }).catch(() => {
+      this.locationPermissionMessage = 'Location access denied. Results may not be accurate.';
+      this.locationDenied = true;
+      this.userLocation = null;
+      setTimeout(() => {
+        this.locationPermissionVisible = false;
+        this.performSearch();
+      }, 1000);
+    });
   }
 
   performSearch(): void {
@@ -130,5 +154,36 @@ export class SearchmedicineComponent implements OnInit {
     } else {
       alert('Location not available for this pharmacy.');
     }
+  }
+
+  // Add this method for template button
+  sendRequestToSelected(): void {
+    if (!this.selectedMedicine || !this.selectedQuantity) return;
+    // Find a pharmacy to send to (for demo, just pick the first one)
+    const pharmacy = this.pharmacies[0];
+    if (pharmacy) {
+      this.sendRequest(pharmacy);
+    }
+  }
+
+  // Add this method to send requests to all pharmacies
+  sendRequestToAll(): void {
+    if (!this.selectedMedicine || !this.selectedQuantity) return;
+    if (!this.pharmacies || this.pharmacies.length === 0) return;
+    this.sendingAll = true;
+    const pharmaciesCopy = [...this.pharmacies];
+    pharmaciesCopy.forEach((pharmacy, index) => {
+      setTimeout(() => {
+        this.sendRequest(pharmacy);
+      }, index * 500); // Staggered for effect
+    });
+    setTimeout(() => {
+      this.sendingAll = false;
+    }, Math.max(1500, pharmaciesCopy.length * 500));
+  }
+
+  // TrackBy function for pharmacy cards
+  trackPharmacyId(index: number, pharmacy: any) {
+    return pharmacy.pharmacyID;
   }
 }

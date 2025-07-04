@@ -52,83 +52,47 @@
       </div>
     </div>
 
-    <!-- No Results -->
-    <div *ngIf="filteredHospitalsList.length === 0" class="text-center text-gray-500 py-16 lg:py-24">
-      <div class="max-w-md mx-auto">
-        <i class="fa-solid fa-hospital-user text-6xl lg:text-7xl mb-6 text-gray-300"></i>
-        <div class="text-xl lg:text-2xl font-medium mb-4">No hospitals found</div>
-        <p class="text-gray-400">Try adjusting your search criteria to find more results.</p>
-      </div>
-    </div>
-
-    <!-- Results Grid -->
-    <div *ngIf="filteredHospitalsList.length > 0"
-         class="grid gap-6 lg:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-      <div *ngFor="let hospital of filteredHospitalsList"
-           class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 flex flex-col gap-4 border-t-4 transform hover:scale-105 backdrop-blur-sm bg-white/95"
-           [ngClass]="getAvailabilityColor(hospital.totalPatients)">
-        
-        <!-- Header -->
-        <div class="flex items-start justify-between gap-3">
-          <h2 class="text-lg lg:text-xl font-bold text-gray-800 line-clamp-2 group-hover:text-blue-700 transition-colors">
-            {{ hospital.hospitalName }}
-          </h2>
-          <span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-100 text-blue-700 whitespace-nowrap">
-            {{ hospital.department }}
-          </span>
-        </div>
-        
-        <!-- Info Grid -->
-        <div class="grid grid-cols-1 gap-3 text-sm">
-          <!-- Row 1 -->
-          <div class="flex items-center justify-between">
-            <span class="flex items-center text-gray-600">
-              <i class="fa-solid fa-location-dot mr-2 text-blue-500"></i> 
-              {{ hospital.distance | number:'1.0-1' }} km
-            </span>
-            <span class="flex items-center text-gray-600">
-              <i class="fa-solid fa-users mr-2 text-green-500"></i> 
-              {{ hospital.totalPatients }}
-            </span>
-          </div>
-          
-          <!-- Row 2 -->
-          <div class="flex items-center justify-between">
-            <span class="flex items-center text-gray-600">
-              <i class="fa-solid fa-money-bill-wave mr-2 text-yellow-500"></i> 
-              {{ hospital.budget | currency:'EGP':'symbol':'1.0-0' }}
-            </span>
-            <span class="flex items-center text-gray-600">
-              <i class="fa-solid fa-layer-group mr-2 text-purple-500"></i> 
-              {{ hospital.lowerRange }} - {{ hospital.upperRange }}
-            </span>
-          </div>
-          
-          <!-- Row 3 -->
-          <div class="flex items-center justify-between">
-            <span class="flex items-center text-gray-600">
-              <i class="fa-solid fa-shield-halved mr-2 text-indigo-500"></i> 
-              Insurance:
-            </span>
-            <span [ngClass]="hospital.insurance ? 'text-green-600 font-medium' : 'text-red-600 font-medium'">
-              {{ hospital.insurance ? 'Covered' : 'Not Covered' }}
-            </span>
+    <!-- Results Area -->
+    <div>
+      <!-- No Results Message -->
+      @if (filteredHospitalsList.length === 0) {
+        <div class="text-center text-gray-500 py-24 animated animate-fade-in">
+          <div class="max-w-md mx-auto">
+            <i class="fa-solid fa-hospital-user text-7xl mb-6 text-gray-300"></i>
+            <h3 class="text-2xl font-medium mb-4">No Hospitals Found</h3>
+            <p class="text-gray-400">Try adjusting your search filters to find available hospitals.</p>
           </div>
         </div>
-        
-        <!-- Coordinates -->
-        <div class="text-xs text-gray-400 border-t border-gray-100 pt-3 flex justify-between">
-          <span><i class="fa-solid fa-globe mr-1"></i> {{ hospital.longitude }}</span>
-          <span><i class="fa-solid fa-globe mr-1"></i> {{ hospital.latitude }}</span>
+      }
+      <!-- Results Grid -->
+      @if (filteredHospitalsList.length > 0) {
+        <div class="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+          @for (hospital of filteredHospitalsList; track hospital; let i = $index) {
+            <div class="group bg-white rounded-2xl shadow-lg hover-lift p-6 flex flex-col gap-5 animated animate-slide-up"
+                 [ngClass]="getAvailabilityColor(hospital.totalPatients)"
+                 [style.animationDelay]="(i * 0.1) + 's'">
+              <div class="flex items-start justify-between gap-3">
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-blue-700 transition-colors">{{ hospital.hospitalName }}</h3>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 whitespace-nowrap">{{ hospital.department }}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-location-dot w-5 text-center text-blue-500"></i> {{ hospital.distance | number:'1.0-1' }} km</span>
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-users w-5 text-center text-green-500"></i> {{ hospital.totalPatients }} Patients</span>
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-money-bill-wave w-5 text-center text-yellow-500"></i> {{ hospital.budget | currency:'EGP':'symbol':'1.0-0' }}</span>
+                <span class="flex items-center text-gray-600"><i class="fa-solid fa-layer-group w-5 text-center text-purple-500"></i> {{ hospital.lowerRange }}-{{ hospital.upperRange }}</span>
+                <div class="col-span-2 flex items-center justify-between pt-2 border-t border-gray-100 mt-1">
+                  <span class="flex items-center text-gray-600"><i class="fa-solid fa-shield-halved w-5 text-center text-indigo-500"></i> Insurance</span>
+                  <span [ngClass]="hospital.insurance ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">{{ hospital.insurance ? 'Covered' : 'Not Covered' }}</span>
+                </div>
+              </div>
+              <button (click)="openInMaps(hospital)" class="w-full h-14 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold transition-all duration-300 button-blue-glow shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mt-4 text-base">
+                <i class="fa-solid fa-map-location-dot mr-2"></i>
+                View on Map
+              </button>
+            </div>
+          }
         </div>
-        
-        <!-- Action Button -->
-        <button (click)="openInMaps(hospital)"
-                class="mt-4 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:scale-105">
-          <i class="fa-solid fa-map-location-dot"></i> 
-          <span>Open in Google Maps</span>
-        </button>
-      </div>
+      }
     </div>
   </div>
 </section>

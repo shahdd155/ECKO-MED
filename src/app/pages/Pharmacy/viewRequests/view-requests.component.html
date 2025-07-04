@@ -242,7 +242,9 @@
                 <!-- Request ID and Date -->
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-gray-900">#{{ request.id }}</div>
-                  <div class="text-sm text-gray-500" *ngIf="request.dateTime">{{ formatDate(request.dateTime) }}</div>
+                  @if (request.dateTime) {
+                    <div class="text-sm text-gray-500">{{ formatDate(request.dateTime) }}</div>
+                  }
                 </td>
                 <!-- Patient/User Information -->
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -255,17 +257,28 @@
                       </div>
                     </div>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900" *ngIf="request.userName; else noName">{{ request.userName }}</div>
-                      <ng-template #noName><span class="text-gray-400 italic">N/A</span></ng-template>
-                      <div class="text-sm text-gray-500" *ngIf="request.email">{{ request.email }}</div>
-                      <div class="text-xs text-gray-400" *ngIf="request.phoneNum">{{ request.phoneNum }}</div>
+                      @if (request.userName) {
+                        <div class="text-sm font-medium text-gray-900">{{ request.userName }}</div>
+                      } @else {
+                        <ng-template #noName><span class="text-gray-400 italic">N/A</span></ng-template>
+                      }
+                      @if (request.email) {
+                        <div class="text-sm text-gray-500">{{ request.email }}</div>
+                      }
+                      @if (request.phoneNum) {
+                        <div class="text-xs text-gray-400">{{ request.phoneNum }}</div>
+                      }
                     </div>
                   </div>
                 </td>
                 <!-- Medicine Details -->
                 <td class="px-6 py-4">
-                  <div class="text-sm font-medium text-gray-900" *ngIf="request.medicineName">{{ request.medicineName }}</div>
-                  <div class="text-sm text-gray-500" *ngIf="request.qty">Qty: {{ request.qty }}</div>
+                  @if (request.medicineName) {
+                    <div class="text-sm font-medium text-gray-900">{{ request.medicineName }}</div>
+                  }
+                  @if (request.qty) {
+                    <div class="text-sm text-gray-500">Qty: {{ request.qty }}</div>
+                  }
                 </td>
                 <!-- Actions -->
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
