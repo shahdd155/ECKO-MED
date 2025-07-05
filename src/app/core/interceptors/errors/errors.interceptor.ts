@@ -17,7 +17,10 @@ export const errorsInterceptor: HttpInterceptorFn = (req, next) => {
         toastr.error('Bad request. Please check your input and try again.', '', { timeOut: 1000 });
       }
       else if(error.status === 401) {
-        toastr.error('Unauthorized. Please log in again.', '', { timeOut: 1000 });
+        // Optionally, you can just return here and not show any message
+        const errorMessage = error.error?.message || error.message || 'Unauthorized access';
+        console.error('401 Error:', errorMessage);
+        return throwError(() => error);
       }
       else if(error.status === 403) {
         toastr.error('Access forbidden. You don\'t have permission to perform this action.', '', { timeOut: 1000 });
