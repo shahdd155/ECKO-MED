@@ -163,7 +163,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.removeSelectedFile();
         // Navigate to login after a delay
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/verifyemail']);
         }, 4000);
       },
       error: (error) => {

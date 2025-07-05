@@ -230,12 +230,9 @@
                       [class.border-red-500]="patientForm.get('department')?.invalid && patientForm.get('department')?.touched"
                     >
                       <option value="">Select department</option>
-                      <option value="cardiology">Cardiology</option>
-                      <option value="dermatology">Dermatology</option>
-                      <option value="emergency">Emergency</option>
-                      <option value="neurology">Neurology</option>
-                      <option value="orthopedics">Orthopedics</option>
-                      <option value="pediatrics">Pediatrics</option>
+                      @for (dept of availableDepartments; track dept.name) {
+                        <option [value]="dept.name">{{ dept.name }}</option>
+                      }
                     </select>
                     @if (patientForm.get('department')?.invalid && patientForm.get('department')?.touched) {
                       <div class="mt-1 text-sm text-red-600">Please select a department</div>
@@ -328,34 +325,6 @@
                 <label class="block text-sm font-medium text-slate-200 mb-2">User ID</label>
                 <div class="bg-white rounded px-3 py-2">
                   <span class="text-gray-900">{{ patientForm.get('userId')?.value || 'Not entered' }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Department Statistics (Optional) -->
-            <div class="bg-white rounded-lg shadow-sm p-4 lg:p-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-4">Department Statistics</h3>
-              <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Emergency</span>
-                  <div class="w-24 bg-gray-200 rounded-full h-2">
-                    <div class="bg-slate-600 h-2 rounded-full" style="width: 45%"></div>
-                  </div>
-                  <span class="text-sm text-gray-500">45</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Cardiology</span>
-                  <div class="w-24 bg-gray-200 rounded-full h-2">
-                    <div class="bg-slate-600 h-2 rounded-full" style="width: 30%"></div>
-                  </div>
-                  <span class="text-sm text-gray-500">30</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Surgery</span>
-                  <div class="w-24 bg-gray-200 rounded-full h-2">
-                    <div class="bg-slate-600 h-2 rounded-full" style="width: 25%"></div>
-                  </div>
-                  <span class="text-sm text-gray-500">25</span>
                 </div>
               </div>
             </div>

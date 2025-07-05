@@ -56,11 +56,11 @@
               <div class="font-bold text-base mb-2">Legend</div>
               <div class="flex items-center mb-2">
                 <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#374151"></span>
-                <span class="text-sm text-gray-900">Patients Number This Month</span>
+                <span class="text-sm text-gray-900">Patients Number This {{ timeframe === 'monthly' ? 'Month' : 'Week' }}</span>
               </div>
               <div class="flex items-center">
                 <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#f59e42"></span>
-                <span class="text-sm text-gray-900">Patients Number Last Month</span>
+                <span class="text-sm text-gray-900">Patients Number This {{ timeframe === 'monthly' ? 'Month' : 'Week' }}</span>
               </div>
             </div>
           </div>
@@ -72,9 +72,12 @@
         <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
           <div class="flex justify-between items-start">
             <div>
-              <div class="text-gray-500 text-base font-medium mb-1">Total Patients</div>
+              <div class="text-gray-500 text-base font-medium mb-1">Total patients</div>
               <div class="text-4xl font-extrabold text-gray-900">{{ totalPatients | number }}</div>
-              <div class="text-sm text-green-600 font-medium mt-1">{{totalPatientsPercent}} from last month</div>
+              <div class="text-sm font-medium mt-1" [ngClass]="{
+                'text-red-600': totalPatients < 0.0,
+                'text-green-600': totalPatients < 0 
+              }">{{totalPatients}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
             </div>
             <button class="text-gray-400 p-1">
               <i class="fa-solid fa-ellipsis"></i>
@@ -87,7 +90,10 @@
             <div>
               <div class="text-gray-500 text-base font-medium mb-1">Total Lab Results</div>
               <div class="text-4xl font-extrabold text-gray-900">{{ totalLabResults | number }}</div>
-              <div class="text-sm text-red-600 font-medium mt-1">{{labTestsPercent}} from last month</div>
+              <div class="text-sm font-medium mt-1" [ngClass]="{
+                'text-red-600': labTestsPercent === '-',
+                'text-green-600': labTestsPercent !== '-'
+              }">{{labTestsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
             </div>
             <button class="text-gray-400 p-1">
               <i class="fa-solid fa-ellipsis"></i>
@@ -99,14 +105,20 @@
           <div class="text-gray-500 text-base font-medium">Total no. of male</div>
           <div class="text-4xl font-extrabold text-gray-900">{{ maleCount | number }}</div>
           <i class="fa-solid fa-person text-orange-500 text-8xl"></i>
-          <div class="text-sm text-red-600 font-medium">{{malePatientsPercent}} from last week</div>
+          <div class="text-sm font-medium" [ngClass]="{
+            'text-blue-600': malePatientsPercent.includes('-'),
+            'text-red-600': !malePatientsPercent.includes('-')
+          }">{{malePatientsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
         </div>
         <!-- Total no. of female -->
         <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
           <div class="text-gray-500 text-base font-medium">Total no. of female</div>
           <div class="text-4xl font-extrabold text-gray-900">{{ femaleCount | number }}</div>
           <i class="fa-solid fa-person-dress text-8xl"></i>
-          <div class="text-sm text-orange-400 font-medium">{{femalePatientsPercent}} from last week</div>
+          <div class="text-sm font-medium" [ngClass]="{
+            'text-red-600': femalePatientsPercent.includes('-'),
+            'text-green-600': !femalePatientsPercent.includes('-')
+          }">{{femalePatientsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
         </div>
       </div>
     </div>

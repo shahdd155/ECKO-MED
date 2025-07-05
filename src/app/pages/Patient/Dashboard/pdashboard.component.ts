@@ -19,8 +19,6 @@ export class PdashboardComponent implements OnInit {
   userImage: string | null = null;
   
   // These seem to be static or from another source, leaving them for now.
-  hospitalName= 'alsalam';
-  dName='Ahmed';
 
   private patientsService = inject(PatientsService);
   private adsService = inject(AdsService);

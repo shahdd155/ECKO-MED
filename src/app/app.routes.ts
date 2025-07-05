@@ -43,6 +43,12 @@ export const routes: Routes = [
                 path: 'forgotpass',
                 title: 'forget password',
                 loadComponent: () => import('./pages/forgotPassword/forgotpass.component').then(m => m.ForgotpassComponent)
+            },
+            {
+                path: 'verifyemail',
+                loadComponent: () => import('./pages/verifyemail/verifyemail.component')
+                    .then(m => m.VerifyemailComponent),
+                title: 'Verify Email'
             }
         ]
     },
@@ -160,12 +166,6 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/Patient/searchmedicine/searchmedicine.component')
                     .then(m => m.SearchmedicineComponent),
                 title: 'search medicine'
-            },
-            {
-                path: 'verifyemail',
-                loadComponent: () => import('./pages/verifyemail/verifyemail.component')
-                    .then(m => m.VerifyemailComponent),
-                title: 'Verify Email'
             }
         ]
     },
