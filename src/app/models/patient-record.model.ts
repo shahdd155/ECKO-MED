@@ -17,10 +17,10 @@ export interface Prescription {
 }
 
 export interface Scan {
-  id: number;
+  id?: number;
   type: string;
-  bodypart: string;
   date: string;
   description: string;
-  ImageBase64: string;
+  imageBase64: string;
+  bodypart?: string;
 }

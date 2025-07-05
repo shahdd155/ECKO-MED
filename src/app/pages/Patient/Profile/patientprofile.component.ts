@@ -20,7 +20,8 @@ export class PatientprofileComponent implements OnInit {
     this.profileForm = this.fb.group({
       firstName: [''],
       lastName: [''],
-      insurance: ['']
+      insurance: [''],
+      username:['']
     });
   }
 
@@ -29,7 +30,8 @@ export class PatientprofileComponent implements OnInit {
       this.profileForm.patchValue({
         firstName: data.firstName,
         lastName: data.lastName,
-        insurance: data.insurance
+        insurance: data.insurance,
+        username: data.username
       });
       if (data.image) {
         this.userImage = 'data:image/png;base64,' + data.image;

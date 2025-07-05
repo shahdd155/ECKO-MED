@@ -24,6 +24,10 @@
           <input type="file" (change)="onFileSelected($event)" #fileInput style="display: none;" />
           <button type="button" (click)="fileInput.click()" class="bg-slate-600 text-white px-4 py-2 rounded shadow hover:bg-slate-700">Update Image</button>
         </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" [value]="profileForm.get('username')?.value" class="form-control" readonly />
+        </div>
         <div class="flex gap-2">
           <button type="submit" class="bg-slate-600 text-white px-8 py-2 rounded shadow hover:bg-slate-700 flex-1">Save</button>
           <button type="button" class="border border-gray-400 text-gray-700 px-8 py-2 rounded flex-1">Cancel</button>

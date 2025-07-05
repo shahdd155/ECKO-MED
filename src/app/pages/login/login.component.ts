@@ -49,4 +49,12 @@ export class LoginComponent {
       });
     }
   }
+
+  goToPharmacyLogin() {
+    this.router.navigate(['/phlogin']);
+  }
+
+  goToDataEntryLogin() {
+    this.router.navigate(['/dentrylogin']);
+  }
 }

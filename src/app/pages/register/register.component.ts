@@ -143,9 +143,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
 
-    // Append all user fields as strings
+    // Append all user fields as strings, except username
     Object.keys(this.registerForm.controls).forEach(key => {
-      formData.append(key, this.registerForm.get(key)?.value || '');
+      if (key !== 'username') {
+        formData.append(key, this.registerForm.get(key)?.value || '');
+      }
     });
 
     if (this.selectedFile) {
@@ -156,11 +158,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.isSubmitting = false;
         // Display the success message and the username returned from the backend
-        this.successMessage = `${response.message} Your username is: ${response.userName}`;
-        
+        this.successMessage = `${response.message}`;
         this.registerForm.reset();
         this.removeSelectedFile();
-        
         // Navigate to login after a delay
         setTimeout(() => {
           this.router.navigate(['/login']);
@@ -169,7 +169,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.isSubmitting = false;
         this.errorMessage = error.message || 'Registration failed. Please try again.';
-        
         setTimeout(() => {
           this.errorMessage = '';
         }, 5000);

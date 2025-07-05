@@ -146,36 +146,6 @@
             </div>
 
             <div class="flex flex-col gap-1">
-              <label for="username" class="text-sm font-medium">Username</label>
-              <input id="username" type="text" formControlName="username" placeholder="Choose a username" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-              <!-- Username Validation -->
-              @if (registerForm.get('username')?.errors && registerForm.get('username')?.touched) {
-                  <div class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                      <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                      </svg>
-                      <span class="sr-only">Danger</span>
-                      <div>
-                          <ul class="mt-1.5 list-disc list-inside">
-                              @if (registerForm.get('username')?.getError('required')) {
-                                  <li>Username is required</li>
-                              }
-                              @else if (registerForm.get('username')?.getError('minlength')) {
-                                  <li>Username must be at least 4 characters</li>
-                              }
-                              @else if (registerForm.get('username')?.getError('maxlength')) {
-                                  <li>Username cannot exceed 20 characters</li>
-                              }
-                              @else if (registerForm.get('username')?.getError('pattern')) {
-                                  <li>Username can only contain letters, numbers, and underscores</li>
-                              }
-                          </ul>
-                      </div>
-                  </div>
-              }
-            </div>
-
-            <div class="flex flex-col gap-1">
               <label for="email" class="text-sm font-medium">Email</label>
               <input id="email" type="email" formControlName="email" placeholder="Enter your email" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" />
               <!-- Email Validation -->
