@@ -1,127 +1,126 @@
 <div class="p-6 bg-gray-100 min-h-screen rounded-2xl">
-  <div class="mb-6">
-    <div class="w-full text-2xl font-bold text-gray-900 text-left">
-      Data Entry - {{ userName }}
+    <div class="mb-6">
+        <div class="w-full text-2xl font-bold text-gray-900 text-left">
+            Data Entry - {{ userName }}
+        </div>
     </div>
-  </div>
 
-  <!-- Loading State -->
-  @if (isLoading) {
+    <!-- Loading State -->
+    @if (isLoading) {
     <div class="flex justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      <span class="ml-3 text-gray-600">Loading dashboard data...</span>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <span class="ml-3 text-gray-600">Loading dashboard data...</span>
     </div>
-  }
+    }
 
-  @if (!isLoading) {
+    @if (!isLoading) {
     <div class="space-y-4">
-      <div class="mb-4">
-   
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col min-h-[350px] relative w-full">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-lg text-gray-900">Patient Overview</span>
-            <div class="flex items-center space-x-2">
-              <div class="relative">
-                <select #timeframeSelect class="border border-gray-300 rounded px-2 py-1 text-sm pr-6 appearance-none focus:outline-none" (change)="setTimeframe(timeframeSelect.value)">
-                  <option value="monthly" [selected]="timeframe === 'monthly'">Monthly</option>
-                  <option value="weekly" [selected]="timeframe === 'weekly'">Weekly</option>
-                </select>
-              </div>
-              <button class="text-gray-400 p-1">
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-              </button>
-            </div>
-          </div>
-          <div class="flex h-full">
-            <div class="flex-1 relative">
-              @if (patientOverviewData.length > 0) {
-                <ngx-charts-line-chart 
-                  [results]="patientOverviewData" 
-                  [scheme]="colorScheme" 
-                  [xAxis]="true" 
-                  [yAxis]="true" 
-                  [legend]="false" 
-                  [showXAxisLabel]="false" 
-                  [showYAxisLabel]="false" 
-                  [autoScale]="true"
-                  [animations]="true"
-                  class="h-48 w-full">
-                </ngx-charts-line-chart>
-                <div class="absolute left-[52%] top-[18%] text-xs font-bold text-gray-900 bg-white px-2 py-1 rounded shadow border border-gray-200">
-                  {{ getPeakValue() | number }}
-                </div>
-              }
-            </div>
-            <div class="flex flex-col justify-center ml-4 min-w-[120px]">
-              <div class="font-bold text-base mb-2">Legend</div>
-              <div class="flex items-center mb-2">
-                <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#374151"></span>
-                <span class="text-sm text-gray-900">Patients Number This {{ timeframe === 'monthly' ? 'Month' : 'Week' }}</span>
-              </div>
-              <div class="flex items-center">
-                <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#f59e42"></span>
-                <span class="text-sm text-gray-900">Patients Number This {{ timeframe === 'monthly' ? 'Month' : 'Week' }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div class="mb-4">
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Total Patients -->
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="text-gray-500 text-base font-medium mb-1">Total patients</div>
-              <div class="text-4xl font-extrabold text-gray-900">{{ totalPatients | number }}</div>
-              <div class="text-sm font-medium mt-1" [ngClass]="{
-                'text-red-600': totalPatients < 0.0,
-                'text-green-600': totalPatients < 0 
-              }">{{totalPatients}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col min-h-[350px] relative w-full">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-lg text-gray-900">Patient Overview</span>
+                    <div class="flex items-center space-x-2">
+                        <div class="relative">
+                            <select #timeframeSelect class="border border-gray-300 rounded px-2 py-1 text-sm pr-6 appearance-none focus:outline-none" (change)="setTimeframe(timeframeSelect.value)">
+                                <option value="monthly" [selected]="timeframe === 'monthly'">Monthly</option>
+                                <option value="weekly" [selected]="timeframe === 'weekly'">Weekly</option>
+                            </select>
+                        </div>
+                        <button class="text-gray-400 p-1">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex h-full">
+                    <div class="flex-1 relative">
+                        @if (patientOverviewData.length > 0) {
+                        <ngx-charts-line-chart [results]="patientOverviewData"
+                                               [scheme]="colorScheme"
+                                               [xAxis]="true"
+                                               [yAxis]="true"
+                                               [legend]="false"
+                                               [showXAxisLabel]="false"
+                                               [showYAxisLabel]="false"
+                                               [autoScale]="true"
+                                               [animations]="true"
+                                               class="h-48 w-full">
+                        </ngx-charts-line-chart>
+                        <div class="absolute left-[52%] top-[18%] text-xs font-bold text-gray-900 bg-white px-2 py-1 rounded shadow border border-gray-200">
+                            {{ getPeakValue() | number }}
+                        </div>
+                        }
+                    </div>
+                    <div class="flex flex-col justify-center ml-4 min-w-[120px]">
+                        <div class="font-bold text-base mb-2">Legend</div>
+                        <div class="flex items-center mb-2">
+                            <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#374151"></span>
+                            <span class="text-sm text-gray-900">Patients Number This {{ timeframe === 'monthly' ? 'Month' : 'Week' }}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 rounded-full inline-block mr-2" style="background:#f59e42"></span>
+                            <span class="text-sm text-gray-900">Patients Number This {{ timeframe === 'monthly' ? 'Month' : 'Week' }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button class="text-gray-400 p-1">
-              <i class="fa-solid fa-ellipsis"></i>
-            </button>
-          </div>
         </div>
-        <!-- Total Lab Results -->
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="text-gray-500 text-base font-medium mb-1">Total Lab Results</div>
-              <div class="text-4xl font-extrabold text-gray-900">{{ totalLabResults | number }}</div>
-              <div class="text-sm font-medium mt-1" [ngClass]="{
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Total Patients -->
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-gray-500 text-base font-medium mb-1">Total patients</div>
+                        <div class="text-4xl font-extrabold text-gray-900">{{ totalPatients | number }}</div>
+                        <div class="text-sm font-medium mt-1" [ngClass]="{
+                             'text-red-600' : totalPatientsPercent.includes('-'),
+                'text-green-600': !totalPatientsPercent.includes('-') ,
+              }">{{totalPatientsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
+                    </div>
+                    <button class="text-gray-400 p-1">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Total Lab Results -->
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between min-h-[150px] relative">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-gray-500 text-base font-medium mb-1">Total Lab Results</div>
+                        <div class="text-4xl font-extrabold text-gray-900">{{ totalLabResults | number }}</div>
+                        <div class="text-sm font-medium mt-1" [ngClass]="{
                 'text-red-600': labTestsPercent === '-',
                 'text-green-600': labTestsPercent !== '-'
               }">{{labTestsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
+                    </div>
+                    <button class="text-gray-400 p-1">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                </div>
             </div>
-            <button class="text-gray-400 p-1">
-              <i class="fa-solid fa-ellipsis"></i>
-            </button>
-          </div>
-        </div>
-        <!-- Total no. of male -->
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
-          <div class="text-gray-500 text-base font-medium">Total no. of male</div>
-          <div class="text-4xl font-extrabold text-gray-900">{{ maleCount | number }}</div>
-          <i class="fa-solid fa-person text-orange-500 text-8xl"></i>
-          <div class="text-sm font-medium" [ngClass]="{
-            'text-blue-600': malePatientsPercent.includes('-'),
-            'text-red-600': !malePatientsPercent.includes('-')
+            <!-- Total no. of male -->
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
+                <div class="text-gray-500 text-base font-medium">Total no. of male</div>
+                <div class="text-4xl font-extrabold text-gray-900">{{ maleCount | number }}</div>
+                <i class="fa-solid fa-person text-orange-500 text-8xl"></i>
+                <div class="text-sm font-medium" [ngClass]="{
+            'text-red-600': malePatientsPercent.includes('-'),
+            'text-green-600': !malePatientsPercent.includes('-')
           }">{{malePatientsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
-        </div>
-        <!-- Total no. of female -->
-        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
-          <div class="text-gray-500 text-base font-medium">Total no. of female</div>
-          <div class="text-4xl font-extrabold text-gray-900">{{ femaleCount | number }}</div>
-          <i class="fa-solid fa-person-dress text-8xl"></i>
-          <div class="text-sm font-medium" [ngClass]="{
+            </div>
+            <!-- Total no. of female -->
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col items-center justify-center min-h-[150px]">
+                <div class="text-gray-500 text-base font-medium">Total no. of female</div>
+                <div class="text-4xl font-extrabold text-gray-900">{{ femaleCount | number }}</div>
+                <i class="fa-solid fa-person-dress text-8xl"></i>
+                <div class="text-sm font-medium" [ngClass]="{
             'text-red-600': femalePatientsPercent.includes('-'),
             'text-green-600': !femalePatientsPercent.includes('-')
           }">{{femalePatientsPercent}} from last {{ timeframe === 'monthly' ? 'month' : 'week' }}</div>
+            </div>
         </div>
-      </div>
     </div>
-  }
+    }
 </div>
 

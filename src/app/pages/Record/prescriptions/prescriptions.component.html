@@ -1,0 +1,233 @@
+<div class="px-4 sm:px-6 lg:px-8 xl:px-12 py-8 bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen">
+  <!-- Header Section -->
+  <div class=" backdrop-blur-sm border-b border-blue-100 sticky  text-center top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+     
+          <div>
+            <h1 class="text-3xl font-bold bg-blue-500 bg-clip-text text-transparent">
+              My Prescriptions
+            </h1>
+            <p class="text-gray-600 text-sm mt-1">Manage and track your medications</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    @if (prescriptions.length > 0) {
+      <!-- Filters and Search -->
+      <div class="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <select 
+            class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            [ngModel]="sortBy()"
+            (ngModelChange)="sortBy.set($event)"
+          >
+            <option value="date">Sort by Date</option>
+            <option value="name">Sort by Name</option>
+            <option value="duration">Sort by Duration</option>
+          </select>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="text-sm text-gray-600">View:</span>
+          <button 
+            class="p-2 rounded-lg transition-colors"
+            [class.bg-blue-100]="viewMode() === 'grid'"
+            [class.text-blue-600]="viewMode() === 'grid'"
+            [class.text-gray-400]="viewMode() !== 'grid'"
+            (click)="viewMode.set('grid')"
+          >
+            <i class="fa-solid fa-th-large"></i>
+          </button>
+          <button 
+            class="p-2 rounded-lg transition-colors"
+            [class.bg-blue-100]="viewMode() === 'list'"
+            [class.text-blue-600]="viewMode() === 'list'"
+            [class.text-gray-400]="viewMode() !== 'list'"
+            (click)="viewMode.set('list')"
+          >
+            <i class="fa-solid fa-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Prescriptions Grid -->
+      @if (viewMode() === 'grid') {
+        <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          @for (prescription of filteredPrescriptions(); track prescription.id; let i = $index) {
+            <div class="group relative animate-fadeInUp" [style.animationDelay]="(i * 100) + 'ms'">
+              <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden">
+                <!-- Header -->
+                <div class="relative h-24 bg-blue-50">
+                  <div class="absolute top-4 left-4 right-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-pills text-blue-500 text-sm"></i>
+                      </div>
+                      <span class="text-blue-700 text-sm font-medium">#{{ prescription.id }}</span>
+                    </div>
+                    <div class="px-3 py-1 bg-blue-100 rounded-full">
+                      <span class="text-blue-700 text-xs font-medium">{{ prescription.medDate | date:'MMM dd' }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+                  <div class="mb-4">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                      {{ prescription.id }}
+                    </h3>
+                    <div class="flex items-center space-x-2">
+                      <span class="text-gray-500 text-sm">{{ prescription.duration }}</span>
+                    </div>
+                  </div>
+
+                  <div class="space-y-3">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-capsules text-blue-600 text-sm"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-600">Dosage</p>
+                        <p class="font-medium text-gray-900">{{ prescription.dosage }}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                      <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-clock text-purple-600 text-sm"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-600">Frequency</p>
+                        <p class="font-medium text-gray-900">{{ prescription.frequency }}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                      <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-calendar-day text-indigo-600 text-sm"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-600">Timing</p>
+                        <p class="font-medium text-gray-900">{{ prescription.timing }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  @if (prescription.doctorNotes) {
+                    <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                      <p class="text-xs text-gray-600 mb-1">Doctor's Notes</p>
+                      <p class="text-sm text-gray-800">{{ prescription.doctorNotes }}</p>
+                    </div>
+                  }
+
+                  <div class="mt-6 flex items-center justify-between">
+                    <!-- Actions removed as per request -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Prescriptions List -->
+      @if (viewMode() === 'list') {
+        <div class="space-y-4">
+          @for (prescription of filteredPrescriptions(); track prescription.id; let i = $index) {
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden animate-fadeInUp" [style.animationDelay]="(i * 100) + 'ms'">
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                      <i class="fa-solid fa-pills text-white"></i>
+                    </div>
+                    <div>
+                      <h3 class="text-xl font-bold text-gray-900">{{ prescription.id }}</h3>
+                      <p class="text-gray-600 text-sm">Prescribed on {{ prescription.medDate | date:'MMM dd, yyyy' }}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <span class="text-gray-500 text-sm">{{ prescription.duration }}</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <i class="fa-solid fa-capsules text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-600">Dosage</p>
+                      <p class="font-medium text-gray-900">{{ prescription.dosage }}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+                      <i class="fa-solid fa-clock text-purple-600 text-sm"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-600">Frequency</p>
+                      <p class="font-medium text-gray-900">{{ prescription.frequency }}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                      <i class="fa-solid fa-calendar-day text-indigo-600 text-sm"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-600">Timing</p>
+                      <p class="font-medium text-gray-900">{{ prescription.timing }}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                      <i class="fa-solid fa-calendar-check text-green-600 text-sm"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-600">Duration</p>
+                      <p class="font-medium text-gray-900">{{ prescription.duration }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                @if (prescription.doctorNotes) {
+                  <div class="p-4 bg-gray-50 rounded-lg mb-4">
+                    <p class="text-sm text-gray-600 mb-2 font-medium">Doctor's Notes</p>
+                    <p class="text-gray-800">{{ prescription.doctorNotes }}</p>
+                  </div>
+                }
+
+                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <!-- Actions removed as per request -->
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    } @else {
+      <!-- Empty State -->
+      <div class="flex flex-col items-center justify-center py-24">
+        <div class="w-32 h-32 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mb-6">
+          <i class="fa-solid fa-prescription-bottle-medical text-4xl text-blue-600"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">No prescriptions yet</h3>
+        <p class="text-gray-600 text-center max-w-md mb-8">
+          You haven't been prescribed any medications yet. Your prescriptions will appear here once they're added by your healthcare provider.
+        </p>
+        <button class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium">
+          Contact Your Doctor
+        </button>
+      </div>
+    }
+  </div>
+</div>

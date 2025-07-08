@@ -1,0 +1,105 @@
+<section class="px-4 sm:px-6 lg:px-8 xl:px-12 py-8 bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-blue-500 mb-8 text-center tracking-tight">Your Lab Tests</h2>
+    @if (labTests.length > 0) {
+      <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        @for (test of labTests; track test.id) {
+          <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow p-0 flex flex-col border border-blue-50 group cursor-pointer"
+               (click)="selectedTest = test">
+            <div class="flex items-center justify-between px-6 pt-4 pb-2 rounded-t-2xl bg-gradient-to-r from-blue-50 to-purple-50">
+              <span class="text-xs font-medium text-blue-400 tracking-wide">Test ID: {{ test.id }}</span>
+              <span class="px-3 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 shadow-sm">{{ test.type }}</span>
+            </div>
+            <div class="p-6 flex flex-col gap-4 flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-lg font-semibold text-blue-900 group-hover:text-purple-700 transition-colors">{{ test.name }}</span>
+              </div>
+              @if (test.imagePath) {
+                <img [src]="test.imagePath" alt="{{ test.name }}"
+                     class="w-full h-40 object-cover rounded-md mb-3" />
+              }
+              <div class="flex flex-col gap-1">
+                <div class="text-sm text-gray-700"><span class="font-semibold">Notes:</span> <span class="text-gray-600">{{ test.notes || 'No notes' }}</span></div>
+                <div class="text-xs text-gray-500 mt-2">Date: <span class="font-semibold">{{ test.date | date:'dd/MM/yyyy (h:mma)' }}</span></div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center py-24">
+        <i class="fa-solid fa-flask-vial text-9xl mb-3 text-blue-900"></i>
+        <div class="text-lg text-blue-900 font-semibold mb-2">No lab tests found</div>
+        <div class="text-gray-500">You have not completed any lab tests yet.</div>
+      </div>
+    }
+  </div>
+</section>
+
+@if (selectedTest) {
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900">{{ selectedTest.name }}</h2>
+          <p class="text-gray-600 text-sm">Test ID: {{ selectedTest.id }}</p>
+        </div>
+        <button (click)="selectedTest = null" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <i class="fa-solid fa-times text-gray-500"></i>
+        </button>
+      </div>
+      <!-- Modal Content -->
+      <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Test Image -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Test Image</h3>
+            <div class="bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center h-64">
+              @if (selectedTest.imagePath) {
+                <img [src]="selectedTest.imagePath" [alt]="selectedTest.name" class="w-full h-64 object-cover" />
+              } @else {
+                <div class="text-center">
+                  <i class="fa-solid fa-flask-vial text-gray-400 text-4xl mb-2"></i>
+                  <p class="text-gray-500">No image available</p>
+                </div>
+              }
+            </div>
+          </div>
+          <!-- Test Details -->
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Test Details</h3>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <span class="text-gray-600 font-medium">Type:</span>
+                  <span class="text-gray-900 font-semibold">{{ selectedTest.type }}</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <span class="text-gray-600 font-medium">Date:</span>
+                  <span class="text-gray-900 font-semibold">{{ selectedTest.date | date:'EEEE, MMMM dd, yyyy' }}</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <span class="text-gray-600 font-medium">Time:</span>
+                  <span class="text-gray-900 font-semibold">{{ selectedTest.date | date:'h:mm a' }}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Notes</h3>
+              <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                <p class="text-gray-700 leading-relaxed">{{ selectedTest.notes || 'No notes' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end">
+        <button (click)="selectedTest = null" class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+}

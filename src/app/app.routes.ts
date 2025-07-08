@@ -7,7 +7,6 @@ import { patientGuard } from './core/guards/patient.guard';
 import { dataEntryGuard } from './core/guards/data-entry.guard';
 import { PharmacyLayoutComponent } from './layouts/pharmacy-layout/pharmacy-layout.component';
 import { pharmacyGuard } from './core/guards/pharmacy.guard';
-import { LabtestsComponent } from './pages/Patient/labtests/labtests.component';
 
 export const routes: Routes = [
     {
@@ -49,6 +48,27 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/verifyemail/verifyemail.component')
                     .then(m => m.VerifyemailComponent),
                 title: 'Verify Email'
+            },
+            // PUBLIC RECORD ROUTES
+            {
+                path: 'public-myvisits',
+                loadComponent: () => import('./pages/Record/myvisits/myvisits.component').then(m => m.MyvisitsComponent),
+                title: 'My Visits',
+            },
+            {
+                path: 'public-scans/:id',
+                loadComponent: () => import('./pages/Record/scans/scans.component').then(m => m.ScansComponent),
+                title: 'Scans'
+            },
+            {
+                path: 'public-labtests/:id',
+                loadComponent: () => import('./pages/Record/labtests/labtests.component').then(m => m.LabtestsComponent),
+                title: 'labtests'
+            },
+            {
+                path: 'public-prescriptions/:id',
+                loadComponent: () => import('./pages/Record/prescriptions/prescriptions.component').then(m => m.PrescriptionsComponent),
+                title: 'Prescription'
             }
         ]
     },
